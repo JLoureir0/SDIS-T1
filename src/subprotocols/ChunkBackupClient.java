@@ -64,7 +64,8 @@ public class ChunkBackupClient {
 	}
 	
 	public static void sendPacket(String request) throws Exception {
-		sendPacket = new DatagramPacket(request.getBytes(),request.length(),mdbAddress,mdbPort);
+		byte[] asciiRequest = request.getBytes("US-ASCII");
+		sendPacket = new DatagramPacket(asciiRequest,asciiRequest.length,mdbAddress,mdbPort);
 		socket.send(sendPacket);
 		return;
 	}
