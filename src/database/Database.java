@@ -6,19 +6,19 @@ import java.util.Map;
 
 public class Database {
 	
-	private Map<Integer,Integer> chunksMap; // Key -> fileId value -> chunkNo
+	private Map<String, Integer> chunksMap; // Key -> fileId value -> chunkNo
 	private ArrayList<Chunk> chunks;
 
 	public Database() {
-		setChunksMap(new HashMap<Integer,Integer>());
+		setChunksMap(new HashMap<String,Integer>());
 		setChunks(new ArrayList<Chunk>());
 	}
 
-	public Map<Integer,Integer> getChunksMap() {
+	public Map<String, Integer> getChunksMap() {
 		return chunksMap;
 	}
 
-	public void setChunksMap(Map<Integer,Integer> chunksMap) {
+	public void setChunksMap(Map<String, Integer> chunksMap) {
 		this.chunksMap = chunksMap;
 	}
 
@@ -29,5 +29,8 @@ public class Database {
 	public void setChunks(ArrayList<Chunk> chunks) {
 		this.chunks = chunks;
 	}
+
+
+
 	
 }

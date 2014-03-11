@@ -7,7 +7,7 @@ import java.net.InetAddress;
 public class ChunkBackupClient {
 	
 	// Thing to receive from Above
-	private static int fileId;
+	private static String fileId;
 	private static int chunkNumber;
 	private static int replicationDegree;
 	private static String chunkBody;
@@ -83,7 +83,7 @@ public class ChunkBackupClient {
 			storedCounter++;
 		}
 		else
-			System.out.println("Descartei n�o era STORED");
+			System.out.println("Descartei nao era STORED");
 		
 		return;
 	}
