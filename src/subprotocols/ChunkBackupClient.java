@@ -89,7 +89,7 @@ public class ChunkBackupClient {
 	}
 	
 	public static void resetCounter() {
-		storedCounter=0;
+		storedCounter = 0;
 	}
 	
 }
