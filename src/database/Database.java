@@ -5,18 +5,26 @@ import java.util.Map;
 
 public class Database {
 	
-	private Map<String, File> chunksMap; // Key -> fileId value -> chunkNo
+	private Map<String, File> files; // Key -> fileId value -> File
 	
 	public Database() {
-		chunksMap = new HashMap<String,File>();
+		files = new HashMap<String,File>();
 	}
 
 	public Map<String, File> getChunksMap() {
-		return chunksMap;
+		return files;
 	}
 
 	public void setChunksMap(Map<String, File> chunksMap) {
-		this.chunksMap = chunksMap;
+		this.files = chunksMap;
+	}
+	
+	public void addFile(String fileId,File file) {
+		files.put(fileId, file);
+	}
+	
+	public void removeFile(String fileId) {
+		files.remove(fileId);
 	}
 
 }
