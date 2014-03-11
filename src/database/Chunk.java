@@ -6,14 +6,24 @@ public class Chunk {
 	private int fileId;
 	private int replicationDegree;
 	private int chunkNo;
+	private int count;
 	
 	public Chunk() {
 		chunkBody = "";
 		fileId = 0;
 		replicationDegree = 0;
 		chunkNo = 0;
+		count = 0;
 	}
 	
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
 	public Chunk(int fileId,int replicationDegree,int chunkNo,String chunkBody) {
 		this.chunkBody = chunkBody;
 		this.fileId = fileId;
