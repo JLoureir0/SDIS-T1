@@ -18,6 +18,7 @@ public class SubProtocolTest {
 	private final String STORED = "STORED";
 	private final String VERSION_1 = "1.0";
 	private final String CRLF = "CRLF";
+	private final String CHUNK = "CHUNK";
 
 	@Test
 	public void testChunkBackup() {
@@ -36,8 +37,8 @@ public class SubProtocolTest {
 			cb.start();		
 			
 			MulticastSocket mcSocket = new MulticastSocket(mcPort);
-			byte[] receivedData = new byte[ARRAY_SIZE];
-			DatagramPacket storePacket = new DatagramPacket(receivedData, receivedData.length);
+			byte[] storeData = new byte[ARRAY_SIZE];
+			DatagramPacket storePacket = new DatagramPacket(storeData, storeData.length);
 			mcSocket.joinGroup(mcAddress);
 			mcSocket.receive(storePacket);
 			mcSocket.close();
@@ -90,5 +91,39 @@ public class SubProtocolTest {
 		}
 		
 		assertEquals(4, db.getCount(fileID, chunkNo));
+	}
+	
+	@Test
+	public void testChunkRestore() {
+		String fileID = "id1";
+		int chunkNo = 1;
+		int replicationDegree = 9;
+		String chunkBody = "sensitive data";
+		int mdrPort = 54321;
+		String address = "224.2.2.4";
+		Database db = new Database();
+		db.addChunk(fileID, chunkNo, replicationDegree, chunkBody);
+		
+		try {
+			InetAddress mdrAddress = InetAddress.getByName(address);
+			
+			ChunkRestore cr = new ChunkRestore(db, fileID, chunkNo, mdrPort, mdrAddress);
+			cr.start();		
+			
+			MulticastSocket mdrSocket = new MulticastSocket(mdrPort);
+			byte[] restoreData = new byte[ARRAY_SIZE];
+			DatagramPacket restorePacket = new DatagramPacket(restoreData, restoreData.length);
+			mdrSocket.joinGroup(mdrAddress);
+			mdrSocket.receive(restorePacket);
+			mdrSocket.close();
+			
+			String restoreMessage = CHUNK + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF + " " + chunkBody;
+			String receivedRestore = new String(restorePacket.getData(),ENCODING).trim();
+			
+			assertEquals(restoreMessage, receivedRestore);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
