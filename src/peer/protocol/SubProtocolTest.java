@@ -31,15 +31,19 @@ public class SubProtocolTest {
 			
 			MulticastSocket mcSocket = new MulticastSocket(mcPort);
 			byte[] receivedData = new byte[512];
-			DatagramPacket receivedPacket = new DatagramPacket(receivedData, receivedData.length);
+			DatagramPacket storePacket = new DatagramPacket(receivedData, receivedData.length);
 			mcSocket.joinGroup(mcAddress);
-			mcSocket.receive(receivedPacket);
+			mcSocket.receive(storePacket);
 			mcSocket.close();
 			
 			String store = "STORED 1.0 " + fileID + " " + chunkNo + " CRLF CRLF";
-			String receivedStore = new String(receivedPacket.getData(),"US-ASCII").trim();
+			String receivedStore = new String(storePacket.getData(),"US-ASCII").trim();
+			
 			assertEquals(store, receivedStore);
 			assertTrue(db.containsChunk(fileID, chunkNo));
+			
+			Thread.sleep(400);
+			assertEquals(1, db.getCount(fileID, chunkNo));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
