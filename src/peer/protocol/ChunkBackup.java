@@ -10,6 +10,10 @@ import peer.database.Database;
 
 public class ChunkBackup extends Thread {
 	private final int SLEEP = 401;
+	private final String STORED = "STORED";
+	private final String VERSION_1 = "1.0";
+	private final String CRLF = "CRLF";
+	private final String ENCODING = "US-ASCII";
 	
 	private Database database;
 	private String fileID;
@@ -50,10 +54,10 @@ public class ChunkBackup extends Thread {
 	}
 	
 	private void sendStore() {
-		String storeMessage = "STORED 1.0 " + fileID + " " + chunkNo + " CRLF CRLF";
+		String storeMessage = STORED + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF;
 		
 		try {
-			byte[] storeData = storeMessage.getBytes("US-ASCII");
+			byte[] storeData = storeMessage.getBytes(ENCODING);
 			DatagramPacket storePacket = new DatagramPacket(storeData, storeData.length, mcAddress, mcPort);
 			Thread.sleep(random.nextInt(SLEEP));
 			mcSocket.send(storePacket);

@@ -23,7 +23,7 @@ public class Database {
 		while(it.hasNext()) {
 			ID id = it.next();
 			if(id.getFileID() == fileId)
-				it.remove(); // avoiding a ConcurrentModificationException
+				it.remove();
 		}
 	}
 	

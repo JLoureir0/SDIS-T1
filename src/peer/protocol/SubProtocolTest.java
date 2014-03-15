@@ -12,6 +12,12 @@ import org.junit.Test;
 import peer.database.Database;
 
 public class SubProtocolTest {
+	private final int HALF_A_SECOND = 500;
+	private final int ARRAY_SIZE = 512;
+	private final String ENCODING = "US-ASCII";
+	private final String STORED = "STORED";
+	private final String VERSION_1 = "1.0";
+	private final String CRLF = "CRLF";
 
 	@Test
 	public void testChunkBackup() {
@@ -30,19 +36,19 @@ public class SubProtocolTest {
 			cb.start();		
 			
 			MulticastSocket mcSocket = new MulticastSocket(mcPort);
-			byte[] receivedData = new byte[512];
+			byte[] receivedData = new byte[ARRAY_SIZE];
 			DatagramPacket storePacket = new DatagramPacket(receivedData, receivedData.length);
 			mcSocket.joinGroup(mcAddress);
 			mcSocket.receive(storePacket);
 			mcSocket.close();
 			
-			String store = "STORED 1.0 " + fileID + " " + chunkNo + " CRLF CRLF";
-			String receivedStore = new String(storePacket.getData(),"US-ASCII").trim();
+			String storeMessage = STORED + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF;
+			String receivedStore = new String(storePacket.getData(),ENCODING).trim();
 			
-			assertEquals(store, receivedStore);
+			assertEquals(storeMessage, receivedStore);
 			assertTrue(db.containsChunk(fileID, chunkNo));
 			
-			Thread.sleep(400);
+			Thread.sleep(HALF_A_SECOND);
 			assertEquals(1, db.getCount(fileID, chunkNo));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -57,13 +63,13 @@ public class SubProtocolTest {
 		String chunkBody = "sensitive data";
 		int mcPort = 54321;
 		String address = "224.2.2.3";
-		String store = "STORED 1.0 " + fileID + " " + chunkNo + " CRLF CRLF";
+		String storeMessage = STORED + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF;
 		Database db = new Database();
 		
 		db.addChunk(fileID, chunkNo, replicationDegree, chunkBody);
 		
 		try {
-			byte[] storeData = store.getBytes("US-ASCII");
+			byte[] storeData = storeMessage.getBytes(ENCODING);
 			InetAddress mcAddress = InetAddress.getByName(address);
 			
 			ReplicationCounter replicationCounter = new ReplicationCounter(db, fileID, chunkNo, mcAddress, mcPort);

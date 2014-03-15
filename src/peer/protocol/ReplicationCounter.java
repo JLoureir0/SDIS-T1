@@ -7,6 +7,11 @@ import java.net.MulticastSocket;
 import peer.database.Database;
 
 public class ReplicationCounter extends Thread {
+	private final int HALF_A_SECOND = 500;
+	private final int ARRAY_SIZE = 512;
+	private final String ENCODING = "US-ASCII";
+	private final String WHITESPACE_REGEX = "\\s";
+	
 	private Database database;
 	private String fileID;
 	private int chunkNo;
@@ -31,13 +36,13 @@ public class ReplicationCounter extends Thread {
 	}
 	
 	public void run() {
-		long end = System.currentTimeMillis() + 500;
+		long end = System.currentTimeMillis() + HALF_A_SECOND;
 		while(System.currentTimeMillis() < end) {
-			byte[] storeData = new byte[512];
+			byte[] storeData = new byte[ARRAY_SIZE];
 			try {
 				DatagramPacket storePacket = new DatagramPacket(storeData, storeData.length);
 				mcSocket.receive(storePacket);
-				if(correctChunk(new String(storePacket.getData(), "US-ASCII").trim()))
+				if(correctChunk(new String(storePacket.getData(), ENCODING).trim()))
 					updateCount();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -50,7 +55,7 @@ public class ReplicationCounter extends Thread {
 	}
 	
 	private boolean correctChunk(String store) {
-		String[] storeSplit = store.split("\\s");
+		String[] storeSplit = store.split(WHITESPACE_REGEX);
 		return (storeSplit[0].equals("STORED") && storeSplit[2].equals(fileID) && storeSplit[3].equals(Integer.toString(chunkNo)));
 	}
 }
