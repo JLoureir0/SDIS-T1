@@ -1,4 +1,4 @@
-package database;
+package peer.database;
 
 public class ID {
 	private String fileID;

@@ -1,4 +1,4 @@
-package database;
+package peer.database;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

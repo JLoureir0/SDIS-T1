@@ -1,4 +1,4 @@
-package database;
+package peer.database;
 
 import java.util.HashMap;
 import java.util.Iterator;
