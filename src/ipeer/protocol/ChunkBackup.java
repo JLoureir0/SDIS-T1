@@ -1,5 +1,7 @@
 package ipeer.protocol;
 
+import ipeer.database.Database;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -11,22 +13,36 @@ public class ChunkBackup {
 	private static int replicationDegree;
 	private static String chunkBody;
 	private static double version=1.0;
+	private static Database db;
 	
 	private static int mdbPort;
 	private static InetAddress mdbAddress;
 	private static int MCPort;
 	private static InetAddress mcAddress;
 	
-	///////////////////////////////
+	////////////////////////////////////////////
 	private static DatagramPacket sendPacket;
-	private static  DatagramPacket receivePacket;
+	private static DatagramPacket receivePacket;
 	private static DatagramSocket socket;
 	private static byte receiveData[];
 	private static int storedCounter;
 	private static long tStart;
 	private static long tEnd;
 	
-	public static void main(String[] args) {
+	@SuppressWarnings("static-access")
+	public ChunkBackup(Database db, String fileId, int chunkNumber, int replicationDegree, String chunkBody, int mdbPort, InetAddress mdbAddress, int MCPort, InetAddress mcAddress) {
+		this.db = db;
+		this.fileId = fileId;
+		this.chunkNumber = chunkNumber;
+		this.replicationDegree = replicationDegree;
+		this.chunkBody = chunkBody;
+		this.mdbPort = mdbPort;
+		this.mdbAddress = mdbAddress;
+		this.MCPort = MCPort;
+		this.mcAddress = mcAddress;
+	}
+	
+	public static void start() {
 		try {
 			storedCounter=0;
 			socket = new DatagramSocket();

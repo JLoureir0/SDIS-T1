@@ -28,6 +28,7 @@ public class SubProtocolTest {
 		String chunkBody = "sensitive data";
 		int mcPort = 54321;
 		String address = "224.2.2.3";
+		String storeMessage = STORED + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF;
 		Database db = new Database();
 		
 		try {
@@ -43,7 +44,6 @@ public class SubProtocolTest {
 			mcSocket.receive(storePacket);
 			mcSocket.close();
 			
-			String storeMessage = STORED + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF;
 			String receivedStore = new String(storePacket.getData(),ENCODING).trim();
 			
 			assertEquals(storeMessage, receivedStore);
