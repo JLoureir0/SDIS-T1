@@ -1,11 +1,10 @@
-package subprotocols;
+package ipeer.protocol;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-public class ChunkBackupClient {
-	
+public class ChunkBackup {
 	// Thing to receive from Above
 	private static String fileId;
 	private static int chunkNumber;
@@ -51,7 +50,6 @@ public class ChunkBackupClient {
 				else
 					resetCounter();
 			}
-
 		}catch (Exception e) {
 			e.printStackTrace();
 		}	

@@ -1,11 +1,10 @@
-package subprotocols;
+package ipeer.protocol;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-public class ChunkDeleteClient {
-	
+public class ChunkDelete {
 	private static String fileId;
 	private static int MCPort;
 	private static InetAddress mcAddress;
