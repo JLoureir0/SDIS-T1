@@ -1,18 +1,14 @@
-package peer.protocol;
+package ipeer.protocol;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
-import peer.database.Database;
-
 public class ReplicationCounter extends Thread {
-	private final int HALF_A_SECOND = 500;
 	private final int ARRAY_SIZE = 512;
 	private final String ENCODING = "US-ASCII";
 	private final String WHITESPACE_REGEX = "\\s";
-	
-	private Database database;
+
 	private String fileID;
 	private int chunkNo;
 	private MulticastSocket mcSocket;
@@ -20,13 +16,18 @@ public class ReplicationCounter extends Thread {
 	private InetAddress mcAddress;
 	@SuppressWarnings("unused")
 	private int mcPort;
+	@SuppressWarnings("unused")
+	private int replicationCounter;
+	private int iteration;
 	
-	public ReplicationCounter(Database database, String fileID, int chunkNo, InetAddress mcAddress, int mcPort) {
-		this.database = database;
+	public ReplicationCounter(String fileID, int chunkNo, InetAddress mcAddress, int mcPort, int replicationCounter, int iteration) {
 		this.fileID = fileID;
 		this.chunkNo = chunkNo;
 		this.mcAddress = mcAddress;
 		this.mcPort = mcPort;
+		this.replicationCounter = replicationCounter;
+		this.iteration = iteration;
+		
 		try {
 			mcSocket = new MulticastSocket(mcPort);
 			mcSocket.joinGroup(mcAddress);
@@ -36,23 +37,20 @@ public class ReplicationCounter extends Thread {
 	}
 	
 	public void run() {
-		long end = System.currentTimeMillis() + HALF_A_SECOND;
+		replicationCounter = 0;
+		
+		long end = (long) (System.currentTimeMillis() + 500*Math.pow(2, iteration));
 		while(System.currentTimeMillis() < end) {
 			byte[] storeData = new byte[ARRAY_SIZE];
 			try {
 				DatagramPacket storePacket = new DatagramPacket(storeData, storeData.length);
 				mcSocket.receive(storePacket);
 				if(correctChunk(new String(storePacket.getData(), ENCODING).trim()))
-					updateCount();
+					replicationCounter++;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		mcSocket.close();
-	}
-	
-	private void updateCount() {
-		database.increaseCount(fileID, chunkNo);
 	}
 	
 	private boolean correctChunk(String store) {

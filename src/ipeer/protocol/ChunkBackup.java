@@ -1,36 +1,33 @@
 package ipeer.protocol;
 
 import ipeer.database.Database;
+import ipeer.database.File;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 
 public class ChunkBackup {
-	// Thing to receive from Above
-	private static String fileId;
-	private static int chunkNumber;
-	private static int replicationDegree;
-	private static String chunkBody;
-	private static double version=1.0;
-	private static Database db;
+	private final  String ENCODING = "US-ASCII";
+	private final  String PUTCHUNK = "PUTCHUNK";
+	private final  String VERSION_1 = "1.0";
+	private final  String CRLF = "CRLF";
 	
-	private static int mdbPort;
-	private static InetAddress mdbAddress;
-	private static int MCPort;
-	private static InetAddress mcAddress;
+	private  Database db;
+	private  String path;
+	private  String fileId;
+	private  int chunkNumber;
+	private  int replicationDegree;
+	private  String chunkBody;
+	private  int mdbPort;
+	private  InetAddress mdbAddress;
+	private  int mcPort;
+	private  InetAddress mcAddress;
+	private  DatagramSocket mdbSocket;
+	private  int replicationCounter;
 	
-	////////////////////////////////////////////
-	private static DatagramPacket sendPacket;
-	private static DatagramPacket receivePacket;
-	private static DatagramSocket socket;
-	private static byte receiveData[];
-	private static int storedCounter;
-	private static long tStart;
-	private static long tEnd;
-	
-	@SuppressWarnings("static-access")
-	public ChunkBackup(Database db, String fileId, int chunkNumber, int replicationDegree, String chunkBody, int mdbPort, InetAddress mdbAddress, int MCPort, InetAddress mcAddress) {
+	public ChunkBackup(Database db, String fileId, String path, int chunkNumber, int replicationDegree, String chunkBody, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
 		this.db = db;
 		this.fileId = fileId;
 		this.chunkNumber = chunkNumber;
@@ -38,72 +35,47 @@ public class ChunkBackup {
 		this.chunkBody = chunkBody;
 		this.mdbPort = mdbPort;
 		this.mdbAddress = mdbAddress;
-		this.MCPort = MCPort;
+		this.mcPort = mcPort;
 		this.mcAddress = mcAddress;
-	}
-	
-	public static void start() {
+		this.path = path;
+		
 		try {
-			storedCounter=0;
-			socket = new DatagramSocket();
-			
-			for(int i=1;i<=5;i++) {
-				//Create Packet
-				String request = createPacket();
-				//Send Backup request mdb
-				sendPacket(request);
-				//Wait 500ms for answers from MC, actualize counter
-				tStart = System.currentTimeMillis();
-				while(true) {
-					reveivePackets();
-					tEnd = System.currentTimeMillis();
-					if((tEnd-tStart) > (500*i))
-						break;
-				}
-				
-				if(storedCounter>=replicationDegree)
+			mdbSocket = new DatagramSocket();
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void start() {
+		try {
+			for(int iteration=0; iteration < 5; iteration++) {
+				sendPutChunk();
+				replicationCounter(iteration);
+				if(replicationCounter>=replicationDegree) {
+					File file = new File(path,chunkNumber);
+					db.addFile(fileId, file);
+					mdbSocket.close();
 					break;
-				else
-					resetCounter();
+				}
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}	
 	}
 	
-	public static String createPacket() {
-		String request = "PUTCHUNK";
-		request += " "+version+" "+fileId+" "+chunkNumber+" "+replicationDegree+" CRLF CRLF "+chunkBody;
-		return request;
+	public void replicationCounter(int iteration) {
+		ReplicationCounter rc = new ReplicationCounter(fileId,chunkNumber,mcAddress,mcPort,replicationCounter,iteration);
+		rc.start();
 	}
 	
-	public static void sendPacket(String request) throws Exception {
-		byte[] asciiRequest = request.getBytes("US-ASCII");
-		sendPacket = new DatagramPacket(asciiRequest,asciiRequest.length,mdbAddress,mdbPort);
-		socket.send(sendPacket);
-		return;
-	}
-	
-	public static void reveivePackets() throws Exception {
-		receiveData = new byte[512];
-		receivePacket = new DatagramPacket(receiveData, receiveData.length,mcAddress,MCPort);
-		socket.receive(receivePacket);
-		
-		String response = new String(receivePacket.getData());
-		System.out.print("Response: "+response);
-		
-		if(response.substring(0,6).equals("STORED")) {
-			System.out.println("STORED");
-			storedCounter++;
+	public  void sendPutChunk() {
+		String putchunkMessage = PUTCHUNK + " " + VERSION_1 + " " + fileId + " " + chunkNumber + " " + replicationDegree + " " + CRLF + " " +CRLF + chunkBody;
+		try {
+			byte[] putchunkData = putchunkMessage.getBytes(ENCODING);
+			DatagramPacket putchunkPacket = new DatagramPacket(putchunkData, putchunkData.length, mdbAddress, mdbPort);
+			mdbSocket.send(putchunkPacket);
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		else
-			System.out.println("Descartei nao era STORED");
-		
-		return;
-	}
-	
-	public static void resetCounter() {
-		storedCounter = 0;
-	}
-	
+	}	
 }
