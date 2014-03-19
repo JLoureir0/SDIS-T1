@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 public class ReplicationCounter extends Thread {
+	private final int HALF_A_SECOND = 500;
 	private final int ARRAY_SIZE = 512;
 	private final String ENCODING = "US-ASCII";
 	private final String WHITESPACE_REGEX = "\\s";
@@ -16,41 +17,42 @@ public class ReplicationCounter extends Thread {
 	private InetAddress mcAddress;
 	@SuppressWarnings("unused")
 	private int mcPort;
-	@SuppressWarnings("unused")
-	private int replicationCounter;
+	private int[] replicationCounter;
 	private int iteration;
 	
-	public ReplicationCounter(String fileID, int chunkNo, InetAddress mcAddress, int mcPort, int replicationCounter, int iteration) {
+	public ReplicationCounter(String fileID, int chunkNo, InetAddress mcAddress, int mcPort, int[] replicationCounter, int iteration) {
 		this.fileID = fileID;
 		this.chunkNo = chunkNo;
 		this.mcAddress = mcAddress;
 		this.mcPort = mcPort;
 		this.replicationCounter = replicationCounter;
+		replicationCounter[0] = 0;
 		this.iteration = iteration;
 		
 		try {
 			mcSocket = new MulticastSocket(mcPort);
 			mcSocket.joinGroup(mcAddress);
+			mcSocket.setSoTimeout((int) (HALF_A_SECOND*Math.pow(2, iteration)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void run() {
-		replicationCounter = 0;
+		byte[] storeData = new byte[ARRAY_SIZE];
+		long endTime = (long) (System.currentTimeMillis() + 500*Math.pow(2, iteration));
 		
-		long end = (long) (System.currentTimeMillis() + 500*Math.pow(2, iteration));
-		while(System.currentTimeMillis() < end) {
-			byte[] storeData = new byte[ARRAY_SIZE];
+		while(System.currentTimeMillis() < endTime) {
 			try {
 				DatagramPacket storePacket = new DatagramPacket(storeData, storeData.length);
 				mcSocket.receive(storePacket);
-				if(correctChunk(new String(storePacket.getData(), ENCODING).trim()))
-					replicationCounter++;
+				if(System.currentTimeMillis() < endTime && correctChunk(new String(storePacket.getData(), ENCODING).trim()))
+					replicationCounter[0] = replicationCounter[0]+1;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
+		}		
+		mcSocket.close();
 	}
 	
 	private boolean correctChunk(String store) {

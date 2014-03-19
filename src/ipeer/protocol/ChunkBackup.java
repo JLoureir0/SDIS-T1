@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 
 public class ChunkBackup {
+	private final int HALF_A_SECOND = 500;
 	private final  String ENCODING = "US-ASCII";
 	private final  String PUTCHUNK = "PUTCHUNK";
 	private final  String VERSION_1 = "1.0";
@@ -16,8 +17,8 @@ public class ChunkBackup {
 	
 	private  Database db;
 	private  String path;
-	private  String fileId;
-	private  int chunkNumber;
+	private  String fileID;
+	private  int chunkNos;
 	private  int replicationDegree;
 	private  String chunkBody;
 	private  int mdbPort;
@@ -25,13 +26,14 @@ public class ChunkBackup {
 	private  int mcPort;
 	private  InetAddress mcAddress;
 	private  DatagramSocket mdbSocket;
-	private  int replicationCounter;
+	private  int[] replicationCounter;
 	
-	public ChunkBackup(Database db, String fileId, String path, int chunkNumber, int replicationDegree, String chunkBody, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
+	public ChunkBackup(Database db, String fileID, String path, int chunkNos, int replicationDegree, String chunkBody, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
 		this.db = db;
-		this.fileId = fileId;
-		this.chunkNumber = chunkNumber;
+		this.fileID = fileID;
+		this.chunkNos = chunkNos;
 		this.replicationDegree = replicationDegree;
+		this.replicationCounter = new int[1];
 		this.chunkBody = chunkBody;
 		this.mdbPort = mdbPort;
 		this.mdbAddress = mdbAddress;
@@ -51,9 +53,10 @@ public class ChunkBackup {
 			for(int iteration=0; iteration < 5; iteration++) {
 				sendPutChunk();
 				replicationCounter(iteration);
-				if(replicationCounter>=replicationDegree) {
-					File file = new File(path,chunkNumber);
-					db.addFile(fileId, file);
+				Thread.sleep((long) (HALF_A_SECOND+Math.pow(2, iteration)));
+				if(replicationCounter[0] >= replicationDegree) {
+					File file = new File(path,chunkNos);
+					db.addFile(fileID, file);
 					mdbSocket.close();
 					break;
 				}
@@ -64,12 +67,12 @@ public class ChunkBackup {
 	}
 	
 	public void replicationCounter(int iteration) {
-		ReplicationCounter rc = new ReplicationCounter(fileId,chunkNumber,mcAddress,mcPort,replicationCounter,iteration);
+		ReplicationCounter rc = new ReplicationCounter(fileID,chunkNos,mcAddress,mcPort,replicationCounter,iteration);
 		rc.start();
 	}
 	
 	public  void sendPutChunk() {
-		String putchunkMessage = PUTCHUNK + " " + VERSION_1 + " " + fileId + " " + chunkNumber + " " + replicationDegree + " " + CRLF + " " +CRLF + chunkBody;
+		String putchunkMessage = PUTCHUNK + " " + VERSION_1 + " " + fileID + " " + chunkNos + " " + replicationDegree + " " + CRLF + " " +CRLF + chunkBody;
 		try {
 			byte[] putchunkData = putchunkMessage.getBytes(ENCODING);
 			DatagramPacket putchunkPacket = new DatagramPacket(putchunkData, putchunkData.length, mdbAddress, mdbPort);
