@@ -6,27 +6,28 @@ import ipeer.database.File;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.SocketException;
 
 public class ChunkBackup {
 	private final int HALF_A_SECOND = 500;
-	private final  String ENCODING = "US-ASCII";
-	private final  String PUTCHUNK = "PUTCHUNK";
-	private final  String VERSION_1 = "1.0";
-	private final  String CRLF = "CRLF";
+	private final String ENCODING = "US-ASCII";
+	private final String PUTCHUNK = "PUTCHUNK";
+	private final String VERSION_1 = "1.0";
+	private final String CRLF = "CRLF";
 	
-	private  Database db;
-	private  String path;
-	private  String fileID;
-	private  int chunkNos;
-	private  int replicationDegree;
-	private  String chunkBody;
-	private  int mdbPort;
-	private  InetAddress mdbAddress;
-	private  int mcPort;
-	private  InetAddress mcAddress;
-	private  DatagramSocket mdbSocket;
-	private  int[] replicationCounter;
+	private Database db;
+	private String path;
+	private String fileID;
+	private int chunkNos;
+	private int replicationDegree;
+	private String chunkBody;
+	private int mdbPort;
+	private InetAddress mdbAddress;
+	private int mcPort;
+	private InetAddress mcAddress;
+	private DatagramSocket mdbSocket;
+	private int[] replicationCounter;
 	
 	public ChunkBackup(Database db, String fileID, String path, int chunkNos, int replicationDegree, String chunkBody, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
 		this.db = db;
@@ -43,7 +44,7 @@ public class ChunkBackup {
 		
 		try {
 			mdbSocket = new DatagramSocket();
-		} catch (SocketException e) {
+		} catch (Exception /*SocketException*/ e) {
 			e.printStackTrace();
 		}
 	}
