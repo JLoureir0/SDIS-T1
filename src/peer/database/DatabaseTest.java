@@ -43,12 +43,12 @@ public class DatabaseTest {
 	public void testDatabase() {
 		Database db = new Database();
 		
-		db.addChunk("id1", 1, 9, "very important data");
+		db.addChunk("id1", 1, 9, "very_important_data");
 		
 		assertTrue(db.containsChunk("id1", 1));
 		assertFalse(db.containsChunk("id2", 1));
 		assertEquals(9,db.getReplicationDegree("id1",1));
-		assertEquals("very important data", db.getChunkBody("id1", 1));
+		assertEquals("very_important_data", db.getChunkBody("id1", 1));
 		assertEquals(0, db.getCount("id1",1));
 		
 		db.increaseCount("id1",1);
@@ -57,13 +57,13 @@ public class DatabaseTest {
 		assertEquals(0, db.getCount("id1",1));
 		db.increaseCount("id1",1);
 		
-		db.addChunk("id2", 1, 9, "cool data");
+		db.addChunk("id2", 1, 9, "cool_data");
 		
-		db.addChunk("id1", 1, 9, "swag data");
+		db.addChunk("id1", 1, 9, "swag_data");
 		assertEquals(0, db.getCount("id1",1));
-		assertEquals("swag data", db.getChunkBody("id1", 1));
+		assertEquals("swag_data", db.getChunkBody("id1", 1));
 		
-		db.addChunk("id1", 2, 9, "stupid data");
+		db.addChunk("id1", 2, 9, "stupid_data");
 		
 		db.removeFile("id1");
 		assertFalse(db.containsChunk("id1", 1));

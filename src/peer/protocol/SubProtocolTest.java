@@ -126,4 +126,24 @@ public class SubProtocolTest {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void testChunkDelete() {
+		String fileID = "id1";
+		int chunkNo = 1;
+		int replicationDegree = 9;
+		String chunkBody = "sensitive_data";
+		Database db = new Database();
+		db.addChunk(fileID, chunkNo, replicationDegree, chunkBody);
+		
+		assertTrue(db.containsChunk(fileID, chunkNo));
+		ChunkDelete cd = new ChunkDelete(db,fileID);
+		cd.start();
+		try {
+			Thread.sleep(HALF_A_SECOND);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		assertFalse(db.containsChunk(fileID, chunkNo));
+	}
 }

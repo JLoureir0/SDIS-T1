@@ -18,11 +18,11 @@ public class Database {
 		chunks.put(id, chunk);
 	}
 
-	public void removeFile(String fileId) {
+	public void removeFile(String fileID) {
 		Iterator<ID> it = chunks.keySet().iterator();
 		while(it.hasNext()) {
 			ID id = it.next();
-			if(id.getFileID() == fileId)
+			if(id.getFileID() == fileID)
 				it.remove();
 		}
 	}
