@@ -25,7 +25,7 @@ public class SubProtocolTest {
 		String fileID = "id1";
 		int chunkNo = 1;
 		int replicationDegree = 9;
-		String chunkBody = "sensitive data";
+		String chunkBody = "sensitive_data";
 		int mcPort = 54321;
 		String address = "224.2.2.3";
 		String storeMessage = STORED + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF;
@@ -61,7 +61,7 @@ public class SubProtocolTest {
 		String fileID = "id1";
 		int chunkNo = 1;
 		int replicationDegree = 9;
-		String chunkBody = "sensitive data";
+		String chunkBody = "sensitive_data";
 		int mcPort = 54321;
 		String address = "224.2.2.3";
 		String storeMessage = STORED + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF;
@@ -98,7 +98,7 @@ public class SubProtocolTest {
 		String fileID = "id1";
 		int chunkNo = 1;
 		int replicationDegree = 9;
-		String chunkBody = "sensitive data";
+		String chunkBody = "sensitive_data";
 		int mdrPort = 54321;
 		String address = "224.2.2.4";
 		Database db = new Database();

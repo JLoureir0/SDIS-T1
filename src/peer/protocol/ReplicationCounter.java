@@ -11,6 +11,9 @@ public class ReplicationCounter extends Thread {
 	private final int ARRAY_SIZE = 512;
 	private final String ENCODING = "US-ASCII";
 	private final String WHITESPACE_REGEX = "\\s";
+	private final String STORED = "STORED";
+	private final String VERSION_1 = "1.0";
+	private final String CRLF = "CRLF";
 	
 	private Database database;
 	private String fileID;
@@ -57,6 +60,6 @@ public class ReplicationCounter extends Thread {
 	
 	private boolean correctChunk(String store) {
 		String[] storeSplit = store.split(WHITESPACE_REGEX);
-		return (storeSplit[0].equals("STORED") && storeSplit[2].equals(fileID) && storeSplit[3].equals(Integer.toString(chunkNo)));
+		return (storeSplit[0].equals(STORED) && storeSplit[1].equals(VERSION_1) && storeSplit[2].equals(fileID) && storeSplit[3].equals(Integer.toString(chunkNo)) && storeSplit[4].equals(CRLF) && storeSplit[5].equals(CRLF));
 	}
 }
