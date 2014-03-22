@@ -101,13 +101,16 @@ public class SubProtocolTest {
 		String chunkBody = "sensitive_data";
 		int mdrPort = 54321;
 		String address = "224.2.2.4";
+		int mcPort = 54321;
+		String address1 = "224.2.2.3";
 		Database db = new Database();
 		db.addChunk(fileID, chunkNo, replicationDegree, chunkBody);
 		
 		try {
 			InetAddress mdrAddress = InetAddress.getByName(address);
+			InetAddress mcAddress = InetAddress.getByName(address1);
 			
-			ChunkRestore cr = new ChunkRestore(db, fileID, chunkNo, mdrPort, mdrAddress);
+			ChunkRestore cr = new ChunkRestore(db, fileID, chunkNo, mdrPort, mdrAddress,mcPort,mcAddress);
 			cr.start();		
 			
 			MulticastSocket mdrSocket = new MulticastSocket(mdrPort);
@@ -120,6 +123,39 @@ public class SubProtocolTest {
 			String restoreMessage = CHUNK + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF + " " + chunkBody;
 			String receivedRestore = new String(restorePacket.getData(),ENCODING).trim();
 			
+			assertEquals(restoreMessage, receivedRestore);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			InetAddress mdrAddress = InetAddress.getByName(address);
+			InetAddress mcAddress = InetAddress.getByName(address1);
+			
+			
+			
+			ChunkRestore cr = new ChunkRestore(db, fileID, chunkNo, mdrPort, mdrAddress,mcPort,mcAddress);
+			cr.start();
+			
+			String restoreMessage = CHUNK + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF + " " + chunkBody;
+			byte[] chunkData = restoreMessage.getBytes(ENCODING);
+			DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length, mcAddress, mcPort);
+			DatagramSocket mcSocket = new DatagramSocket();
+			Thread.sleep(10);
+			mcSocket.send(chunkPacket);
+			mcSocket.close();
+			
+			MulticastSocket mdrSocket = new MulticastSocket(mdrPort);
+			byte[] restoreData = new byte[ARRAY_SIZE];
+			DatagramPacket restorePacket = new DatagramPacket(restoreData, restoreData.length);
+			mdrSocket.joinGroup(mdrAddress);
+			mdrSocket.setSoTimeout(HALF_A_SECOND);
+			mdrSocket.receive(restorePacket);
+			fail();
+			mdrSocket.close();
+			
+			String receivedRestore = new String(restorePacket.getData(),ENCODING).trim();
 			assertEquals(restoreMessage, receivedRestore);
 			
 		} catch (Exception e) {
