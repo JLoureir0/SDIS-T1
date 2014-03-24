@@ -28,6 +28,7 @@ public class ChunkDelete {
 			String request = createPacket();
 			
 			for(int i=0;i<numberOfDeleteMessages;i++) {
+				Thread.sleep(100);
 				sendPacket(request);
 			}
 			mcSocket.close();
