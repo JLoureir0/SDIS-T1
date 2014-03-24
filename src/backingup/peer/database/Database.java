@@ -5,10 +5,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class Database {
+	private Map<ID, Chunk> chunks;
 
-  private Map<ID, Chunk> chunks;
-
-  public Database() {
+	public Database() {
 		chunks = new HashMap<ID,Chunk>();
 	}
   
@@ -22,8 +21,9 @@ public class Database {
 		Iterator<ID> it = chunks.keySet().iterator();
 		while(it.hasNext()) {
 			ID id = it.next();
-			if(id.getFileID() == fileID)
+			if(id.getFileID() == fileID) {
 				it.remove();
+			}
 		}
 	}
 	
@@ -49,5 +49,16 @@ public class Database {
 	
 	public void resetCount(String fileID, int chunkNo) {
 		chunks.get(new ID(fileID, chunkNo)).resetCount();;
+	}
+	
+	public int getSize() {
+		int size = 0;
+		Iterator<Chunk> it = chunks.values().iterator();
+		
+		while(it.hasNext()) {
+			Chunk chunk = it.next();
+			size += chunk.getChunkBody().length();
+		}
+		return size;
 	}
 }
