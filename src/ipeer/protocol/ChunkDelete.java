@@ -6,7 +6,7 @@ import java.net.InetAddress;
 
 public class ChunkDelete {
 	private static String ENCODING = "US-ASCII";
-	private static String DELETE = "delete";
+	private static String DELETE = "DELETE";
 	private static String CRLF = "CRLF";
 	private int mcPort;
 	private InetAddress mcAddress;
@@ -22,7 +22,7 @@ public class ChunkDelete {
 		this.mcPort = mcPort;
 	}
 	
-	public void start() {
+	public boolean start() {
 		try {
 			mcSocket = new DatagramSocket();
 			String request = createPacket();
@@ -31,9 +31,13 @@ public class ChunkDelete {
 				sendPacket(request);
 			}
 			mcSocket.close();
+			System.out.println("Vou fechar com true");
+			return true;
 		}catch (Exception e) {
 			e.printStackTrace();
-		}	
+		}
+		System.out.println("Vou fechar com false");
+		return false;
 	}
 	
 	public String createPacket() {
@@ -41,10 +45,14 @@ public class ChunkDelete {
 		return request;
 	}
 	
-	public void sendPacket(String request) throws Exception {
-		byte[] deleteRequest = request.getBytes(ENCODING);
-		sendPacket = new DatagramPacket(deleteRequest,deleteRequest.length,mcAddress,mcPort);
-		mcSocket.send(sendPacket);
+	public void sendPacket(String request) {
+		try {
+			byte[] deleteRequest = request.getBytes(ENCODING);
+			sendPacket = new DatagramPacket(deleteRequest,deleteRequest.length,mcAddress,mcPort);
+			mcSocket.send(sendPacket);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return;
 	}
 	
