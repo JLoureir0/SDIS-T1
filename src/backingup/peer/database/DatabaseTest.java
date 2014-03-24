@@ -64,10 +64,12 @@ public class DatabaseTest {
 		assertEquals("swag_data", db.getChunkBody("id1", 1));
 		
 		db.addChunk("id1", 2, 9, "stupid_data");
+		assertEquals(29, db.getSize());
 		
 		db.removeFile("id1");
 		assertFalse(db.containsChunk("id1", 1));
 		assertFalse(db.containsChunk("id1", 2));
-		assertTrue(db.containsChunk("id2", 1));		
+		assertTrue(db.containsChunk("id2", 1));
+		assertEquals(9,db.getSize());
 	}
 }
