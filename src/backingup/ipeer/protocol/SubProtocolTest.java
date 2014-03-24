@@ -145,8 +145,10 @@ public class SubProtocolTest {
 			};
 			t.start();
 			Thread.sleep(10);
-			String result = cr.start();
+			String result = cr.restoreChunk();
 			assertEquals(chunkBody,result);		
+		} catch (ChunkNotFound cf) {
+			fail();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	
@@ -197,7 +199,7 @@ public class SubProtocolTest {
 				}
 			};
 			t.start();
-			assertTrue(cd.start());
+			assertTrue(cd.chunkDelete());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

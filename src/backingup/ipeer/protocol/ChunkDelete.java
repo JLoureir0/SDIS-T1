@@ -21,7 +21,7 @@ public class ChunkDelete {
 		this.mcPort = mcPort;
 	}
 	
-	public boolean start() {
+	public boolean chunkDelete() {
 		try {
 			mcSocket = new DatagramSocket();
 			String request = createPacket();

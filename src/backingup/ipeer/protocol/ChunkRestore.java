@@ -36,18 +36,23 @@ public class ChunkRestore {
 		}
 	}
 	
-	public String start() {
+	public String restoreChunk() throws ChunkNotFound {
+		long endTime = System.currentTimeMillis() + Constants.SLEEP;
 		boolean received = false;
 		while(!received) {
-			sendPacket();
-			received = receivePacket();
+			
+			if(System.currentTimeMillis() > endTime)
+				throw new ChunkNotFound();
+
+			sendGetChunk();
+			received = receiveChunk();
 		}
 		mcSocket.close();
 		mdrSocket.close();
 		return receivedChunkBody;
 	}
 	
-	public void sendPacket() {
+	public void sendGetChunk() {
 		String stringRequest = Constants.GETCHUNK + " " + Constants.VERSION_1 + " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF;
 		
 		try {
@@ -59,29 +64,36 @@ public class ChunkRestore {
 		}
 	}
 	
-	public boolean receivePacket() {
+	public boolean receiveChunk() {
 		byte[] receiveData = new byte[Constants.ARRAY_SIZE];
 		
 		try {
 			mdrSocket = new MulticastSocket(mdrPort);
-			//mdrSocket.setSoTimeout(TWO_SECONDS);
+			mdrSocket.setSoTimeout(Constants.SLEEP);
 			mdrSocket.joinGroup(mdrAddress);
 			DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
 
 			mdrSocket.receive(receivedPacket);
 			String receivedMessage = new String(receivedPacket.getData(),Constants.ENCODING).trim();
-			String[] receivedSplit = receivedMessage.split(Constants.WHITESPACE_REGEX);
-			
-			if(receivedSplit[0].equals(Constants.CHUNK) && receivedSplit[2].equals(fileID) /*&& receivedSplit[3].equals(chunkNo)*/) {
-				receivedChunkBody = receivedSplit[6];
-				return true;
-			}
-			else
-				return false;
 
+			if(correctChunk(receivedMessage))
+				return true;		
+			return false;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
 		return false;
 	}
+	
+	public boolean correctChunk(String chunk) {
+		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
+		String chunkNumber = ""+chunkNo;
+		if(chunkSplit[0].equals(Constants.CHUNK) && chunkSplit[1].equals(Constants.VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(chunkNumber) && chunkSplit[4].equals(Constants.CRLF) && chunkSplit[5].equals(Constants.CRLF)) {
+			receivedChunkBody = chunkSplit[6];
+			return true;
+		}
+		else
+			return false;
+	}	
 }

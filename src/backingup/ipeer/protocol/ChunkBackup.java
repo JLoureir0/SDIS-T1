@@ -35,7 +35,6 @@ public class ChunkBackup {
 		
 		try {
 			mdbSocket = new DatagramSocket();
-			
 			mcSocket = new MulticastSocket(mcPort);
 			mcSocket.joinGroup(mcAddress);
 		} catch (Exception e) {
