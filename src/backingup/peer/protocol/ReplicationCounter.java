@@ -1,10 +1,10 @@
-package peer.protocol;
+package backingup.peer.protocol;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
-import peer.database.Database;
+import backingup.peer.database.Database;
 
 public class ReplicationCounter extends Thread {
 	private final int HALF_A_SECOND = 500;

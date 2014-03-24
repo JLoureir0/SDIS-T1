@@ -1,13 +1,12 @@
-package ipeer.protocol;
+package backingup.ipeer.protocol;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+import backingup.Constants;
+
 public class ChunkDelete {
-	private static String ENCODING = "US-ASCII";
-	private static String DELETE = "DELETE";
-	private static String CRLF = "CRLF";
 	private int mcPort;
 	private InetAddress mcAddress;
 	private DatagramPacket sendPacket;
@@ -42,13 +41,13 @@ public class ChunkDelete {
 	}
 	
 	public String createPacket() {
-		String request = DELETE + " " + fileId + " " + CRLF + " " + CRLF; 
+		String request = Constants.DELETE + " " + fileId + " " + Constants.CRLF + " " + Constants.CRLF; 
 		return request;
 	}
 	
 	public void sendPacket(String request) {
 		try {
-			byte[] deleteRequest = request.getBytes(ENCODING);
+			byte[] deleteRequest = request.getBytes(Constants.ENCODING);
 			sendPacket = new DatagramPacket(deleteRequest,deleteRequest.length,mcAddress,mcPort);
 			mcSocket.send(sendPacket);
 		} catch (Exception e) {

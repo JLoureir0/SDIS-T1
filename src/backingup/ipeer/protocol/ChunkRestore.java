@@ -1,21 +1,13 @@
-package ipeer.protocol;
+package backingup.ipeer.protocol;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.net.SocketException;
+
+import backingup.Constants;
 
 public class ChunkRestore {
-	private String WHITESPACE_REGEX = "\\s";
-	private int ARRAY_SIZE = 512;
-	private int TWO_SECONDS = 2000;
-	private String ENCODING = "US-ASCII";
-	private String VERSION_1 = "1.0";
-	private String CRLF = "CRLF";
-	private String GETCHUNK = "GETCHUNK";
-	private String CHUNK = "CHUNK";
-
 	private String fileID;
 	private int chunkNo;
 
@@ -58,10 +50,10 @@ public class ChunkRestore {
 	}
 	
 	public void sendPacket() {
-		String stringRequest = GETCHUNK + " " + VERSION_1 + " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF;
+		String stringRequest = Constants.GETCHUNK + " " + Constants.VERSION_1 + " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF;
 		
 		try {
-			byte[] request = stringRequest.getBytes(ENCODING);
+			byte[] request = stringRequest.getBytes(Constants.ENCODING);
 			DatagramPacket sendPacket = new DatagramPacket(request, request.length, mcAddress, mcPort);
 			mcSocket.send(sendPacket);
 		} catch (Exception e) {
@@ -70,7 +62,7 @@ public class ChunkRestore {
 	}
 	
 	public boolean receivePacket() {
-		byte[] receiveData = new byte[ARRAY_SIZE];
+		byte[] receiveData = new byte[Constants.ARRAY_SIZE];
 		
 		try {
 			mdrSocket = new MulticastSocket(mdrPort);
@@ -79,13 +71,13 @@ public class ChunkRestore {
 			DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
 
 			mdrSocket.receive(receivedPacket);
-			String receivedMessage = new String(receivedPacket.getData(),ENCODING).trim();
-			String[] receivedSplit = receivedMessage.split(WHITESPACE_REGEX);
+			String receivedMessage = new String(receivedPacket.getData(),Constants.ENCODING).trim();
+			String[] receivedSplit = receivedMessage.split(Constants.WHITESPACE_REGEX);
 			
 			System.out.println("************************");
 			System.out.println("0: "+receivedSplit[0] + " 2: " + receivedSplit[2] + " 3: " + receivedSplit[3]);
 			System.out.println("************************");
-			if(receivedSplit[0].equals(CHUNK) && receivedSplit[2].equals(fileID) /*&& receivedSplit[3].equals(chunkNo)*/) {
+			if(receivedSplit[0].equals(Constants.CHUNK) && receivedSplit[2].equals(fileID) /*&& receivedSplit[3].equals(chunkNo)*/) {
 				System.out.println("CERTO!");
 				receivedChunkBody = receivedSplit[6];
 				return true;

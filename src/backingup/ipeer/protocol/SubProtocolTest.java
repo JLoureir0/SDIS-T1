@@ -1,4 +1,4 @@
-package ipeer.protocol;
+package backingup.ipeer.protocol;
 
 import static org.junit.Assert.*;
 
@@ -9,18 +9,9 @@ import java.net.MulticastSocket;
 
 import org.junit.Test;
 
+import backingup.Constants;
+
 public class SubProtocolTest {
-	private final int ARRAY_SIZE = 512;
-	private final String WHITESPACE_REGEX = "\\s"; 
-	private final String ENCODING = "US-ASCII";
-	private final String PUTCHUNK = "PUTCHUNK";
-	private final String GETCHUNK = "GETCHUNK";
-	private final String STORED = "STORED";
-	private final String DELETE = "DELETE";
-	private final String CHUNK = "CHUNK";
-	private final String VERSION_1 = "1.0";
-	private final String CRLF = "CRLF";
-	
 	@Test
 	public void testChunkBackup() {
 		String fileID = "id1";
@@ -50,7 +41,7 @@ public class SubProtocolTest {
 				String address = "224.2.2.5";
 				int mcPort = 54321;
 				String address1 = "224.2.2.3";
-				String storeMessage = STORED + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF;
+				String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF;
 				
 				try {
 					InetAddress mdbAddress = InetAddress.getByName(address);
@@ -58,27 +49,27 @@ public class SubProtocolTest {
 					MulticastSocket mdbSocket = new MulticastSocket(mdbPort);
 					mdbSocket.joinGroup(mdbAddress);
 					
-					byte[] putchunkData = new byte[ARRAY_SIZE];
+					byte[] putchunkData = new byte[Constants.ARRAY_SIZE];
 					DatagramPacket putchunkPacket = new DatagramPacket(putchunkData, putchunkData.length);
 					
 					mdbSocket.receive(putchunkPacket);
 					mdbSocket.close();
-					String[] putchunkMessage = new String(putchunkPacket.getData(),ENCODING).trim().split(WHITESPACE_REGEX);
+					String[] putchunkMessage = new String(putchunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
 					
 					assertEquals(8, putchunkMessage.length);
-					assertEquals(PUTCHUNK, putchunkMessage[0]);
-					assertEquals(VERSION_1, putchunkMessage[1]);
+					assertEquals(Constants.PUTCHUNK, putchunkMessage[0]);
+					assertEquals(Constants.VERSION_1, putchunkMessage[1]);
 					assertEquals(fileID, putchunkMessage[2]);
 					assertEquals(Integer.toString(chunkNo), putchunkMessage[3]);
 					assertEquals(Integer.toString(replicationDegree), putchunkMessage[4]);
-					assertEquals(CRLF, putchunkMessage[5]);
-					assertEquals(CRLF, putchunkMessage[6]);
+					assertEquals(Constants.CRLF, putchunkMessage[5]);
+					assertEquals(Constants.CRLF, putchunkMessage[6]);
 					assertEquals(chunkBody, putchunkMessage[7]);
 					
 					InetAddress mcAddress = InetAddress.getByName(address1);
 					DatagramSocket mcSocket = new DatagramSocket();
 					
-					byte[] storeData = storeMessage.getBytes(ENCODING);
+					byte[] storeData = storeMessage.getBytes(Constants.ENCODING);
 					DatagramPacket storePacket = new DatagramPacket(storeData, storeData.length, mcAddress, mcPort);
 					
 					mcSocket.send(storePacket);
@@ -120,7 +111,7 @@ public class SubProtocolTest {
 					int mdrPort = 55321;
 					String address1 = "224.2.2.4";
 					String chunkBody = "sensitive_data";
-					String sendChunkMessage = CHUNK + " " + VERSION_1 + " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF + " " + chunkBody; 
+					String sendChunkMessage = Constants.CHUNK + " " + Constants.VERSION_1 + " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF + " " + chunkBody; 
 					
 					try {
 						InetAddress mcAddress = InetAddress.getByName(address);
@@ -129,25 +120,25 @@ public class SubProtocolTest {
 						MulticastSocket mcSocket = new MulticastSocket(mcPort);
 						mcSocket.joinGroup(mcAddress);
 						
-						byte[] getChunkData = new byte[ARRAY_SIZE];
+						byte[] getChunkData = new byte[Constants.ARRAY_SIZE];
 						DatagramPacket getChunkPacket = new DatagramPacket(getChunkData, getChunkData.length);
 						System.out.println("Vou receber GETCHUNK");
 						mcSocket.receive(getChunkPacket);
 						mcSocket.close();
-						String[] getChunkMessage = new String(getChunkPacket.getData(),ENCODING).trim().split(WHITESPACE_REGEX);
+						String[] getChunkMessage = new String(getChunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
 						
 						System.out.println("VACA DA AREIRA");
 						assertEquals(6, getChunkMessage.length);
-						System.out.println(GETCHUNK + " " + getChunkMessage[0]);
-						assertEquals(GETCHUNK, getChunkMessage[0]);
+						System.out.println(Constants.GETCHUNK + " " + getChunkMessage[0]);
+						assertEquals(Constants.GETCHUNK, getChunkMessage[0]);
 						System.out.println("a");
-						assertEquals(VERSION_1, getChunkMessage[1]);
+						assertEquals(Constants.VERSION_1, getChunkMessage[1]);
 						System.out.println("b");
 						assertEquals(fileID, getChunkMessage[2]);
 						System.out.println("Vou enviar");
 						DatagramSocket mdrSocket = new DatagramSocket();
 						
-						byte[] chunkData = sendChunkMessage.getBytes(ENCODING);
+						byte[] chunkData = sendChunkMessage.getBytes(Constants.ENCODING);
 						DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length, mdrAddress, mdrPort);
 						
 						mdrSocket.send(chunkPacket);
@@ -193,16 +184,16 @@ public class SubProtocolTest {
 						mcSocket.joinGroup(mcAddress);
 					
 						for(int i=0; i<numberOfDeleteMessages; i++) {
-							byte[] deletechunkData = new byte[ARRAY_SIZE];
+							byte[] deletechunkData = new byte[Constants.ARRAY_SIZE];
 							DatagramPacket deleteChunkPacket = new DatagramPacket(deletechunkData, deletechunkData.length);
 							System.out.println("i: "+i);
 							mcSocket.receive(deleteChunkPacket);
-							String [] deletechunkMessage = new String(deleteChunkPacket.getData(),ENCODING).trim().split(WHITESPACE_REGEX);
+							String [] deletechunkMessage = new String(deleteChunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
 							assertEquals(4, deletechunkMessage.length);
-							assertEquals(DELETE, deletechunkMessage[0]);
+							assertEquals(Constants.DELETE, deletechunkMessage[0]);
 							assertEquals(fileId, deletechunkMessage[1]);
-							assertEquals(CRLF, deletechunkMessage[2]);
-							assertEquals(CRLF, deletechunkMessage[3]);
+							assertEquals(Constants.CRLF, deletechunkMessage[2]);
+							assertEquals(Constants.CRLF, deletechunkMessage[3]);
 							System.out.println("FIM");
 						}
 						System.out.println("VOU FECHAR A MERDA DO SOCKET");

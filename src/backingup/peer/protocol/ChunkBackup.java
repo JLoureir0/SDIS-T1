@@ -1,4 +1,4 @@
-package peer.protocol;
+package backingup.peer.protocol;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -6,15 +6,10 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Random;
 
-import peer.database.Database;
+import backingup.Constants;
+import backingup.peer.database.Database;
 
-public class ChunkBackup extends Thread {
-	private final int SLEEP = 401;
-	private final String STORED = "STORED";
-	private final String VERSION_1 = "1.0";
-	private final String CRLF = "CRLF";
-	private final String ENCODING = "US-ASCII";
-	
+public class ChunkBackup extends Thread {	
 	private Database database;
 	private String fileID;
 	private int chunkNo;
@@ -54,12 +49,12 @@ public class ChunkBackup extends Thread {
 	}
 	
 	private void sendStore() {
-		String storeMessage = STORED + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF;
+		String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF;
 		
 		try {
-			byte[] storeData = storeMessage.getBytes(ENCODING);
+			byte[] storeData = storeMessage.getBytes(Constants.ENCODING);
 			DatagramPacket storePacket = new DatagramPacket(storeData, storeData.length, mcAddress, mcPort);
-			Thread.sleep(random.nextInt(SLEEP));
+			Thread.sleep(random.nextInt(Constants.SLEEP));
 			mcSocket.send(storePacket);
 			mcSocket.close();
 		} catch(Exception e) {

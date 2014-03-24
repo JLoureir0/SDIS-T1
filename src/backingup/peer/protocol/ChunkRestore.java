@@ -1,4 +1,4 @@
-package peer.protocol;
+package backingup.peer.protocol;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -7,17 +7,10 @@ import java.net.MulticastSocket;
 import java.net.SocketException;
 import java.util.Random;
 
-import peer.database.Database;
+import backingup.Constants;
+import backingup.peer.database.Database;
 
-public class ChunkRestore extends Thread {
-	private final int ARRAY_SIZE = 512;
-	private final int SLEEP = 401;
-	private final String CHUNK = "CHUNK";
-	private final String VERSION_1 = "1.0";
-	private final String CRLF = "CRLF";
-	private final String ENCODING = "US-ASCII";
-	private final String WHITESPACE_REGEX = "\\s";
-	
+public class ChunkRestore extends Thread {	
 	private Database database;
 	private String fileID;
 	private int chunkNo;
@@ -57,10 +50,10 @@ public class ChunkRestore extends Thread {
 	
 	private void sendChunk() {
 		chunkBody = database.getChunkBody(fileID, chunkNo);
-		String chunkMessage = CHUNK + " " + VERSION_1 +  " " + fileID + " " + chunkNo + " " + CRLF + " " + CRLF + " " + chunkBody;
+		String chunkMessage = Constants.CHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF + " " + chunkBody;
 		
 		try {
-			byte[] chunkData = chunkMessage.getBytes(ENCODING);
+			byte[] chunkData = chunkMessage.getBytes(Constants.ENCODING);
 			DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length, mdrAddress, mdrPort);
 			
 			if(noResponse())
@@ -75,17 +68,17 @@ public class ChunkRestore extends Thread {
 		try {
 			MulticastSocket mcSocket = new MulticastSocket(mcPort);
 			mcSocket.joinGroup(mcAddress);
-			int timeout = random.nextInt(SLEEP);
+			int timeout = random.nextInt(Constants.SLEEP);
 			mcSocket.setSoTimeout(timeout);			
 			
 			long endTime = System.currentTimeMillis()+timeout;
 			
 			while(System.currentTimeMillis() < endTime) {
 				try {
-					byte[] chunkData = new byte[ARRAY_SIZE];
+					byte[] chunkData = new byte[Constants.ARRAY_SIZE];
 					DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length);
 					mcSocket.receive(chunkPacket);
-					String chunk = new String(chunkPacket.getData(),ENCODING).trim();
+					String chunk = new String(chunkPacket.getData(),Constants.ENCODING).trim();
 					
 					if(System.currentTimeMillis() < endTime && correctChunk(chunk)) {
 						mcSocket.close();
@@ -103,7 +96,7 @@ public class ChunkRestore extends Thread {
 	}
 	
 	private boolean correctChunk(String chunk) {
-		String[] chunkSplit = chunk.split(WHITESPACE_REGEX);
-		return (chunkSplit[0].equals(CHUNK) && chunkSplit[1].equals(VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(Integer.toString(chunkNo)) && chunkSplit[4].equals(CRLF) && chunkSplit[5].equals(CRLF) && chunkSplit[6].equals(chunkBody));
+		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
+		return (chunkSplit[0].equals(Constants.CHUNK) && chunkSplit[1].equals(Constants.VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(Integer.toString(chunkNo)) && chunkSplit[4].equals(Constants.CRLF) && chunkSplit[5].equals(Constants.CRLF) && chunkSplit[6].equals(chunkBody));
 	}
 }

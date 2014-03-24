@@ -1,4 +1,4 @@
-package peer.database;
+package backingup.peer.database;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

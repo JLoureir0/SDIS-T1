@@ -1,20 +1,13 @@
-package ipeer.protocol;
+package backingup.ipeer.protocol;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
+import backingup.Constants;
+
 public class ChunkBackup {
-	private final int HALF_A_SECOND = 500;
-	private final int ARRAY_SIZE = 512;
-	private final String WHITESPACE_REGEX = "\\s";
-	private final String ENCODING = "US-ASCII";
-	private final String PUTCHUNK = "PUTCHUNK";
-	private final String STORED = "STORED";
-	private final String VERSION_1 = "1.0";
-	private final String CRLF = "CRLF";
-	
 	private String fileID;
 	private int chunkNo;
 	private int replicationDegree;
@@ -70,9 +63,9 @@ public class ChunkBackup {
 	}
 	
 	private  void sendPutChunk() {
-		String putchunkMessage = PUTCHUNK + " " + VERSION_1 + " " + fileID + " " + chunkNo + " " + replicationDegree + " " + CRLF + " " + CRLF + " " + chunkBody;
+		String putchunkMessage = Constants.PUTCHUNK + " " + Constants.VERSION_1 + " " + fileID + " " + chunkNo + " " + replicationDegree + " " + Constants.CRLF + " " + Constants.CRLF + " " + chunkBody;
 		try {
-			byte[] putchunkData = putchunkMessage.getBytes(ENCODING);
+			byte[] putchunkData = putchunkMessage.getBytes(Constants.ENCODING);
 			DatagramPacket putchunkPacket = new DatagramPacket(putchunkData, putchunkData.length, mdbAddress, mdbPort);
 			mdbSocket.send(putchunkPacket);
 		} catch(Exception e) {
@@ -81,11 +74,11 @@ public class ChunkBackup {
 	}
 	
 	private void replicationCounter(int iteration) {
-		byte[] storeData = new byte[ARRAY_SIZE];
-		long endTime = (long) (System.currentTimeMillis() + HALF_A_SECOND*Math.pow(2, iteration));
+		byte[] storeData = new byte[Constants.ARRAY_SIZE];
+		long endTime = (long) (System.currentTimeMillis() + Constants.HALF_A_SECOND*Math.pow(2, iteration));
 		
 		try {
-			mcSocket.setSoTimeout((int) (HALF_A_SECOND*Math.pow(2, iteration)));
+			mcSocket.setSoTimeout((int) (Constants.HALF_A_SECOND*Math.pow(2, iteration)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -95,7 +88,7 @@ public class ChunkBackup {
 			try {
 				DatagramPacket storePacket = new DatagramPacket(storeData, storeData.length);
 				mcSocket.receive(storePacket);
-				if(System.currentTimeMillis() < endTime && correctChunk(new String(storePacket.getData(), ENCODING).trim())) {
+				if(System.currentTimeMillis() < endTime && correctChunk(new String(storePacket.getData(), Constants.ENCODING).trim())) {
 					replicationCounter++;
 				}
 			} catch (Exception e) {
@@ -104,7 +97,7 @@ public class ChunkBackup {
 	}
 	
 	private boolean correctChunk(String store) {
-		String[] storeSplit = store.split(WHITESPACE_REGEX);
-		return (storeSplit[0].equals(STORED) && storeSplit[1].equals(VERSION_1) && storeSplit[2].equals(fileID) && storeSplit[3].equals(Integer.toString(chunkNo)) && storeSplit[4].equals(CRLF) && storeSplit[5].equals(CRLF));
+		String[] storeSplit = store.split(Constants.WHITESPACE_REGEX);
+		return (storeSplit[0].equals(Constants.STORED) && storeSplit[1].equals(Constants.VERSION_1) && storeSplit[2].equals(fileID) && storeSplit[3].equals(Integer.toString(chunkNo)) && storeSplit[4].equals(Constants.CRLF) && storeSplit[5].equals(Constants.CRLF));
 	}
 }

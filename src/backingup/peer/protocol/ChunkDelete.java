@@ -1,6 +1,6 @@
-package peer.protocol;
+package backingup.peer.protocol;
 
-import peer.database.Database;
+import backingup.peer.database.Database;
 
 public class ChunkDelete extends Thread{
 	private Database database;
