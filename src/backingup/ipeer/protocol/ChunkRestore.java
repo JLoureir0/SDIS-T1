@@ -39,13 +39,11 @@ public class ChunkRestore {
 	public String start() {
 		boolean received = false;
 		while(!received) {
-			System.out.println("Entrei no WHILE");
 			sendPacket();
 			received = receivePacket();
 		}
 		mcSocket.close();
 		mdrSocket.close();
-		System.out.println("Sai do WHILE");
 		return receivedChunkBody;
 	}
 	
@@ -74,11 +72,7 @@ public class ChunkRestore {
 			String receivedMessage = new String(receivedPacket.getData(),Constants.ENCODING).trim();
 			String[] receivedSplit = receivedMessage.split(Constants.WHITESPACE_REGEX);
 			
-			System.out.println("************************");
-			System.out.println("0: "+receivedSplit[0] + " 2: " + receivedSplit[2] + " 3: " + receivedSplit[3]);
-			System.out.println("************************");
 			if(receivedSplit[0].equals(Constants.CHUNK) && receivedSplit[2].equals(fileID) /*&& receivedSplit[3].equals(chunkNo)*/) {
-				System.out.println("CERTO!");
 				receivedChunkBody = receivedSplit[6];
 				return true;
 			}

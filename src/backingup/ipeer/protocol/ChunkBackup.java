@@ -51,14 +51,12 @@ public class ChunkBackup {
 				if(replicationCounter >= replicationDegree) {
 					mdbSocket.close();
 					mcSocket.close();
-					System.out.println("Vou fechar com true");
 					return true;
 				}
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("Vou fechar com false");
 		return false;
 	}
 	

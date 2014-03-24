@@ -122,20 +122,14 @@ public class SubProtocolTest {
 						
 						byte[] getChunkData = new byte[Constants.ARRAY_SIZE];
 						DatagramPacket getChunkPacket = new DatagramPacket(getChunkData, getChunkData.length);
-						System.out.println("Vou receber GETCHUNK");
 						mcSocket.receive(getChunkPacket);
 						mcSocket.close();
 						String[] getChunkMessage = new String(getChunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
 						
-						System.out.println("VACA DA AREIRA");
 						assertEquals(6, getChunkMessage.length);
-						System.out.println(Constants.GETCHUNK + " " + getChunkMessage[0]);
 						assertEquals(Constants.GETCHUNK, getChunkMessage[0]);
-						System.out.println("a");
 						assertEquals(Constants.VERSION_1, getChunkMessage[1]);
-						System.out.println("b");
 						assertEquals(fileID, getChunkMessage[2]);
-						System.out.println("Vou enviar");
 						DatagramSocket mdrSocket = new DatagramSocket();
 						
 						byte[] chunkData = sendChunkMessage.getBytes(Constants.ENCODING);
@@ -186,7 +180,6 @@ public class SubProtocolTest {
 						for(int i=0; i<numberOfDeleteMessages; i++) {
 							byte[] deletechunkData = new byte[Constants.ARRAY_SIZE];
 							DatagramPacket deleteChunkPacket = new DatagramPacket(deletechunkData, deletechunkData.length);
-							System.out.println("i: "+i);
 							mcSocket.receive(deleteChunkPacket);
 							String [] deletechunkMessage = new String(deleteChunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
 							assertEquals(4, deletechunkMessage.length);
@@ -194,9 +187,7 @@ public class SubProtocolTest {
 							assertEquals(fileId, deletechunkMessage[1]);
 							assertEquals(Constants.CRLF, deletechunkMessage[2]);
 							assertEquals(Constants.CRLF, deletechunkMessage[3]);
-							System.out.println("FIM");
 						}
-						System.out.println("VOU FECHAR A MERDA DO SOCKET");
 						mcSocket.close();
 						
 					} catch (Exception e) {
