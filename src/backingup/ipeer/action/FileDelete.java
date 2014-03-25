@@ -19,7 +19,7 @@ public class FileDelete {
 	public FileDelete(String fileId, int numberOfDeleteMessages, InetAddress mcAddress, int mcPort, String path) {
 		this.fileId = fileId;
 		this.numberOfDeleteMessages = numberOfDeleteMessages;
-		this.mcAddress = mcAddress; 
+		this.mcAddress = mcAddress;  
 		this.mcPort = mcPort;
 		this.path = path;
 	}
