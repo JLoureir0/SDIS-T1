@@ -1,11 +1,11 @@
 package backingup.ipeer.database;
 
-public class File {
+public class FileDb {
 
 	private String path;
 	private int chunkNos;
 	
-	public File(String path, int chunkNos) {
+	public FileDb(String path, int chunkNos) {
 		this.path = path;
 		this.chunkNos = chunkNos;
 	}

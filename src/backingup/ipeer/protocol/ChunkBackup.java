@@ -59,7 +59,7 @@ public class ChunkBackup {
 		return false;
 	}
 	
-	private  void sendPutChunk() {
+	private void sendPutChunk() {
 		String putchunkMessage = Constants.PUTCHUNK + " " + Constants.VERSION_1 + " " + fileID + " " + chunkNo + " " + replicationDegree + " " + Constants.CRLF + " " + Constants.CRLF + " " + chunkBody;
 		try {
 			byte[] putchunkData = putchunkMessage.getBytes(Constants.ENCODING);
