@@ -199,7 +199,7 @@ public class SubProtocolTest {
 				}
 			};
 			t.start();
-			assertTrue(cd.chunkDelete());
+			assertTrue(cd.deleteChunk());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
