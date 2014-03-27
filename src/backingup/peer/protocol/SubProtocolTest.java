@@ -28,7 +28,7 @@ public class SubProtocolTest {
 			InetAddress mcAddress = InetAddress.getByName(address);
 			
 			ChunkBackup cb = new ChunkBackup(db, fileID, chunkNo, replicationDegree, chunkBody, mcPort, mcAddress);
-			cb.start();		
+			cb.start();
 			
 			MulticastSocket mcSocket = new MulticastSocket(mcPort);
 			byte[] storeData = new byte[Constants.ARRAY_SIZE];

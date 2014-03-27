@@ -1,7 +1,6 @@
 package backingup;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,16 +14,14 @@ public class FileManager {
 	}
 	
 	public boolean deleteFile() {
-		boolean success = false;
         Path filePath = FileSystems.getDefault().getPath(path);
 
         try {
-            success = Files.deleteIfExists(filePath);
-        } catch (IOException | SecurityException e) {
+            return Files.deleteIfExists(filePath);
+        } catch (Exception e) {
         	e.printStackTrace();
-        	success = false;
+        	return false;
         }
-        return success;
 	}
 	
 	public boolean writeFile(String fileBody) {
@@ -37,7 +34,4 @@ public class FileManager {
 		}
 		return true;
 	}
-	
-	// public String readFile() {}
-	
 }

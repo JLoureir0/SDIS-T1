@@ -5,12 +5,6 @@ public class Chunk {
 	private int replicationDegree;
 	private String chunkBody;
 	private int count;
-
-	public Chunk() {
-		chunkBody = "";
-		replicationDegree = 0;
-		count = 0;
-	}
 	
 	public Chunk(int replicationDegree, String chunkBody) {
 		this.replicationDegree = replicationDegree;
