@@ -8,6 +8,7 @@ public class Constants {
 	public static String GETCHUNK = "GETCHUNK";
 	public static final String CHUNK = "CHUNK";
 	public static String DELETE = "DELETE";
+	public static final String REMOVED = "REMOVED";
 	public static final String VERSION_1 = "1.0";
 	public static final String CRLF = "CRLF";
 	public static final String ENCODING = "US-ASCII";

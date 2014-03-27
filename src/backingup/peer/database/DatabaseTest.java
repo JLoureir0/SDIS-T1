@@ -35,13 +35,23 @@ public class DatabaseTest {
 		chunk.increaseCount();
 		assertEquals(1, chunk.getCount());
 		
+		chunk.increaseCount();
+		assertEquals(2, chunk.getCount());
+		chunk.decreaseCount();
+		assertEquals(1, chunk.getCount());
+		
 		chunk.resetCount();
 		assertEquals(0, chunk.getCount());
 	}
 	
 	@Test
 	public void testDatabase() {
-		Database db = new Database();
+		Database db = new Database(100);
+		
+		assertEquals(100, db.getMaxSize());
+		
+		db.setMaxSize(150);
+		assertEquals(150, db.getMaxSize());
 		
 		db.addChunk("id1", 1, 9, "very_important_data");
 		
@@ -53,11 +63,15 @@ public class DatabaseTest {
 		
 		db.increaseCount("id1",1);
 		assertEquals(1, db.getCount("id1",1));
+		db.increaseCount("id1",1);
+		assertEquals(2, db.getCount("id1",1));
+		db.decreaseCount("id1", 1);
+		assertEquals(1, db.getCount("id1",1));
 		db.resetCount("id1",1);
 		assertEquals(0, db.getCount("id1",1));
 		db.increaseCount("id1",1);
 		
-		db.addChunk("id2", 1, 9, "cool_data");
+		db.addChunk("id2", 1, 1, "cool_data");
 		
 		db.addChunk("id1", 1, 9, "swag_data");
 		assertEquals(0, db.getCount("id1",1));
@@ -71,5 +85,22 @@ public class DatabaseTest {
 		assertFalse(db.containsChunk("id1", 2));
 		assertTrue(db.containsChunk("id2", 1));
 		assertEquals(9,db.getSize());
+		
+		db.addChunk("id1", 1, 9, "important_data");
+		db.increaseCount("id2", 1);
+		db.increaseCount("id2", 1);
+		
+		ID id2 = db.removeChunk();
+		assertEquals("id2", id2.getFileID());
+		assertEquals(1, id2.getChunkNo());
+		assertEquals(14, db.getSize());
+		
+		ID id1 = db.removeChunk();
+		assertEquals("id1", id1.getFileID());
+		assertEquals(1, id1.getChunkNo());
+		assertEquals(0, db.getSize());
+		
+		db.addChunk("id1", 1, 9, "very_important_data");
+		db.addChunk("id1", 2, 9, "very_important_data");
 	}
 }
