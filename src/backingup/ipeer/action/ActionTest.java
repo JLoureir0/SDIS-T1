@@ -55,7 +55,7 @@ public class ActionTest {
 	
 	@Test
 	public void testCreateFileID() {
-		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testRestoreFile.txt";
+		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testChunks.txt";
 		int replicationDegree = 2;
 		Database db = new Database();
 		int mdbPort = 64321;
