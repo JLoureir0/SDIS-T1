@@ -11,7 +11,7 @@ public class FileManager {
 		this.path = path;
 	}
 	
-	public boolean deleteFile() {
+	public boolean delete() {
 		try{			 
     		File file = new File(path);
     		if(file.delete())
@@ -22,7 +22,7 @@ public class FileManager {
     	return false;
 	}
 	
-	public boolean writeFile(String body) {
+	public boolean write(String body) {
 		try {
 			File file = new File(Constants.BACKUP_PATH);
 			file.mkdir();
@@ -36,7 +36,7 @@ public class FileManager {
 		return true;
 	}
 	
-	public String readFile() {
+	public String read() {
 		 byte[] buffer = new byte[Constants.ARRAY_SIZE];
          String body = "";
          try {
