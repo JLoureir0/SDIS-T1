@@ -104,11 +104,9 @@ public class FileBackup {
 	
 	public void generateFileID() {
 		String fileIdentification = fileName + fileLastModification;
-		System.out.println(fileIdentification);
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			fileID = bytesToHexString(digest.digest(fileIdentification.getBytes()));
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
