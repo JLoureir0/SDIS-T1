@@ -33,7 +33,7 @@ public class FileDelete {
 	
 	public boolean removeFileFromDir() {
 		FileManager fm = new FileManager(path);
-		 return fm.deleteFile();
+		 return fm.delete();
 	}
 
 }

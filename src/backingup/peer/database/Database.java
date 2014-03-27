@@ -1,8 +1,12 @@
 package backingup.peer.database;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import backingup.Constants;
+import backingup.FileManager;
 
 public class Database {
 	private int maxSize;
@@ -18,7 +22,8 @@ public class Database {
 			ID id = new ID(fileID, chunkNo);
 			Chunk chunk = new Chunk(replicationDegree);
 			chunks.put(id, chunk);
-			// save chunk to file sys
+			FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + fileID + chunkNo);
+			fileManager.write(chunkBody);
 		}
 	}
 	
@@ -28,16 +33,18 @@ public class Database {
 			ID id = it.next();
 			Chunk chunk = chunks.get(id);
 			if(chunk.getReplicationDegree() < chunk.getCount()) {
-				// remove chunk from file sys
 				it.remove();
+				FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
+				fileManager.delete();
 				return id;
 			}
 		}
 		it = chunks.keySet().iterator();
 		if(it.hasNext()) {
 			ID id = it.next();
-			// remove chunk from file sys
 			it.remove();
+			FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
+			fileManager.delete();
 			return id;
 		}
 		return null;
@@ -48,8 +55,9 @@ public class Database {
 		while(it.hasNext()) {
 			ID id = it.next();
 			if(id.getFileID() == fileID) {
-				// remove chunk from file sys
 				it.remove();
+				FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
+				fileManager.delete();
 			}
 		}
 	}
@@ -59,8 +67,8 @@ public class Database {
 	}
 	
 	public String getChunkBody(String fileID, int chunkNo) {
-		// get Body from file sys
-		return "";
+		FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + fileID + chunkNo);
+		return fileManager.read();
 	}
 
 	public int getReplicationDegree(String fileID, int chunkNo) {
@@ -92,7 +100,11 @@ public class Database {
 	}
 	
 	public int getSize() {
-		// get size of the directory
-		return 0;
+		int size = 0;
+		for(ID id: chunks.keySet()) {
+			File file = new File(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
+			size += file.length();
+		}
+		return size;
 	}
 }
