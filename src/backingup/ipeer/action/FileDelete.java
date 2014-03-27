@@ -34,16 +34,16 @@ public class FileDelete {
 		return removeFileFromDir();
 	}
 	
-	private boolean removeFileFromDir() {
+	public boolean removeFileFromDir() {
 		boolean success = false;
         Path filePath = FileSystems.getDefault().getPath(path);
 
         try {
             success = Files.deleteIfExists(filePath);
         } catch (IOException | SecurityException e) {
-            System.err.println(e);
+        	e.printStackTrace();
         }
         return success;
 	}
-	
+
 }

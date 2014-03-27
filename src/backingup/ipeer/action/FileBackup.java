@@ -71,12 +71,11 @@ public class FileBackup {
 		return false;
 	}
 	
-	private void createFileChunks(String fileBody) {
+	public void createFileChunks(String fileBody) {
 	    String chunkBody = "";
 	    int byteCounter = 0;
 	    int chunkNo = 0;
-	    for(int i = 0; i < fileBody.length() ; i++) {
-	    	
+	    for(int i = 0; i < fileBody.length() ; i++) {    	
 	    	if(byteCounter == CHUNKSIZE) {
 	    		chunkNo++;
 	    		fileChunks.put(chunkNo,chunkBody);
@@ -96,10 +95,10 @@ public class FileBackup {
 	    }
 	}
 	
-	private void updateDatabase() {
+	public void updateDatabase() {
 		db.addFile(fileID, path, chunkNos);
 	}
-	
+
 	private boolean backupChunks() {	
 
 		boolean result = false;
@@ -114,7 +113,7 @@ public class FileBackup {
 		return true;
 	}
 	
-	private void generateFileID() {
+	public void generateFileID() {
 		String fileIdentification = fileName + fileLastModification;	
 	    MessageDigest msg=null;
 	    
@@ -139,5 +138,29 @@ public class FileBackup {
         }
         return sb.toString();
     }
+    
+	public void setFileLastModification(long fileLastModification) {
+		this.fileLastModification = fileLastModification;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getFileID() {
+		return fileID;
+	}
+
+	public int getChunkNos() {
+		return chunkNos;
+	}
+
+	public void setChunkNos(int chunkNos) {
+		this.chunkNos = chunkNos;
+	}
+
+	public Database getDb() {
+		return db;
+	}
 	
 }
