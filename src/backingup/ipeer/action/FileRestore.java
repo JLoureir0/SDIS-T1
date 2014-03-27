@@ -1,8 +1,8 @@
 package backingup.ipeer.action;
 
-import java.io.FileOutputStream;
 import java.net.InetAddress;
 
+import backingup.FileManager;
 import backingup.ipeer.database.Database;
 import backingup.ipeer.protocol.ChunkRestore;
 
@@ -42,17 +42,9 @@ public class FileRestore {
 		return changeFileContent();
 	}
 
-
 	public boolean changeFileContent() {
-		
-		try {
-            FileOutputStream fileOS = new FileOutputStream(path);
-            fileOS.write(fileBody.getBytes());
-            fileOS.close();
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
+		FileManager fm = new FileManager(path);
+		return fm.writeFile(fileBody);
 	}
 	
 	public String getFileBody() { 

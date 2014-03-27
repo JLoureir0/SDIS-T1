@@ -1,11 +1,8 @@
 package backingup.ipeer.action;
 
-import java.io.IOException;
 import java.net.InetAddress;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
+import backingup.FileManager;
 import backingup.ipeer.protocol.ChunkDelete;
 
 public class FileDelete {
@@ -35,15 +32,8 @@ public class FileDelete {
 	}
 	
 	public boolean removeFileFromDir() {
-		boolean success = false;
-        Path filePath = FileSystems.getDefault().getPath(path);
-
-        try {
-            success = Files.deleteIfExists(filePath);
-        } catch (IOException | SecurityException e) {
-        	e.printStackTrace();
-        }
-        return success;
+		FileManager fm = new FileManager(path);
+		 return fm.deleteFile();
 	}
 
 }
