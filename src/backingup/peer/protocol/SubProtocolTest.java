@@ -22,7 +22,7 @@ public class SubProtocolTest {
 		int mcPort = 54321;
 		String address = "224.2.2.3";
 		String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF;
-		Database db = new Database();
+		Database db = new Database(100);
 		
 		try {
 			InetAddress mcAddress = InetAddress.getByName(address);
@@ -58,7 +58,7 @@ public class SubProtocolTest {
 		int mcPort = 54321;
 		String address = "224.2.2.3";
 		String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF;
-		Database db = new Database();
+		Database db = new Database(100);
 		
 		db.addChunk(fileID, chunkNo, replicationDegree, chunkBody);
 		
@@ -96,7 +96,7 @@ public class SubProtocolTest {
 		String address = "224.2.2.4";
 		int mcPort = 54321;
 		String address1 = "224.2.2.3";
-		Database db = new Database();
+		Database db = new Database(100);
 		db.addChunk(fileID, chunkNo, replicationDegree, chunkBody);
 		
 		try {
@@ -162,7 +162,7 @@ public class SubProtocolTest {
 		int chunkNo = 1;
 		int replicationDegree = 9;
 		String chunkBody = "sensitive_data";
-		Database db = new Database();
+		Database db = new Database(100);
 		db.addChunk(fileID, chunkNo, replicationDegree, chunkBody);
 		
 		assertTrue(db.containsChunk(fileID, chunkNo));
@@ -174,5 +174,45 @@ public class SubProtocolTest {
 			e.printStackTrace();
 		}
 		assertFalse(db.containsChunk(fileID, chunkNo));
+	}
+	
+	@Test
+	public void testFreeSpace() {
+		String fileID = "id1";
+		int chunkNo1 = 1, chunkNo2 = 2;
+		int replicationDegree = 3;
+		String chunkBody1 = "sensitive_data";
+		int mcPort = 54321;
+		String address = "224.2.2.3";
+		
+		Database db = new Database(28);
+		db.addChunk(fileID, chunkNo1, replicationDegree, chunkBody1);
+		db.increaseCount(fileID, chunkNo1);
+		db.increaseCount(fileID, chunkNo1);
+		db.increaseCount(fileID, chunkNo1);
+		
+		db.addChunk(fileID, chunkNo2, replicationDegree, chunkBody1);
+		db.increaseCount(fileID, chunkNo2);
+		db.increaseCount(fileID, chunkNo2);
+		db.increaseCount(fileID, chunkNo2);
+		db.increaseCount(fileID, chunkNo2);
+		
+		InetAddress mcAddress = null;
+		try {
+			mcAddress = InetAddress.getByName(address);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		FreeSpace fs = new FreeSpace(db,mcPort,mcAddress);
+		
+		fs.freeSpace(15);
+		assertEquals(15,db.getMaxSize());
+		assertEquals(14, db.getSize());
+		assertTrue(db.containsChunk(fileID, chunkNo1));
+		
+		fs.freeSpace(10);
+		assertEquals(10,db.getMaxSize());
+		assertEquals(0, db.getSize());
 	}
 }

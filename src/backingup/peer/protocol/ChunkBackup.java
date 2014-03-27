@@ -40,7 +40,8 @@ public class ChunkBackup extends Thread {
 	public void run() {
 		replicationCounter();
 		database.addChunk(fileID, chunkNo, replicationDegree, chunkBody);
-		sendStore();
+		if(database.containsChunk(fileID, chunkNo))
+			sendStore();
 	}
 	
 	private void replicationCounter() {

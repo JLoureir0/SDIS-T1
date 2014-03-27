@@ -33,7 +33,12 @@ public class Chunk {
 	public void resetCount() {
 		count = 0;
 	}
+	
 	public void increaseCount() {
 		count++;
+	}
+	
+	public void decreaseCount() {
+		count--;
 	}
 }
