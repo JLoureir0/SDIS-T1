@@ -31,7 +31,7 @@ public class FileDelete {
 		return removeFileFromDir();
 	}
 	
-	public boolean removeFileFromDir() {
+	private boolean removeFileFromDir() {
 		FileManager fm = new FileManager(path);
 		 return fm.deleteFile();
 	}

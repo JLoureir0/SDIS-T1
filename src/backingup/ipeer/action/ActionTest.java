@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 
 import org.junit.Test;
@@ -13,7 +14,9 @@ import backingup.ipeer.database.Database;
 public class ActionTest {
 
 	@Test
-	public void testFileRestore() {
+	public void testFileRestore() throws NoSuchMethodException, SecurityException {
+	    Method method = FileRestore.class.getDeclaredMethod("changeFileContent");
+	    method.setAccessible(true);
 		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testRestoreFile.txt";
 		String fileContent = "Just an example of a text in order to test if fileRestore is working properly";
 		Database db = new Database();
@@ -30,14 +33,18 @@ public class ActionTest {
 			FileRestore fr = new FileRestore(fileID,1,mcPort,mdrPort,mcAddress,mdrAddress,db);
 			fr.setPath(path);
 			fr.setFileBody(fileContent);
-			assertTrue(fr.changeFileContent());
+			boolean aux = (boolean) method.invoke(fr);
+			assertTrue(aux);
+			//assertTrue(fr.changeFileContent());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}			
 	}
-	
+
 	@Test
-	public void testFileDelete() {
+	public void testFileDelete() throws NoSuchMethodException, SecurityException {
+	    Method method = FileDelete.class.getDeclaredMethod("removeFileFromDir");
+	    method.setAccessible(true);
 		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testDeleteFile.txt";
 		int numberOfDeleteMessages = 1;
 		String fileID = "file1";
@@ -47,14 +54,18 @@ public class ActionTest {
 		try {
 			InetAddress mcAddress = InetAddress.getByName(address);
 			FileDelete fd = new FileDelete(fileID,numberOfDeleteMessages,mcAddress, mcPort, path);
-			assertTrue(fd.removeFileFromDir());
+			boolean aux = (boolean) method.invoke(fd);
+			assertTrue(aux);
+			//assertTrue(fd.removeFileFromDir());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	@Test
-	public void testCreateFileID() {
+	public void testCreateFileID() throws NoSuchMethodException, SecurityException {
+	    Method method = FileBackup.class.getDeclaredMethod("generateFileID");
+	    method.setAccessible(true);
 		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testChunks.txt";
 		int replicationDegree = 2;
 		Database db = new Database();
@@ -76,7 +87,8 @@ public class ActionTest {
 			FileBackup fb = new FileBackup(path, replicationDegree, db, mdbPort, mdbAddress, mcPort, mcAddress);
 			fb.setFileLastModification(fileLastModification);
 			fb.setFileName(fileName);
-			fb.generateFileID();
+			method.invoke(fb);
+			//fb.generateFileID();
 			
 			System.out.println("Generated FileID: " + fb.getFileID());			
 		} catch (Exception e) {
@@ -86,7 +98,9 @@ public class ActionTest {
 	}
 	
 	@Test
-	public void testFileBackupUpdateDatabase() {
+	public void testFileBackupUpdateDatabase() throws NoSuchMethodException, SecurityException {
+	    Method method = FileBackup.class.getDeclaredMethod("updateDatabase");
+	    method.setAccessible(true);
 		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testRestoreFile.txt";
 		int replicationDegree = 2;
 		Database db = new Database();
@@ -111,7 +125,8 @@ public class ActionTest {
 			fb.setFileName(fileName);
 			fb.setChunkNos(3);
 			fileID = fb.getFileID();
-			fb.updateDatabase();
+			method.invoke(fb);
+			//fb.updateDatabase();
 			db = fb.getDb();
 			assertTrue(db.containsFile(fileID));
 		} catch (Exception e) {
@@ -121,9 +136,10 @@ public class ActionTest {
 	}
 	
 	@Test
-	public void testCreateFileChunks() {
+	public void testCreateFileChunks() throws NoSuchMethodException, SecurityException {
+	    Method method = FileBackup.class.getDeclaredMethod("createFileChunks", String.class);
+	    method.setAccessible(true);
 		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testChunks.txt";
-
 		int replicationDegree = 2;
 		Database db = new Database();
 		int mdbPort = 64321;
@@ -157,8 +173,8 @@ public class ActionTest {
 			fb.setFileLastModification(fileLastModification);
 			fb.setFileName(fileName);
 			db = fb.getDb();
-			
-			fb.createFileChunks(fileBody);
+			method.invoke(fb,fileBody);
+			//fb.createFileChunks(fileBody);
 			assertEquals(nChunks,fb.getChunkNos());
 		} catch (Exception e) {
 			e.printStackTrace();

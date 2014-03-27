@@ -66,7 +66,7 @@ public class FileBackup {
 		return false; 
 	}
 	
-	public void createFileChunks(String fileBody) {
+	private void createFileChunks(String fileBody) {
 		@SuppressWarnings("unused")
 		int nRead = 0;
 		String chunkBody = "";
@@ -93,7 +93,7 @@ public class FileBackup {
 	    }
 	}
 	
-	public void updateDatabase() {
+	private void updateDatabase() {
 		db.addFile(fileID, path, chunkNos);
 	}
 	
@@ -102,7 +102,7 @@ public class FileBackup {
 		return cb.backupChunk();
 	}
 	
-	public void generateFileID() {
+	private void generateFileID() {
 		String fileIdentification = fileName + fileLastModification;
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");

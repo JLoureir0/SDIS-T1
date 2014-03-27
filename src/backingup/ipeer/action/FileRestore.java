@@ -42,7 +42,7 @@ public class FileRestore {
 		return changeFileContent();
 	}
 
-	public boolean changeFileContent() {
+	private boolean changeFileContent() {
 		FileManager fm = new FileManager(path);
 		return fm.writeFile(fileBody);
 	}
