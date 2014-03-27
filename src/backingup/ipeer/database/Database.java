@@ -4,13 +4,13 @@ import java.util.HashMap;
 
 public class Database {
 
-	private HashMap<String, FileDb> files;
+	private HashMap<String, File> files;
 	
 	public Database() {
-		files = new HashMap<String,FileDb>();
+		files = new HashMap<String,File>();
 	}
 	
-	public void addFile(String fileID, FileDb file) {
+	public void addFile(String fileID, File file) {
 		files.put(fileID, file);
 	}
 	

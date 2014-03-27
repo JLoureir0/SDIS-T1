@@ -8,7 +8,7 @@ public class DatabaseTest {
 
 	@Test
 	public void testFile() {
-		FileDb f1 = new FileDb("/cenas",10);
+		File f1 = new File("/cenas",10);
 		assertEquals("/cenas",f1.getPath());
 		assertEquals(10,f1.getChunkNos());
 				
@@ -17,7 +17,7 @@ public class DatabaseTest {
 	@Test
 	public void testDatabase() {
 		Database db = new Database();
-		FileDb f1 = new FileDb("/cenas",10);
+		File f1 = new File("/cenas",10);
 		
 		db.addFile("abc",f1);
 		assertTrue(db.containsFile("abc"));

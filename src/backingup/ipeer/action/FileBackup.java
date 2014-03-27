@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import backingup.ipeer.database.Database;
-import backingup.ipeer.database.FileDb;
 import backingup.ipeer.protocol.ChunkBackup;
 
 public class FileBackup {
@@ -97,7 +96,7 @@ public class FileBackup {
 	}
 	
 	private void updateDatabase() {
-		FileDb file = new FileDb(path,chunkNos);
+		File file = new File(path,chunkNos);
 		db.addFile(fileID, file);
 	}
 	
