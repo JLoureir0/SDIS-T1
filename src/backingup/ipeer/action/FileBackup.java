@@ -103,27 +103,21 @@ public class FileBackup {
 	}
 	
 	public void generateFileID() {
-		String fileIdentification = fileName + fileLastModification;	
-	    MessageDigest msg=null;
-	    
-	    try {
-	    	msg = MessageDigest.getInstance("SHA-256");
-	    	msg.update(fileIdentification.getBytes());
-
-	        fileID = bytesToHexString(msg.digest());
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+		String fileIdentification = fileName + fileLastModification;
+		System.out.println(fileIdentification);
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			fileID = bytesToHexString(digest.digest(fileIdentification.getBytes()));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
     private static String bytesToHexString(byte[] bytes) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < bytes.length; i++) {
-            String hex = Integer.toHexString(0xFF & bytes[i]);
-            if (hex.length() == 1) {
-                sb.append('0');
-            }
-            sb.append(hex);
+        	sb.append(Integer.toHexString(0xFF & bytes[i]));
         }
         return sb.toString();
     }

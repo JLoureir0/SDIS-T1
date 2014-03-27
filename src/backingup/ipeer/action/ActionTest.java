@@ -70,7 +70,7 @@ public class ActionTest {
 			InetAddress mcAddress = InetAddress.getByName(address1);
 			
 			File file = new File(path);
-		    fileLastModification = file.lastModified();
+		    fileLastModification = file.lastModified();	    
 		    fileName = file.getName();
 			
 			FileBackup fb = new FileBackup(path, replicationDegree, db, mdbPort, mdbAddress, mcPort, mcAddress);
@@ -78,9 +78,7 @@ public class ActionTest {
 			fb.setFileName(fileName);
 			fb.generateFileID();
 			
-			System.out.println("Generated FileID: "+fb.getFileID());
-			assertEquals(1,1);
-			
+			System.out.println("Generated FileID: " + fb.getFileID());			
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
