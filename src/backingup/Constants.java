@@ -13,4 +13,5 @@ public class Constants {
 	public static final String CRLF = "CRLF";
 	public static final String ENCODING = "US-ASCII";
 	public static final String WHITESPACE_REGEX = "\\s";
+	public static final String BACKUP_PATH = "";
 }

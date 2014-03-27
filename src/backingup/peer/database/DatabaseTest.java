@@ -26,10 +26,9 @@ public class DatabaseTest {
 	
 	@Test
 	public void testChunk() {
-		Chunk chunk = new Chunk(0, "dasdas");
+		Chunk chunk = new Chunk(0);
 		
 		assertEquals(0, chunk.getReplicationDegree());
-		assertEquals("dasdas", chunk.getChunkBody());
 		assertEquals(0, chunk.getCount());
 		
 		chunk.increaseCount();

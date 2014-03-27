@@ -1,37 +1,53 @@
 package backingup;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class FileManager {
-
-	String path;
+	private String path;
 	
 	public FileManager(String path) {
 		this.path = path;
 	}
 	
 	public boolean deleteFile() {
-        Path filePath = FileSystems.getDefault().getPath(path);
-
-        try {
-            return Files.deleteIfExists(filePath);
-        } catch (Exception e) {
-        	e.printStackTrace();
-        	return false;
-        }
+		try{			 
+    		File file = new File(path);
+    		if(file.delete())
+    			return true; 
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return false;
 	}
 	
-	public boolean writeFile(String fileBody) {
+	public boolean writeFile(String body) {
 		try {
             FileOutputStream fileOS = new FileOutputStream(path);
-            fileOS.write(fileBody.getBytes());
+            fileOS.write(body.getBytes());
             fileOS.close();
 		} catch (Exception e) {
 			return false;
 		}
 		return true;
+	}
+	
+	public String readFile() {
+		 byte[] buffer = new byte[Constants.ARRAY_SIZE];
+         String body = "";
+         try {
+        	 FileInputStream inputStream = new FileInputStream(path);
+        	 
+        	 while(inputStream.read(buffer) != -1) {
+        		 body += new String(buffer).trim();
+        	 }
+        	 
+        	 inputStream.close();
+         }
+         catch(Exception e) {
+        	 e.printStackTrace();
+         }
+         return body;
 	}
 }

@@ -16,8 +16,9 @@ public class Database {
 	public void addChunk(String fileID, int chunkNo, int replicationDegree, String chunkBody) {
 		if((chunkBody.length()+getSize()) <= maxSize) {
 			ID id = new ID(fileID, chunkNo);
-			Chunk chunk = new Chunk(replicationDegree, chunkBody);
+			Chunk chunk = new Chunk(replicationDegree);
 			chunks.put(id, chunk);
+			// save chunk to file sys
 		}
 	}
 	
@@ -27,6 +28,7 @@ public class Database {
 			ID id = it.next();
 			Chunk chunk = chunks.get(id);
 			if(chunk.getReplicationDegree() < chunk.getCount()) {
+				// remove chunk from file sys
 				it.remove();
 				return id;
 			}
@@ -34,6 +36,7 @@ public class Database {
 		it = chunks.keySet().iterator();
 		if(it.hasNext()) {
 			ID id = it.next();
+			// remove chunk from file sys
 			it.remove();
 			return id;
 		}
@@ -45,6 +48,7 @@ public class Database {
 		while(it.hasNext()) {
 			ID id = it.next();
 			if(id.getFileID() == fileID) {
+				// remove chunk from file sys
 				it.remove();
 			}
 		}
@@ -55,7 +59,8 @@ public class Database {
 	}
 	
 	public String getChunkBody(String fileID, int chunkNo) {
-		return chunks.get(new ID(fileID,chunkNo)).getChunkBody();
+		// get Body from file sys
+		return "";
 	}
 
 	public int getReplicationDegree(String fileID, int chunkNo) {
@@ -87,13 +92,7 @@ public class Database {
 	}
 	
 	public int getSize() {
-		int size = 0;
-		Iterator<Chunk> it = chunks.values().iterator();
-		
-		while(it.hasNext()) {
-			Chunk chunk = it.next();
-			size += chunk.getChunkBody().length();
-		}
-		return size;
+		// get size of the directory
+		return 0;
 	}
 }
