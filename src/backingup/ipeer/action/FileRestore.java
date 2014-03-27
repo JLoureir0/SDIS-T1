@@ -31,7 +31,7 @@ public class FileRestore {
 	}
 	
 	public boolean restoreFile() {
-		for(int i=1; i<=chunkNos; i++) {
+		for(int i=0; i<chunkNos; i++) {
 			try {
 				ChunkRestore cr = new ChunkRestore(fileID, i, mcPort, mdrPort, mcAddress, mdrAddress);
 				fileBody += cr.restoreChunk();

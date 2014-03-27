@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.security.MessageDigest;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 import backingup.ipeer.database.Database;
 import backingup.ipeer.protocol.ChunkBackup;
@@ -13,7 +11,6 @@ import backingup.ipeer.protocol.ChunkBackup;
 public class FileBackup {
 
 	private int CHUNKSIZE = 64000;
-	private HashMap<Integer,String> fileChunks;
 	private String path;
 	private boolean multiple;
 	private String fileID;
@@ -30,7 +27,6 @@ public class FileBackup {
 	
 	public FileBackup(String path, int replicationDegree ,Database db, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
 		this.path = path;
-		fileChunks = new HashMap<Integer, String>();
 		this.multiple = false;
 		this.db = db;
 		this.fileID = "";
@@ -45,14 +41,13 @@ public class FileBackup {
 	}
 	
 	public boolean backupFile() { 
-		
 		try {
 		    File file = new File(path);
 		    FileInputStream fileStram = new FileInputStream(file);
 		    byte[] dataBody = new byte[(int)file.length()];
 		    fileStram.read(dataBody);
 		    fileStram.close();
-		    String fileBody = new String(dataBody, "UTF-8");
+		    String fileBody = new String(dataBody);
 		    fileLastModification = file.lastModified();
 		    fileName = file.getName();
 		    
@@ -62,35 +57,38 @@ public class FileBackup {
 		    generateFileID();
 		    createFileChunks(fileBody);
 		    updateDatabase();
-		    return backupChunks();
-	 
+
+		    return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return false;
+		return false; 
 	}
 	
 	public void createFileChunks(String fileBody) {
-	    String chunkBody = "";
-	    int byteCounter = 0;
-	    int chunkNo = 0;
-	    for(int i = 0; i < fileBody.length() ; i++) {    	
-	    	if(byteCounter == CHUNKSIZE) {
-	    		chunkNo++;
-	    		fileChunks.put(chunkNo,chunkBody);
-	    		chunkBody = new String("");
-	    		byteCounter = 0;
-	    		chunkNos++;
-	    	}
-	    	
-	    	chunkBody += fileBody.charAt(i);
-	    	byteCounter++;
-	    } 
-	    
+		@SuppressWarnings("unused")
+		int nRead = 0;
+		String chunkBody = "";
+		byte[] buffer = new byte[CHUNKSIZE];
+		
+		try {
+			 FileInputStream inputStream = new FileInputStream(path);
+			 while((nRead = inputStream.read(buffer)) != -1) {
+				 chunkBody = new String(buffer);
+				 chunkBody = chunkBody.trim();
+	             backupChunk(chunkNos, chunkBody);
+				 chunkNos++;
+				 System.out.println("ChunkNos: " + chunkNos);
+	         }	
+			 inputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	    if(multiple) {
-	    	chunkNo++;
-	    	fileChunks.put(chunkNo,"");
+	    	chunkBody = "";
+	    	backupChunk(chunkNos, chunkBody);
 	    	chunkNos++;
 	    }
 	}
@@ -98,19 +96,10 @@ public class FileBackup {
 	public void updateDatabase() {
 		db.addFile(fileID, path, chunkNos);
 	}
-
-	private boolean backupChunks() {	
-
-		boolean result = false;
-		for (Entry<Integer, String> e : fileChunks.entrySet()) { 
-			ChunkBackup cb = new ChunkBackup(fileID,e.getKey(),replicationDegree,e.getValue(),mdbPort,mdbAddress,mcPort,mcAddress);
-			result = cb.backupChunk();
-			
-			if(!result)
-				return false;
-		}
-		
-		return true;
+	
+	private boolean backupChunk(int chunkNo, String chunkBody) {
+		ChunkBackup cb = new ChunkBackup(fileID, chunkNo, replicationDegree, chunkBody, mdbPort, mdbAddress, mcPort, mcAddress);
+		return cb.backupChunk();
 	}
 	
 	public void generateFileID() {
