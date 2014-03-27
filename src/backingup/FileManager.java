@@ -24,10 +24,13 @@ public class FileManager {
 	
 	public boolean writeFile(String body) {
 		try {
+			File file = new File(Constants.BACKUP_PATH);
+			file.mkdir();
             FileOutputStream fileOS = new FileOutputStream(path);
             fileOS.write(body.getBytes());
             fileOS.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;
