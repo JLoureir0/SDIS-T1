@@ -86,7 +86,7 @@ public class FileBackup {
 	    	
 	    	chunkBody += fileBody.charAt(i);
 	    	byteCounter++;
-	    }
+	    } 
 	    
 	    if(multiple) {
 	    	chunkNo++;

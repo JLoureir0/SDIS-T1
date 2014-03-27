@@ -11,7 +11,7 @@ public class Database {
 	}
 	
 	public void addFile(String fileID, String path, int chunkNos) {
-		File file = new File(path,chunkNos);
+		File file = new File(path,chunkNos); 
 		files.put(fileID, file);
 	}
 	

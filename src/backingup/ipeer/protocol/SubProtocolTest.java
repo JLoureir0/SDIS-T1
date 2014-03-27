@@ -21,7 +21,7 @@ public class SubProtocolTest {
 		int mdbPort = 64321;
 		String address = "224.2.2.5";
 		int mcPort = 54321;
-		String address1 = "224.2.2.3";
+		String address1 = "224.2.2.3"; 
 		
 		try {
 		InetAddress mdbAddress = InetAddress.getByName(address);

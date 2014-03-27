@@ -143,7 +143,7 @@ public class ActionTest {
 			InetAddress mdbAddress = InetAddress.getByName(address);
 			InetAddress mcAddress = InetAddress.getByName(address1);
 			
-			File file = new File(path);
+			File file = new File(path); 
 		    fileLastModification = file.lastModified();
 		    fileName = file.getName();
 			
@@ -159,4 +159,4 @@ public class ActionTest {
 			fail();
 		}
 	}
-}
+} 

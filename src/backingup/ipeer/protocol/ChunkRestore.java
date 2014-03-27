@@ -60,7 +60,7 @@ public class ChunkRestore {
 			DatagramPacket sendPacket = new DatagramPacket(request, request.length, mcAddress, mcPort);
 			mcSocket.send(sendPacket);
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.printStackTrace(); 
 		}
 	}
 	

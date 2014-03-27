@@ -55,7 +55,7 @@ public class FileRestore {
 		return true;
 	}
 	
-	public String getFileBody() {
+	public String getFileBody() { 
 		return fileBody;
 	}
 
