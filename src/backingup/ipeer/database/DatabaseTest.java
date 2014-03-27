@@ -17,9 +17,8 @@ public class DatabaseTest {
 	@Test
 	public void testDatabase() {
 		Database db = new Database();
-		File f1 = new File("/cenas",10);
 		
-		db.addFile("abc",f1);
+		db.addFile("abc","/cenas",10);
 		assertTrue(db.containsFile("abc"));
 		assertEquals("/cenas", db.getFilePath("abc"));
 		assertEquals(10, db.getFileChunkNos("abc"));

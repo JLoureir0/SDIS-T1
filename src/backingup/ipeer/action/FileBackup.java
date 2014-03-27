@@ -36,7 +36,7 @@ public class FileBackup {
 		this.fileID = "";
 		this.fileLastModification = 0;
 		this.fileName = "";
-		this.chunkNos = 1;
+		this.chunkNos = 0;
 		this.replicationDegree = replicationDegree;
 		this.mcPort = mcPort;
 		this.mdbPort = mdbPort;
@@ -96,8 +96,7 @@ public class FileBackup {
 	}
 	
 	private void updateDatabase() {
-		File file = new File(path,chunkNos);
-		db.addFile(fileID, file);
+		db.addFile(fileID, path, chunkNos);
 	}
 	
 	private boolean backupChunks() {	

@@ -10,7 +10,8 @@ public class Database {
 		files = new HashMap<String,File>();
 	}
 	
-	public void addFile(String fileID, File file) {
+	public void addFile(String fileID, String path, int chunkNos) {
+		File file = new File(path,chunkNos);
 		files.put(fileID, file);
 	}
 	
