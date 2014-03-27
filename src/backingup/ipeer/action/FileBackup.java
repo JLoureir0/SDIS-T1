@@ -74,14 +74,15 @@ public class FileBackup {
 	private void createFileChunks(String fileBody) {
 	    String chunkBody = "";
 	    int byteCounter = 0;
+	    int chunkNo = 0;
 	    for(int i = 0; i < fileBody.length() ; i++) {
 	    	
 	    	if(byteCounter == CHUNKSIZE) {
-	    		int chunkNo = i+1;
+	    		chunkNo++;
 	    		fileChunks.put(chunkNo,chunkBody);
 	    		chunkBody = new String("");
 	    		byteCounter = 0;
-	    		chunkNo++;
+	    		chunkNos++;
 	    	}
 	    	
 	    	chunkBody += fileBody.charAt(i);
@@ -89,9 +90,9 @@ public class FileBackup {
 	    }
 	    
 	    if(multiple) {
-	    	int chunkNo = fileBody.length()+2;
-	    	fileChunks.put(chunkNo,"");
 	    	chunkNo++;
+	    	fileChunks.put(chunkNo,"");
+	    	chunkNos++;
 	    }
 	}
 	
