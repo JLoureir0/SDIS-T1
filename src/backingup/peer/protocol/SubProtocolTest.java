@@ -125,9 +125,7 @@ public class SubProtocolTest {
 		try {
 			InetAddress mdrAddress = InetAddress.getByName(address);
 			InetAddress mcAddress = InetAddress.getByName(address1);
-			
-			
-			
+					
 			ChunkRestore cr = new ChunkRestore(db, fileID, chunkNo, mdrPort, mdrAddress,mcPort,mcAddress);
 			cr.start();
 			
