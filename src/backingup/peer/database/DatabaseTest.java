@@ -26,10 +26,9 @@ public class DatabaseTest {
 	
 	@Test
 	public void testChunk() {
-		Chunk chunk = new Chunk(0, "dasdas");
+		Chunk chunk = new Chunk(0);
 		
 		assertEquals(0, chunk.getReplicationDegree());
-		assertEquals("dasdas", chunk.getChunkBody());
 		assertEquals(0, chunk.getCount());
 		
 		chunk.increaseCount();
@@ -49,6 +48,12 @@ public class DatabaseTest {
 		Database db = new Database(100);
 		
 		assertEquals(100, db.getMaxSize());
+		
+		db.setMaxSize(19);
+		db.addChunk("id1", 1, 9, "very_important_data");
+		db.addChunk("id1", 2, 9, "very_important_data");
+		assertTrue(db.containsChunk("id1", 1));
+		assertFalse(db.containsChunk("id1", 2));
 		
 		db.setMaxSize(150);
 		assertEquals(150, db.getMaxSize());
@@ -99,8 +104,5 @@ public class DatabaseTest {
 		assertEquals("id1", id1.getFileID());
 		assertEquals(1, id1.getChunkNo());
 		assertEquals(0, db.getSize());
-		
-		db.addChunk("id1", 1, 9, "very_important_data");
-		db.addChunk("id1", 2, 9, "very_important_data");
 	}
 }

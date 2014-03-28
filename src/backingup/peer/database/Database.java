@@ -1,8 +1,12 @@
 package backingup.peer.database;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import backingup.Constants;
+import backingup.FileManager;
 
 public class Database {
 	private int maxSize;
@@ -16,8 +20,10 @@ public class Database {
 	public void addChunk(String fileID, int chunkNo, int replicationDegree, String chunkBody) {
 		if((chunkBody.length()+getSize()) <= maxSize) {
 			ID id = new ID(fileID, chunkNo);
-			Chunk chunk = new Chunk(replicationDegree, chunkBody);
+			Chunk chunk = new Chunk(replicationDegree);
 			chunks.put(id, chunk);
+			FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + fileID + chunkNo);
+			fileManager.write(chunkBody);
 		}
 	}
 	
@@ -28,6 +34,8 @@ public class Database {
 			Chunk chunk = chunks.get(id);
 			if(chunk.getReplicationDegree() < chunk.getCount()) {
 				it.remove();
+				FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
+				fileManager.delete();
 				return id;
 			}
 		}
@@ -35,6 +43,8 @@ public class Database {
 		if(it.hasNext()) {
 			ID id = it.next();
 			it.remove();
+			FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
+			fileManager.delete();
 			return id;
 		}
 		return null;
@@ -46,6 +56,8 @@ public class Database {
 			ID id = it.next();
 			if(id.getFileID() == fileID) {
 				it.remove();
+				FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
+				fileManager.delete();
 			}
 		}
 	}
@@ -55,7 +67,8 @@ public class Database {
 	}
 	
 	public String getChunkBody(String fileID, int chunkNo) {
-		return chunks.get(new ID(fileID,chunkNo)).getChunkBody();
+		FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + fileID + chunkNo);
+		return fileManager.read();
 	}
 
 	public int getReplicationDegree(String fileID, int chunkNo) {
@@ -88,11 +101,9 @@ public class Database {
 	
 	public int getSize() {
 		int size = 0;
-		Iterator<Chunk> it = chunks.values().iterator();
-		
-		while(it.hasNext()) {
-			Chunk chunk = it.next();
-			size += chunk.getChunkBody().length();
+		for(ID id: chunks.keySet()) {
+			File file = new File(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
+			size += file.length();
 		}
 		return size;
 	}

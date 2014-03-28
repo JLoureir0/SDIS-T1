@@ -44,7 +44,7 @@ public class FileRestore {
 
 	private boolean changeFileContent() {
 		FileManager fm = new FileManager(path);
-		return fm.writeFile(fileBody);
+		return fm.write(fileBody);
 	}
 	
 	public String getFileBody() { 
