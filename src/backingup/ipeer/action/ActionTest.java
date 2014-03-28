@@ -10,19 +10,24 @@ import java.net.InetAddress;
 import org.junit.Test;
 
 import backingup.Constants;
+import backingup.FileManager;
 import backingup.ipeer.database.Database;
 
 public class ActionTest {
 
 	@Test
 	public void testFileRestore() throws NoSuchMethodException, SecurityException {
-	    Method method = FileRestore.class.getDeclaredMethod("changeFileContent");
+	    Method method = FileRestore.class.getDeclaredMethod("writeChunk", String.class);
 	    method.setAccessible(true);
 		String dirPath = System.getProperty(Constants.CURRENT_DIR);
 		dirPath += "\\src\\backingup\\ipeer\\action"; 
 		String fileName = "testRestoreFile.txt";
 		String path = dirPath + File.separator + fileName;
-		String fileContent = "Just an example of a text in order to test if fileRestore is working properly";
+		String fileContent = "Just an example ";
+		String fileContent1 = "of a text in order ";
+		String fileContent2 = "to test ";
+		String fileContent3 = "if fileRestore ";
+		String fileContent4 = "is working properly";
 		Database db = new Database();
 		int mdrPort = 64321;
 		String address = "224.2.2.5";
@@ -36,8 +41,17 @@ public class ActionTest {
 			
 			FileRestore fr = new FileRestore(fileID,1,mcPort,mdrPort,mcAddress,mdrAddress,db);
 			fr.setPath(path);
-			fr.setFileBody(fileContent);
-			boolean aux = (boolean) method.invoke(fr);
+			boolean aux = (boolean) method.invoke(fr,fileContent);
+			assertTrue(aux);
+			aux = (boolean) method.invoke(fr,fileContent);
+			assertTrue(aux);
+			aux = (boolean) method.invoke(fr,fileContent1);
+			assertTrue(aux);
+			aux = (boolean) method.invoke(fr,fileContent2);
+			assertTrue(aux);
+			aux = (boolean) method.invoke(fr,fileContent3);
+			assertTrue(aux);
+			aux = (boolean) method.invoke(fr,fileContent4);
 			assertTrue(aux);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -46,6 +60,7 @@ public class ActionTest {
 
 	@Test
 	public void testFileDelete() throws NoSuchMethodException, SecurityException {
+		createFileBeforeBeingDeleted();
 	    Method method = FileDelete.class.getDeclaredMethod("removeFileFromDir");
 	    method.setAccessible(true);
 		String dirPath = System.getProperty(Constants.CURRENT_DIR);
@@ -56,15 +71,27 @@ public class ActionTest {
 		String fileID = "file1";
 		int mcPort = 54321;
 		String address = "224.2.2.3";
+		Database db = new Database();
+		db.addFile(fileID, path, 2);
 		
 		try {
 			InetAddress mcAddress = InetAddress.getByName(address);
-			FileDelete fd = new FileDelete(fileID,numberOfDeleteMessages,mcAddress, mcPort, path);
+			FileDelete fd = new FileDelete(fileID,numberOfDeleteMessages,mcAddress, mcPort, path, db);
 			boolean aux = (boolean) method.invoke(fd);
 			assertTrue(aux);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void createFileBeforeBeingDeleted() {
+		String dirPath = System.getProperty(Constants.CURRENT_DIR);
+		dirPath += "\\src\\backingup\\ipeer\\action"; 
+		String fileName = "testDeleteFile.txt";
+		String path = dirPath + File.separator + fileName;
+		String fileBody = "Just a file to test FileDelete";
+		FileManager fm = new FileManager(path);
+		fm.write(fileBody);
 	}
 	
 	@Test
