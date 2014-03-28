@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import backingup.FileManager;
 import backingup.ipeer.database.Database;
@@ -33,9 +34,9 @@ public class SearchDeletedFiles extends Thread {
 		while(true) {
 			files = db.getFiles();
 			try {
-			    Iterator it = files.entrySet().iterator();
+			    Iterator<Entry<String, File>> it = files.entrySet().iterator();
 			    while (it.hasNext()) {
-			        Map.Entry file = (Map.Entry)it.next();
+			        Map.Entry<String, File> file = (Map.Entry<String, File>)it.next();
 			        String fileID = (String) file.getKey();
 			        String path = db.getFilePath(fileID);
 			        FileManager fm = new FileManager(path);
