@@ -93,7 +93,7 @@ public class SubProtocolTest {
 		int replicationDegree = 9;
 		String chunkBody = "sensitive_data";
 		int mdrPort = 54321;
-		String address = "224.2.2.4";
+		String address = "224.2.2.5";
 		int mcPort = 54321;
 		String address1 = "224.2.2.3";
 		Database db = new Database(100);
@@ -143,12 +143,8 @@ public class SubProtocolTest {
 			mdrSocket.joinGroup(mdrAddress);
 			mdrSocket.setSoTimeout(Constants.HALF_A_SECOND);
 			mdrSocket.receive(restorePacket);
-			fail();
 			mdrSocket.close();
-			
-			String receivedRestore = new String(restorePacket.getData(),Constants.ENCODING).trim();
-			assertEquals(restoreMessage, receivedRestore);
-			
+			fail();			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -202,7 +198,7 @@ public class SubProtocolTest {
 			Thread t = new Thread() {
 				public void run() {
 					String fileID = "id1";
-					int chunkNo = 1;
+					int chunkNo = 2;
 					String address = "224.2.2.3";
 					int mcPort = 54321;
 					
@@ -241,7 +237,7 @@ public class SubProtocolTest {
 			t = new Thread() {
 				public void run() {
 					String fileID = "id1";
-					int chunkNo = 2;
+					int chunkNo = 1;
 					String address = "224.2.2.3";
 					int mcPort = 54321;
 					
@@ -277,5 +273,67 @@ public class SubProtocolTest {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}	
+	}
+	
+	@Test
+	public void testChunkRemoved() {
+		String fileID = "id1";
+		int chunkNo = 1;
+		int replicationDegree = 9;
+		String chunkBody = "sensitive_data";
+		int mdbPort = 64321;
+		String address = "224.2.2.5";
+		int mcPort = 54321;
+		String address1 = "224.2.2.3";
+		Database db = new Database(100);
+		db.addChunk(fileID, chunkNo, replicationDegree, chunkBody);
+		
+		try {
+			InetAddress mdbAddress = InetAddress.getByName(address);
+			InetAddress mcAddress = InetAddress.getByName(address1);
+					
+			ChunkRemoved cr = new ChunkRemoved(db, fileID, chunkNo, replicationDegree, mdbPort, mdbAddress, mcPort, mcAddress);
+			cr.start();
+			
+			String putchunkMessage = Constants.PUTCHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + replicationDegree + " " +  Constants.CRLF + " " + Constants.CRLF + " " + chunkBody;
+			byte[] chunkData = putchunkMessage.getBytes(Constants.ENCODING);
+			DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length, mdbAddress, mdbPort);
+			MulticastSocket mdbSocket = new MulticastSocket(mdbPort);
+			Thread.sleep(10);
+			mdbSocket.send(chunkPacket);
+			
+			byte[] putchunkData = new byte[Constants.ARRAY_SIZE];
+			DatagramPacket putchunkPacket = new DatagramPacket(putchunkData, putchunkData.length);
+			mdbSocket.joinGroup(mdbAddress);
+			mdbSocket.setSoTimeout(Constants.HALF_A_SECOND);
+			mdbSocket.receive(putchunkPacket);
+			mdbSocket.close();
+			fail();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			InetAddress mdbAddress = InetAddress.getByName(address);
+			InetAddress mcAddress = InetAddress.getByName(address1);
+			
+			ChunkRemoved cr = new ChunkRemoved(db, fileID, chunkNo, replicationDegree, mdbPort, mdbAddress, mcPort, mcAddress);
+			cr.start();		
+			
+			MulticastSocket mdbSocket = new MulticastSocket(mdbPort);
+			byte[] putchunkData = new byte[Constants.ARRAY_SIZE];
+			DatagramPacket putchunkPacket = new DatagramPacket(putchunkData, putchunkData.length);
+			mdbSocket.joinGroup(mdbAddress);
+			mdbSocket.receive(putchunkPacket);
+			mdbSocket.close();
+			
+			String putchunkMessage = Constants.PUTCHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + replicationDegree + " " +  Constants.CRLF + " " + Constants.CRLF + " " + chunkBody;
+			String receivedPutchunk = new String(putchunkPacket.getData(),Constants.ENCODING).trim();
+			
+			assertEquals(putchunkMessage, receivedPutchunk);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
