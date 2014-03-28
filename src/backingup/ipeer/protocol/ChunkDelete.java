@@ -39,7 +39,7 @@ public class ChunkDelete {
 	}
 	
 	public String createPacket() {
-		String request = Constants.DELETE + " " + fileId + " " + Constants.CRLF + " " + Constants.CRLF; 
+		String request = Constants.DELETE + " " + fileId + " " + Constants.CRLF; 
 		return request;
 	}
 	

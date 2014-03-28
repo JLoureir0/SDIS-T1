@@ -47,6 +47,6 @@ public class ReplicationCounter extends Thread {
 	
 	private boolean correctChunk(String store) {
 		String[] storeSplit = store.split(Constants.WHITESPACE_REGEX);
-		return (storeSplit[0].equals(Constants.STORED) && storeSplit[1].equals(Constants.VERSION_1) && storeSplit[2].equals(fileID) && storeSplit[3].equals(Integer.toString(chunkNo)) && storeSplit[4].equals(Constants.CRLF) && storeSplit[5].equals(Constants.CRLF));
+		return (storeSplit[0].equals(Constants.STORED) && storeSplit[1].equals(Constants.VERSION_1) && storeSplit[2].equals(fileID) && storeSplit[3].equals(Integer.toString(chunkNo)) && storeSplit[4].equals(Constants.CRLF));
 	}
 }

@@ -53,7 +53,7 @@ public class ChunkRestore {
 	}
 	
 	public void sendGetChunk() {
-		String stringRequest = Constants.GETCHUNK + " " + Constants.VERSION_1 + " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF;
+		String stringRequest = Constants.GETCHUNK + " " + Constants.VERSION_1 + " " + fileID + " " + chunkNo + " " + Constants.CRLF;
 		
 		try {
 			byte[] request = stringRequest.getBytes(Constants.ENCODING);
@@ -89,7 +89,7 @@ public class ChunkRestore {
 	public boolean correctChunk(String chunk) {
 		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
 		String chunkNumber = ""+chunkNo;
-		if(chunkSplit[0].equals(Constants.CHUNK) && chunkSplit[1].equals(Constants.VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(chunkNumber) && chunkSplit[4].equals(Constants.CRLF) && chunkSplit[5].equals(Constants.CRLF)) {
+		if(chunkSplit[0].equals(Constants.CHUNK) && chunkSplit[1].equals(Constants.VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(chunkNumber) && chunkSplit[4].equals(Constants.CRLF)) {
 			receivedChunkBody = chunkSplit[6];
 			return true;
 		}

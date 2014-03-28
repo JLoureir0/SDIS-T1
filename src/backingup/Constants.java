@@ -13,7 +13,7 @@ public class Constants {
 	public static String DELETE = "DELETE";
 	public static final String REMOVED = "REMOVED";
 	public static final String VERSION_1 = "1.0";
-	public static final String CRLF = "CRLF";
+	public static final String CRLF = "CRLFCRLF";
 	public static final String ENCODING = "US-ASCII";
 	public static final String WHITESPACE_REGEX = "\\s";
 	public static final String CURRENT_DIR = "user.dir";

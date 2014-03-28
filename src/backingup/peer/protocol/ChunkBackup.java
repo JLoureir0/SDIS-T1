@@ -50,7 +50,7 @@ public class ChunkBackup extends Thread {
 	}
 	
 	private void sendStore() {
-		String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF;
+		String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF;
 		
 		try {
 			byte[] storeData = storeMessage.getBytes(Constants.ENCODING);

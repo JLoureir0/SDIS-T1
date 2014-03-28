@@ -53,15 +53,15 @@ public class MCListener extends Thread {
 	
 	private void parseChunk(String chunk) {
 		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
-		if(chunkSplit[0].equals(Constants.GETCHUNK) && (chunkSplit.length == 6)) {
+		if(chunkSplit[0].equals(Constants.GETCHUNK) && (chunkSplit.length == 5)) {
 			ChunkRestore chunkRestore = new ChunkRestore(database, chunkSplit[2], Integer.parseInt(chunkSplit[3]), mdrPort, mdrAddress, mcPort, mcAddress);
 			chunkRestore.start();
 		}
-		else if(chunkSplit[0].equals(Constants.DELETE) && (chunkSplit.length == 4)) {
+		else if(chunkSplit[0].equals(Constants.DELETE) && (chunkSplit.length == 3)) {
 			ChunkDelete chunkDelete = new ChunkDelete(database, chunkSplit[2]);
 			chunkDelete.start();
 		}
-		else if(chunkSplit[0].equals(Constants.REMOVED) && (chunkSplit.length == 6)) {
+		else if(chunkSplit[0].equals(Constants.REMOVED) && (chunkSplit.length == 5)) {
 			ChunkRemoved chunkRemoved = new ChunkRemoved(database, chunkSplit[2], Integer.parseInt(chunkSplit[3]), Integer.parseInt(chunkSplit[4]), mdbPort, mdbAddress, mcPort, mcAddress);
 			chunkRemoved.start();
 		}

@@ -21,7 +21,7 @@ public class SubProtocolTest {
 		String chunkBody = "sensitive_data";
 		int mcPort = 54321;
 		String address = "224.2.2.3";
-		String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF;
+		String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF;
 		Database db = new Database(100);
 		
 		try {
@@ -57,7 +57,7 @@ public class SubProtocolTest {
 		String chunkBody = "sensitive_data";
 		int mcPort = 54321;
 		String address = "224.2.2.3";
-		String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF;
+		String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF;
 		Database db = new Database(100);
 		
 		db.addChunk(fileID, chunkNo, replicationDegree, chunkBody);
@@ -113,7 +113,7 @@ public class SubProtocolTest {
 			mdrSocket.receive(restorePacket);
 			mdrSocket.close();
 			
-			String restoreMessage = Constants.CHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF + " " + chunkBody;
+			String restoreMessage = Constants.CHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + chunkBody;
 			String receivedRestore = new String(restorePacket.getData(),Constants.ENCODING).trim();
 			
 			assertEquals(restoreMessage, receivedRestore);
@@ -129,7 +129,7 @@ public class SubProtocolTest {
 			ChunkRestore cr = new ChunkRestore(db, fileID, chunkNo, mdrPort, mdrAddress,mcPort,mcAddress);
 			cr.start();
 			
-			String restoreMessage = Constants.CHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + Constants.CRLF + " " + chunkBody;
+			String restoreMessage = Constants.CHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + chunkBody;
 			byte[] chunkData = restoreMessage.getBytes(Constants.ENCODING);
 			DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length, mcAddress, mcPort);
 			DatagramSocket mcSocket = new DatagramSocket();
@@ -221,7 +221,6 @@ public class SubProtocolTest {
 						assertEquals(fileID, removedMessage[2]);
 						assertEquals(Integer.toString(chunkNo), removedMessage[3]);
 						assertEquals(Constants.CRLF, removedMessage[4]);
-						assertEquals(Constants.CRLF, removedMessage[5]);
 					}catch(Exception e) {
 						e.printStackTrace();
 					}
@@ -260,7 +259,6 @@ public class SubProtocolTest {
 						assertEquals(fileID, removedMessage[2]);
 						assertEquals(Integer.toString(chunkNo), removedMessage[3]);
 						assertEquals(Constants.CRLF, removedMessage[4]);
-						assertEquals(Constants.CRLF, removedMessage[5]);
 					}catch(Exception e) {
 						e.printStackTrace();
 					}
@@ -295,7 +293,7 @@ public class SubProtocolTest {
 			ChunkRemoved cr = new ChunkRemoved(db, fileID, chunkNo, replicationDegree, mdbPort, mdbAddress, mcPort, mcAddress);
 			cr.start();
 			
-			String putchunkMessage = Constants.PUTCHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + replicationDegree + " " +  Constants.CRLF + " " + Constants.CRLF + " " + chunkBody;
+			String putchunkMessage = Constants.PUTCHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + replicationDegree + " " +  Constants.CRLF + " " + chunkBody;
 			byte[] chunkData = putchunkMessage.getBytes(Constants.ENCODING);
 			DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length, mdbAddress, mdbPort);
 			MulticastSocket mdbSocket = new MulticastSocket(mdbPort);
@@ -327,7 +325,7 @@ public class SubProtocolTest {
 			mdbSocket.receive(putchunkPacket);
 			mdbSocket.close();
 			
-			String putchunkMessage = Constants.PUTCHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + replicationDegree + " " +  Constants.CRLF + " " + Constants.CRLF + " " + chunkBody;
+			String putchunkMessage = Constants.PUTCHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + replicationDegree + " " +  Constants.CRLF + " " + chunkBody;
 			String receivedPutchunk = new String(putchunkPacket.getData(),Constants.ENCODING).trim();
 			
 			assertEquals(putchunkMessage, receivedPutchunk);

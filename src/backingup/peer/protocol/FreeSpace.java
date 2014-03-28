@@ -35,7 +35,7 @@ public class FreeSpace {
 	}
 	
 	private void sendRemoved(ID id) {
-		String removedMessage = Constants.REMOVED + " " + Constants.VERSION_1 +  " " + id.getFileID() + " " + id.getChunkNo() + " " + Constants.CRLF + " " + Constants.CRLF;
+		String removedMessage = Constants.REMOVED + " " + Constants.VERSION_1 +  " " + id.getFileID() + " " + id.getChunkNo() + " " + Constants.CRLF;
 		
 		try {
 			DatagramSocket mcSocket = new DatagramSocket();

@@ -50,6 +50,6 @@ public class MDBListener extends Thread {
 	
 	private boolean correctChunk(String chunk) {
 		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
-		return (chunkSplit[0].equals(Constants.PUTCHUNK) && (chunkSplit.length == 8));
+		return (chunkSplit[0].equals(Constants.PUTCHUNK) && (chunkSplit.length == 7));
 	}
 }
