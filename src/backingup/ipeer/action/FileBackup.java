@@ -23,22 +23,19 @@ public class FileBackup {
 	private InetAddress mdbAddress;
 	private int mcPort;
 	private InetAddress mcAddress;
-	private String dirPath;
 	
-	public FileBackup(String dirPath, String fileName, int replicationDegree ,Database db, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
-		this.dirPath = dirPath;
+	public FileBackup(String path, int replicationDegree ,Database db, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
+		this.path = path;
 		this.multiple = false;
 		this.db = db;
 		this.fileID = "";
 		this.fileLastModification = 0;
-		this.fileName = fileName;
 		this.chunkNos = 0;
 		this.replicationDegree = replicationDegree;
 		this.mcPort = mcPort;
 		this.mdbPort = mdbPort;
 		this.mdbAddress = mdbAddress;
 		this.mcAddress = mcAddress;
-		this.path = this.dirPath + File.separator + this.fileName;
 	}
 	
 	public boolean backupFile() { 

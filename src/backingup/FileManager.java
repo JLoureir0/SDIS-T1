@@ -13,6 +13,11 @@ public class FileManager {
 		path = directory + File.separator + name;
 	}
 	
+	public FileManager(String path) {
+		this.directory = "";
+		this.path = path;
+	}
+	
 	public boolean delete() {
 		try{			 
     		File file = new File(path);
@@ -26,8 +31,10 @@ public class FileManager {
 	
 	public boolean write(String body) {
 		try {
-			File file = new File(directory);
-			file.mkdir();
+			if(!directory.equals(directory)) {
+				File file = new File(directory);
+				file.mkdir();
+			}
             FileOutputStream fileOS = new FileOutputStream(path);
             fileOS.write(body.getBytes());
             fileOS.close();

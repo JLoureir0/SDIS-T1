@@ -18,8 +18,10 @@ public class ActionTest {
 	public void testFileRestore() throws NoSuchMethodException, SecurityException {
 	    Method method = FileRestore.class.getDeclaredMethod("changeFileContent");
 	    method.setAccessible(true);
-		String path = System.getProperty(Constants.CURRENT_DIR);
+		String dirPath = System.getProperty(Constants.CURRENT_DIR);
+		dirPath += "\\src\\backingup\\ipeer\\action"; 
 		String fileName = "testRestoreFile.txt";
+		String path = dirPath + File.separator + fileName;
 		String fileContent = "Just an example of a text in order to test if fileRestore is working properly";
 		Database db = new Database();
 		int mdrPort = 64321;
@@ -37,7 +39,6 @@ public class ActionTest {
 			fr.setFileBody(fileContent);
 			boolean aux = (boolean) method.invoke(fr);
 			assertTrue(aux);
-			//assertTrue(fr.changeFileContent());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}			
@@ -47,7 +48,10 @@ public class ActionTest {
 	public void testFileDelete() throws NoSuchMethodException, SecurityException {
 	    Method method = FileDelete.class.getDeclaredMethod("removeFileFromDir");
 	    method.setAccessible(true);
-		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testDeleteFile.txt";
+		String dirPath = System.getProperty(Constants.CURRENT_DIR);
+		dirPath += "\\src\\backingup\\ipeer\\action"; 
+		String fileName = "testDeleteFile.txt";
+		String path = dirPath + File.separator + fileName;
 		int numberOfDeleteMessages = 1;
 		String fileID = "file1";
 		int mcPort = 54321;
@@ -58,7 +62,6 @@ public class ActionTest {
 			FileDelete fd = new FileDelete(fileID,numberOfDeleteMessages,mcAddress, mcPort, path);
 			boolean aux = (boolean) method.invoke(fd);
 			assertTrue(aux);
-			//assertTrue(fd.removeFileFromDir());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -68,7 +71,10 @@ public class ActionTest {
 	public void testCreateFileID() throws NoSuchMethodException, SecurityException {
 	    Method method = FileBackup.class.getDeclaredMethod("generateFileID");
 	    method.setAccessible(true);
-		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testChunks.txt";
+		String dirPath = System.getProperty(Constants.CURRENT_DIR);
+		dirPath += "\\src\\backingup\\ipeer\\action"; 
+		String fileName = "testChunks.txt";
+		String path = dirPath + File.separator + fileName;
 		int replicationDegree = 2;
 		Database db = new Database();
 		int mdbPort = 64321;
@@ -76,7 +82,6 @@ public class ActionTest {
 		int mcPort = 54321;
 		String address1 = "224.2.2.3";
 		long fileLastModification = 0;
-		String fileName = "";
 		
 		try {
 			InetAddress mdbAddress = InetAddress.getByName(address);
@@ -84,13 +89,11 @@ public class ActionTest {
 			
 			File file = new File(path);
 		    fileLastModification = file.lastModified();	    
-		    fileName = file.getName();
 			
 			FileBackup fb = new FileBackup(path, replicationDegree, db, mdbPort, mdbAddress, mcPort, mcAddress);
 			fb.setFileLastModification(fileLastModification);
 			fb.setFileName(fileName);
 			method.invoke(fb);
-			//fb.generateFileID();
 			
 			System.out.println("Generated FileID: " + fb.getFileID());			
 		} catch (Exception e) {
@@ -103,7 +106,10 @@ public class ActionTest {
 	public void testFileBackupUpdateDatabase() throws NoSuchMethodException, SecurityException {
 	    Method method = FileBackup.class.getDeclaredMethod("updateDatabase");
 	    method.setAccessible(true);
-		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testRestoreFile.txt";
+		String dirPath = System.getProperty(Constants.CURRENT_DIR);
+		dirPath += "\\src\\backingup\\ipeer\\action"; 
+		String fileName = "testRestoreFile.txt";
+		String path = dirPath + File.separator + fileName;
 		int replicationDegree = 2;
 		Database db = new Database();
 		int mdbPort = 64321;
@@ -111,7 +117,6 @@ public class ActionTest {
 		int mcPort = 54321;
 		String address1 = "224.2.2.3";
 		long fileLastModification = 0;
-		String fileName = "";
 		String fileID = "";
 		
 		try {
@@ -128,7 +133,7 @@ public class ActionTest {
 			fb.setChunkNos(3);
 			fileID = fb.getFileID();
 			method.invoke(fb);
-			//fb.updateDatabase();
+			
 			db = fb.getDb();
 			assertTrue(db.containsFile(fileID));
 		} catch (Exception e) {
@@ -141,7 +146,10 @@ public class ActionTest {
 	public void testCreateFileChunks() throws NoSuchMethodException, SecurityException {
 	    Method method = FileBackup.class.getDeclaredMethod("createFileChunks", String.class);
 	    method.setAccessible(true);
-		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testChunks.txt";
+		String dirPath = System.getProperty(Constants.CURRENT_DIR);
+		dirPath += "\\src\\backingup\\ipeer\\action"; 
+		String fileName = "testChunks.txt";
+		String path = dirPath + File.separator + fileName;
 		int replicationDegree = 2;
 		Database db = new Database();
 		int mdbPort = 64321;
@@ -149,8 +157,6 @@ public class ActionTest {
 		int mcPort = 54321;
 		String address1 = "224.2.2.3";
 		long fileLastModification = 0;
-		String fileName = "";
-
 		
 		try {
 			InetAddress mdbAddress = InetAddress.getByName(address);
@@ -176,7 +182,7 @@ public class ActionTest {
 			fb.setFileName(fileName);
 			db = fb.getDb();
 			method.invoke(fb,fileBody);
-			//fb.createFileChunks(fileBody);
+
 			assertEquals(nChunks,fb.getChunkNos());
 		} catch (Exception e) {
 			e.printStackTrace();
