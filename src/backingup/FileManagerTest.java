@@ -11,7 +11,7 @@ public class FileManagerTest {
 	@Test
 	public void testFileManager() {
 		
-		String path = System.getProperty(Constants.CURRENT_DIR) + File.separator + "backup" + File.separator + "oi.txt";
+		String path = Constants.BACKUP_PATH + File.separator + "oi.txt";
 		String body = "oi tudo bom?"; 
 		FileManager fm = new FileManager(path);
 		
