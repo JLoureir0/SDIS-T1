@@ -7,15 +7,18 @@ import java.io.FileOutputStream;
 public class FileManager {
 	private String directory;
 	private String path;
+	private boolean append;
 	
 	public FileManager(String directory, String name) {
 		this.directory = directory;
-		path = directory + File.separator + name;
+		this.path = directory + File.separator + name;
+		this.append = false;
 	}
 	
 	public FileManager(String path) {
 		this.directory = "";
 		this.path = path;
+		this.append = false;
 	}
 	
 	public boolean delete() {
@@ -35,7 +38,12 @@ public class FileManager {
 				File file = new File(directory);
 				file.mkdir();
 			}
-            FileOutputStream fileOS = new FileOutputStream(path);
+			FileOutputStream fileOS;
+			if(append)
+				fileOS = new FileOutputStream(path, true);
+			else
+				fileOS = new FileOutputStream(path);
+            
             fileOS.write(body.getBytes());
             fileOS.close();
 		} catch (Exception e) {
@@ -61,5 +69,16 @@ public class FileManager {
         	 e.printStackTrace();
          }
          return body;
+	}
+	
+	public boolean CheckIfFileExists() {
+		File f = new File(path);
+		if(f.exists() && !f.isDirectory()) 
+			return true;
+		return false;
+	}
+	
+	public void setAppend(boolean append) {
+		this.append = append;
 	}
 }

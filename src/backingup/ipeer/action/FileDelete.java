@@ -3,22 +3,25 @@ package backingup.ipeer.action;
 import java.net.InetAddress;
 
 import backingup.FileManager;
+import backingup.ipeer.database.Database;
 import backingup.ipeer.protocol.ChunkDelete;
 
 public class FileDelete {
 	
-	String fileId;
-	String path;
-	int numberOfDeleteMessages;
-	int mcPort;
-	InetAddress mcAddress;
-
-	public FileDelete(String fileId, int numberOfDeleteMessages, InetAddress mcAddress, int mcPort, String path) {
+	private String fileId;
+	private String path;
+	private int numberOfDeleteMessages;
+	private int mcPort;
+	private InetAddress mcAddress;
+	private Database db;
+	
+	public FileDelete(String fileId, int numberOfDeleteMessages, InetAddress mcAddress, int mcPort, String path, Database db) {
 		this.fileId = fileId;
 		this.numberOfDeleteMessages = numberOfDeleteMessages;
 		this.mcAddress = mcAddress;   
 		this.mcPort = mcPort;
 		this.path = path;
+		this.db = db;
 	}
 	
 	public boolean DeleteFile() {
@@ -28,7 +31,12 @@ public class FileDelete {
 		if(!deleteChunkResult)
 			return false;
 		
+		updateDatabase();
 		return removeFileFromDir();
+	}
+	
+	private void updateDatabase() {
+		db.removeFile(fileId);
 	}
 	
 	private boolean removeFileFromDir() {

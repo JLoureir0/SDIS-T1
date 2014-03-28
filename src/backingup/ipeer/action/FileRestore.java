@@ -8,7 +8,6 @@ import backingup.ipeer.protocol.ChunkRestore;
 
 public class FileRestore {
 
-	private String fileBody;
 	private String path;
 	private String fileID;
 	private Database db;
@@ -17,8 +16,9 @@ public class FileRestore {
 	private InetAddress mdrAddress;
 	private int mcPort;
 	private InetAddress mcAddress;
+	private FileManager fm;
 	
-	public FileRestore(String fileID, int chunkNo, int mcPort, int mdrPort, InetAddress mcAddress, InetAddress mdrAddress, Database db) {
+	public FileRestore(String fileID, int mcPort, int mdrPort, InetAddress mcAddress, InetAddress mdrAddress, Database db) {
 		this.fileID = fileID;
 		this.db = db;
 		this.mdrPort = mdrPort;
@@ -27,32 +27,32 @@ public class FileRestore {
 		this.mcAddress = mcAddress;
 		this.path = this.db.getFilePath(fileID);
 		this.chunkNos = db.getFileChunkNos(fileID);
-		this.fileBody = "";
+		fm = new FileManager(path);
+		fm.setAppend(false);
 	}
 	
 	public boolean restoreFile() {
+		boolean resultWriteChunk = false;
+		String fileBody = "";
 		for(int i=0; i<chunkNos; i++) {
 			try {
 				ChunkRestore cr = new ChunkRestore(fileID, i, mcPort, mdrPort, mcAddress, mdrAddress);
-				fileBody += cr.restoreChunk();
+				fileBody = cr.restoreChunk();
+				resultWriteChunk = writeChunk(fileBody);
+				if(!resultWriteChunk)
+					return false;
+				fileBody = "";
 			} catch (Exception e) {
 				return false;
 			}
 		}
-		return changeFileContent();
+		return true;
 	}
 
-	private boolean changeFileContent() {
-		FileManager fm = new FileManager(path);
-		return fm.write(fileBody);
-	}
-	
-	public String getFileBody() { 
-		return fileBody;
-	}
-
-	public void setFileBody(String fileBody) {
-		this.fileBody = fileBody;
+	private boolean writeChunk(String chunkBody) {
+		boolean result = fm.write(chunkBody);
+		fm.setAppend(true);
+		return result;
 	}
 
 	public String getPath() {
@@ -61,5 +61,6 @@ public class FileRestore {
 
 	public void setPath(String path) {
 		this.path = path;
+		this.fm = new FileManager(path);
 	}
 }

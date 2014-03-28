@@ -34,5 +34,10 @@ public class Database {
 			return files.get(fileID).getChunkNos();
 		return 0;
 	}
+	
+	public HashMap<String, File> getFiles() {
+		return files;
+	}
+	
 
 }
