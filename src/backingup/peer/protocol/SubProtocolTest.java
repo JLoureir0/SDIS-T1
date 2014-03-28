@@ -215,7 +215,7 @@ public class SubProtocolTest {
 						mcSocket.close();
 						String[] removedMessage = new String(removedPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
 						
-						assertEquals(6, removedMessage.length);
+						assertEquals(5, removedMessage.length);
 						assertEquals(Constants.REMOVED, removedMessage[0]);
 						assertEquals(Constants.VERSION_1, removedMessage[1]);
 						assertEquals(fileID, removedMessage[2]);
@@ -253,7 +253,7 @@ public class SubProtocolTest {
 						mcSocket.close();
 						String[] removedMessage = new String(removedPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
 						
-						assertEquals(6, removedMessage.length);
+						assertEquals(5, removedMessage.length);
 						assertEquals(Constants.REMOVED, removedMessage[0]);
 						assertEquals(Constants.VERSION_1, removedMessage[1]);
 						assertEquals(fileID, removedMessage[2]);
