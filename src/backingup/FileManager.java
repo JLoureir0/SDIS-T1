@@ -5,10 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 public class FileManager {
+	private String directory;
 	private String path;
 	
-	public FileManager(String path) {
-		this.path = path;
+	public FileManager(String directory, String name) {
+		this.directory = directory;
+		path = directory + File.separator + name;
 	}
 	
 	public boolean delete() {
@@ -24,7 +26,7 @@ public class FileManager {
 	
 	public boolean write(String body) {
 		try {
-			File file = new File(Constants.BACKUP_PATH);
+			File file = new File(directory);
 			file.mkdir();
             FileOutputStream fileOS = new FileOutputStream(path);
             fileOS.write(body.getBytes());

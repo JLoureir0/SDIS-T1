@@ -22,7 +22,7 @@ public class Database {
 			ID id = new ID(fileID, chunkNo);
 			Chunk chunk = new Chunk(replicationDegree);
 			chunks.put(id, chunk);
-			FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + fileID + chunkNo);
+			FileManager fileManager = new FileManager(Constants.BACKUP_PATH, fileID + chunkNo);
 			fileManager.write(chunkBody);
 		}
 	}
@@ -34,7 +34,7 @@ public class Database {
 			Chunk chunk = chunks.get(id);
 			if(chunk.getReplicationDegree() < chunk.getCount()) {
 				it.remove();
-				FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
+				FileManager fileManager = new FileManager(Constants.BACKUP_PATH, id.getFileID() + id.getChunkNo());
 				fileManager.delete();
 				return id;
 			}
@@ -43,7 +43,7 @@ public class Database {
 		if(it.hasNext()) {
 			ID id = it.next();
 			it.remove();
-			FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
+			FileManager fileManager = new FileManager(Constants.BACKUP_PATH, id.getFileID() + id.getChunkNo());
 			fileManager.delete();
 			return id;
 		}
@@ -56,7 +56,7 @@ public class Database {
 			ID id = it.next();
 			if(id.getFileID() == fileID) {
 				it.remove();
-				FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
+				FileManager fileManager = new FileManager(Constants.BACKUP_PATH, id.getFileID() + id.getChunkNo());
 				fileManager.delete();
 			}
 		}
@@ -67,7 +67,7 @@ public class Database {
 	}
 	
 	public String getChunkBody(String fileID, int chunkNo) {
-		FileManager fileManager = new FileManager(Constants.BACKUP_PATH + File.separator + fileID + chunkNo);
+		FileManager fileManager = new FileManager(Constants.BACKUP_PATH, fileID + chunkNo);
 		return fileManager.read();
 	}
 

@@ -11,12 +11,13 @@ public class FileManagerTest {
 	@Test
 	public void testFileManager() {
 		
-		String path = Constants.BACKUP_PATH + File.separator + "oi.txt";
+		String path = Constants.BACKUP_PATH;
+		String name = "oi.txt";
 		String body = "oi tudo bom?"; 
-		FileManager fm = new FileManager(path);
+		FileManager fm = new FileManager(path, name);
 		
 		assertTrue(fm.write(body));
-		File f = new File(path);
+		File f = new File(path + File.separator + name);
 		assertEquals(12, f.length());
 		assertTrue(f.exists());
 		
