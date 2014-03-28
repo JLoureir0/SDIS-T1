@@ -50,7 +50,6 @@ public class FileRestore {
 	}
 
 	private boolean writeChunk(String chunkBody) {
-		System.out.println("Path: " + path);
 		boolean result = fm.write(chunkBody);
 		fm.setAppend(true);
 		return result;
