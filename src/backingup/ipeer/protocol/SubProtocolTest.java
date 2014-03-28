@@ -56,7 +56,7 @@ public class SubProtocolTest {
 					mdbSocket.close();
 					String[] putchunkMessage = new String(putchunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
 					
-					assertEquals(8, putchunkMessage.length);
+					assertEquals(7, putchunkMessage.length);
 					assertEquals(Constants.PUTCHUNK, putchunkMessage[0]);
 					assertEquals(Constants.VERSION_1, putchunkMessage[1]);
 					assertEquals(fileID, putchunkMessage[2]);
@@ -125,7 +125,7 @@ public class SubProtocolTest {
 						mcSocket.close();
 						String[] getChunkMessage = new String(getChunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
 						
-						assertEquals(6, getChunkMessage.length);
+						assertEquals(5, getChunkMessage.length);
 						assertEquals(Constants.GETCHUNK, getChunkMessage[0]);
 						assertEquals(Constants.VERSION_1, getChunkMessage[1]);
 						assertEquals(fileID, getChunkMessage[2]);
@@ -183,7 +183,7 @@ public class SubProtocolTest {
 							DatagramPacket deleteChunkPacket = new DatagramPacket(deletechunkData, deletechunkData.length);
 							mcSocket.receive(deleteChunkPacket);
 							String [] deletechunkMessage = new String(deleteChunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
-							assertEquals(4, deletechunkMessage.length);
+							assertEquals(3, deletechunkMessage.length);
 							assertEquals(Constants.DELETE, deletechunkMessage[0]);
 							assertEquals(fileId, deletechunkMessage[1]);
 							assertEquals(Constants.CRLF, deletechunkMessage[2]);

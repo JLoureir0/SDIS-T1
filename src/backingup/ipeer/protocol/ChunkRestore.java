@@ -90,7 +90,7 @@ public class ChunkRestore {
 		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
 		String chunkNumber = ""+chunkNo;
 		if(chunkSplit[0].equals(Constants.CHUNK) && chunkSplit[1].equals(Constants.VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(chunkNumber) && chunkSplit[4].equals(Constants.CRLF)) {
-			receivedChunkBody = chunkSplit[6];
+			receivedChunkBody = chunkSplit[5];
 			return true;
 		}
 		else
