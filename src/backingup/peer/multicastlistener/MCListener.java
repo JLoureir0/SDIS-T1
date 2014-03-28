@@ -29,16 +29,15 @@ public class MCListener extends Thread {
 		this.mdrPort = mdrPort;
 		this.mdrAddress = mdrAddress;
 		try {
-			mcSocket = new MulticastSocket(this.mcPort);
+			mcSocket = new MulticastSocket(mcPort);
+			mcSocket.joinGroup(mcAddress);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void run() {
-		try {
-			mcSocket.joinGroup(mcAddress);
-			
+		try {			
 			while(true) {
 				byte[] chunkData = new byte[Constants.ARRAY_SIZE];
 				DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length);

@@ -14,10 +14,6 @@ public class ChunkBackup {
 	private String chunkBody;
 	private int mdbPort;
 	private InetAddress mdbAddress;
-	@SuppressWarnings("unused")
-	private int mcPort;
-	@SuppressWarnings("unused")
-	private InetAddress mcAddress;
 	private DatagramSocket mdbSocket;
 	private MulticastSocket mcSocket;
 	private int replicationCounter;
@@ -30,8 +26,6 @@ public class ChunkBackup {
 		this.chunkBody = chunkBody;
 		this.mdbPort = mdbPort;
 		this.mdbAddress = mdbAddress;
-		this.mcPort = mcPort;
-		this.mcAddress = mcAddress;
 		
 		try {
 			mdbSocket = new DatagramSocket();

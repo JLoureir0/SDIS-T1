@@ -65,14 +65,12 @@ public class FileBackup {
 	}
 	
 	private void createFileChunks(String fileBody) {
-		@SuppressWarnings("unused")
-		int nRead = 0;
 		String chunkBody = "";
 		byte[] buffer = new byte[CHUNKSIZE];
 		
 		try {
 			 FileInputStream inputStream = new FileInputStream(path);
-			 while((nRead = inputStream.read(buffer)) != -1) {
+			 while(inputStream.read(buffer) != -1) {
 				 chunkBody = new String(buffer);
 				 chunkBody = chunkBody.trim();
 	             backupChunk(chunkNos, chunkBody);
