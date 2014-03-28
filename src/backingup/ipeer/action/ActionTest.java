@@ -9,6 +9,7 @@ import java.net.InetAddress;
 
 import org.junit.Test;
 
+import backingup.Constants;
 import backingup.ipeer.database.Database;
 
 public class ActionTest {
@@ -17,7 +18,8 @@ public class ActionTest {
 	public void testFileRestore() throws NoSuchMethodException, SecurityException {
 	    Method method = FileRestore.class.getDeclaredMethod("changeFileContent");
 	    method.setAccessible(true);
-		String path = "C:\\Users\\Daniel Moreira\\Documents\\workspace\\sdisProject\\src\\backingup\\ipeer\\action\\testRestoreFile.txt";
+		String path = System.getProperty(Constants.CURRENT_DIR);
+		String fileName = "testRestoreFile.txt";
 		String fileContent = "Just an example of a text in order to test if fileRestore is working properly";
 		Database db = new Database();
 		int mdrPort = 64321;
