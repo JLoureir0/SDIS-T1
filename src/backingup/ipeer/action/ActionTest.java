@@ -20,7 +20,7 @@ public class ActionTest {
 	    Method method = FileRestore.class.getDeclaredMethod("writeChunk", String.class);
 	    method.setAccessible(true);
 		String dirPath = System.getProperty(Constants.CURRENT_DIR);
-		dirPath += "\\src\\backingup\\ipeer\\action"; 
+		dirPath += File.separator + "src" + File.separator + "backingup" + File.separator + "ipeer" + File.separator + "action";
 		String fileName = "testRestoreFile.txt";
 		String path = dirPath + File.separator + fileName;
 		String fileContent = "Just an example ";
@@ -64,7 +64,7 @@ public class ActionTest {
 	    Method method = FileDelete.class.getDeclaredMethod("removeFileFromDir");
 	    method.setAccessible(true);
 		String dirPath = System.getProperty(Constants.CURRENT_DIR);
-		dirPath += "\\src\\backingup\\ipeer\\action"; 
+		dirPath += File.separator + "src" + File.separator + "backingup" + File.separator + "ipeer" + File.separator + "action"; 
 		String fileName = "testDeleteFile.txt";
 		String path = dirPath + File.separator + fileName;
 		int numberOfDeleteMessages = 1;
@@ -86,7 +86,7 @@ public class ActionTest {
 	
 	public void createFileBeforeBeingDeleted() {
 		String dirPath = System.getProperty(Constants.CURRENT_DIR);
-		dirPath += "\\src\\backingup\\ipeer\\action"; 
+		dirPath += File.separator + "src" + File.separator + "backingup" + File.separator + "ipeer" + File.separator + "action";
 		String fileName = "testDeleteFile.txt";
 		String path = dirPath + File.separator + fileName;
 		String fileBody = "Just a file to test FileDelete";
@@ -99,7 +99,7 @@ public class ActionTest {
 	    Method method = FileBackup.class.getDeclaredMethod("generateFileID");
 	    method.setAccessible(true);
 		String dirPath = System.getProperty(Constants.CURRENT_DIR);
-		dirPath += "\\src\\backingup\\ipeer\\action"; 
+		dirPath += File.separator + "src" + File.separator + "backingup" + File.separator + "ipeer" + File.separator + "action";
 		String fileName = "testChunks.txt";
 		String path = dirPath + File.separator + fileName;
 		int replicationDegree = 2;
@@ -134,7 +134,7 @@ public class ActionTest {
 	    Method method = FileBackup.class.getDeclaredMethod("updateDatabase");
 	    method.setAccessible(true);
 		String dirPath = System.getProperty(Constants.CURRENT_DIR);
-		dirPath += "\\src\\backingup\\ipeer\\action"; 
+		dirPath += File.separator + "src" + File.separator + "backingup" + File.separator + "ipeer" + File.separator + "action"; 
 		String fileName = "testRestoreFile.txt";
 		String path = dirPath + File.separator + fileName;
 		int replicationDegree = 2;
@@ -174,7 +174,7 @@ public class ActionTest {
 	    Method method = FileBackup.class.getDeclaredMethod("createFileChunks", String.class);
 	    method.setAccessible(true);
 		String dirPath = System.getProperty(Constants.CURRENT_DIR);
-		dirPath += "\\src\\backingup\\ipeer\\action"; 
+		dirPath += File.separator + "src" + File.separator + "backingup" + File.separator + "ipeer" + File.separator + "action";
 		String fileName = "testChunks.txt";
 		String path = dirPath + File.separator + fileName;
 		int replicationDegree = 2;
