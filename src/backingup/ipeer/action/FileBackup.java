@@ -5,12 +5,12 @@ import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.security.MessageDigest;
 
+import backingup.Constants;
 import backingup.ipeer.database.Database;
 import backingup.ipeer.protocol.ChunkBackup;
 
 public class FileBackup {
 
-	private int CHUNKSIZE = 64000;
 	private String path;
 	private boolean multiple;
 	private String fileID;
@@ -49,7 +49,7 @@ public class FileBackup {
 		    fileLastModification = file.lastModified();
 		    fileName = file.getName();
 		    
-		    if (fileBody.length() % CHUNKSIZE == 0)
+		    if (fileBody.length() % Constants.CHUNKSIZE == 0)
 		    	this.multiple = true;
 		    
 		    generateFileID();
@@ -66,7 +66,7 @@ public class FileBackup {
 	
 	private void createFileChunks(String fileBody) {
 		String chunkBody = "";
-		byte[] buffer = new byte[CHUNKSIZE];
+		byte[] buffer = new byte[Constants.CHUNKSIZE];
 		
 		try {
 			 FileInputStream inputStream = new FileInputStream(path);
