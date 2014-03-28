@@ -10,25 +10,33 @@ import backingup.peer.protocol.ChunkBackup;
 
 public class MDBListener extends Thread {
 	private Database database;
+	private int mdbPort;
+	private InetAddress mdbAddress;
 	private int mcPort;
 	private InetAddress mcAddress;
+	private MulticastSocket mdbSocket;
 	
-	public MDBListener(Database database, int mcPort, InetAddress mcAddress) {
+	public MDBListener(Database database, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
 		this.database = database;
+		this.mdbPort = mdbPort;
+		this.mdbAddress = mdbAddress;
 		this.mcPort = mcPort;
 		this.mcAddress = mcAddress;
+		try {
+			mdbSocket = new MulticastSocket(this.mdbPort);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void run() {
 		try {
-			@SuppressWarnings("resource")
-			MulticastSocket mcSocket = new MulticastSocket(mcPort);
-			mcSocket.joinGroup(mcAddress);
+			mdbSocket.joinGroup(mdbAddress);
 			
 			while(true) {
 				byte[] chunkData = new byte[Constants.ARRAY_SIZE];
 				DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length);
-				mcSocket.receive(chunkPacket);
+				mdbSocket.receive(chunkPacket);
 				String chunk = new String(chunkPacket.getData(),Constants.ENCODING).trim();
 						
 				if(correctChunk(chunk)) {
@@ -40,6 +48,7 @@ public class MDBListener extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		mdbSocket.close();
 	}
 	
 	private boolean correctChunk(String chunk) {

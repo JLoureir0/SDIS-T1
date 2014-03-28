@@ -19,9 +19,7 @@ public class ReplicationCounter extends Thread {
 	private String fileID;
 	private int chunkNo;
 	private MulticastSocket mcSocket;
-	@SuppressWarnings("unused")
 	private InetAddress mcAddress;
-	@SuppressWarnings("unused")
 	private int mcPort;
 	
 	public ReplicationCounter(Database database, String fileID, int chunkNo, InetAddress mcAddress, int mcPort) {
@@ -31,8 +29,8 @@ public class ReplicationCounter extends Thread {
 		this.mcAddress = mcAddress;
 		this.mcPort = mcPort;
 		try {
-			mcSocket = new MulticastSocket(mcPort);
-			mcSocket.joinGroup(mcAddress);
+			mcSocket = new MulticastSocket(this.mcPort);
+			mcSocket.joinGroup(this.mcAddress);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
