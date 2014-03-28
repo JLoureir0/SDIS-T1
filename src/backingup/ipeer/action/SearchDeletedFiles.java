@@ -50,7 +50,6 @@ public class SearchDeletedFiles extends Thread {
 				e.printStackTrace();
 			}
 		}
-
 	}
 	
 	private void restoreFile(String fileID) {
