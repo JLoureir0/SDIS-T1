@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import backingup.Constants;
 import backingup.FileManager;
@@ -28,18 +29,19 @@ public class Database {
 	}
 	
 	public ID removeChunk() {
-		Iterator<ID> it = chunks.keySet().iterator();
-		while(it.hasNext()) {
-			ID id = it.next();
-			Chunk chunk = chunks.get(id);
+		 Iterator<Entry<ID, Chunk>> ite = chunks.entrySet().iterator();
+		while(ite.hasNext()) {
+			Map.Entry<ID, Chunk> entry = (Map.Entry<ID, Chunk>)ite.next();
+			ID id = entry.getKey();
+			Chunk chunk = entry.getValue();
 			if(chunk.getReplicationDegree() < chunk.getCount()) {
-				it.remove();
+				ite.remove();
 				FileManager fileManager = new FileManager(Constants.BACKUP_PATH, id.getFileID() + id.getChunkNo());
 				fileManager.delete();
 				return id;
 			}
 		}
-		it = chunks.keySet().iterator();
+		Iterator<ID> it = chunks.keySet().iterator();
 		if(it.hasNext()) {
 			ID id = it.next();
 			it.remove();
