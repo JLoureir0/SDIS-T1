@@ -36,7 +36,7 @@ public class ChunkRemoved extends Thread {
 	
 	public void run() {
 		database.decreaseCount(fileID, chunkNo);
-		if(database.getCount(fileID, chunkNo) < database.getReplicationDegree(fileID, chunkNo)) {
+		if(database.getCount(fileID, chunkNo) < replicationDegree) {
 			if(noResponse()) {
 				ChunkBackup chunkBackup = new ChunkBackup(fileID, chunkNo, replicationDegree, chunkBody, mdbPort, mdbAddress, mcPort, mcAddress);
 				chunkBackup.backupChunk();
@@ -77,6 +77,6 @@ public class ChunkRemoved extends Thread {
 	
 	private boolean correctChunk(String chunk) {
 		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
-		return (chunkSplit[0].equals(Constants.PUTCHUNK) && chunkSplit[1].equals(Constants.VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(Integer.toString(chunkNo)) && chunkSplit[4].equals(replicationDegree) && chunkSplit[5].equals(Constants.CRLF) && chunkSplit[6].equals(Constants.CRLF)&& chunkSplit[7].equals(chunkBody));
+		return (chunkSplit[0].equals(Constants.PUTCHUNK) && chunkSplit[1].equals(Constants.VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(Integer.toString(chunkNo)) && chunkSplit[4].equals(Integer.toString(replicationDegree)) && chunkSplit[5].equals(Constants.CRLF) && chunkSplit[6].equals(Constants.CRLF) && chunkSplit[7].equals(chunkBody));
 	}
 }
