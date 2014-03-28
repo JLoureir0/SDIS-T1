@@ -195,22 +195,87 @@ public class SubProtocolTest {
 		db.increaseCount(fileID, chunkNo2);
 		db.increaseCount(fileID, chunkNo2);
 		
-		InetAddress mcAddress = null;
 		try {
-			mcAddress = InetAddress.getByName(address);
+			InetAddress mcAddress = InetAddress.getByName(address);
+			
+			FreeSpace fs = new FreeSpace(db,mcPort,mcAddress);
+			Thread t = new Thread() {
+				public void run() {
+					String fileID = "id1";
+					int chunkNo = 1;
+					String address = "224.2.2.3";
+					int mcPort = 54321;
+					
+					try {
+						InetAddress mcAddress = InetAddress.getByName(address);
+						
+						MulticastSocket mcSocket = new MulticastSocket(mcPort);
+						mcSocket.joinGroup(mcAddress);
+						
+						byte[] removedData = new byte[Constants.ARRAY_SIZE];
+						DatagramPacket removedPacket = new DatagramPacket(removedData, removedData.length);
+						
+						mcSocket.receive(removedPacket);
+						mcSocket.close();
+						String[] removedMessage = new String(removedPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
+						
+						assertEquals(6, removedMessage.length);
+						assertEquals(Constants.REMOVED, removedMessage[0]);
+						assertEquals(Constants.VERSION_1, removedMessage[1]);
+						assertEquals(fileID, removedMessage[2]);
+						assertEquals(Integer.toString(chunkNo), removedMessage[3]);
+						assertEquals(Constants.CRLF, removedMessage[4]);
+						assertEquals(Constants.CRLF, removedMessage[5]);
+					}catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			t.start();
+			fs.freeSpace(15);
+			assertEquals(15,db.getMaxSize());
+			
+			assertEquals(14, db.getSize());
+			assertTrue(db.containsChunk(fileID, chunkNo1));
+			
+			t = new Thread() {
+				public void run() {
+					String fileID = "id1";
+					int chunkNo = 2;
+					String address = "224.2.2.3";
+					int mcPort = 54321;
+					
+					try {
+						InetAddress mcAddress = InetAddress.getByName(address);
+						
+						MulticastSocket mcSocket = new MulticastSocket(mcPort);
+						mcSocket.joinGroup(mcAddress);
+						
+						byte[] removedData = new byte[Constants.ARRAY_SIZE];
+						DatagramPacket removedPacket = new DatagramPacket(removedData, removedData.length);
+						
+						mcSocket.receive(removedPacket);
+						mcSocket.close();
+						String[] removedMessage = new String(removedPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
+						
+						assertEquals(6, removedMessage.length);
+						assertEquals(Constants.REMOVED, removedMessage[0]);
+						assertEquals(Constants.VERSION_1, removedMessage[1]);
+						assertEquals(fileID, removedMessage[2]);
+						assertEquals(Integer.toString(chunkNo), removedMessage[3]);
+						assertEquals(Constants.CRLF, removedMessage[4]);
+						assertEquals(Constants.CRLF, removedMessage[5]);
+					}catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			t.start();
+			fs.freeSpace(10);
+			assertEquals(10,db.getMaxSize());
+			assertEquals(0, db.getSize());
 		}catch(Exception e) {
 			e.printStackTrace();
-		}
-		
-		FreeSpace fs = new FreeSpace(db,mcPort,mcAddress);
-		
-		fs.freeSpace(15);
-		assertEquals(15,db.getMaxSize());
-		assertEquals(14, db.getSize());
-		assertTrue(db.containsChunk(fileID, chunkNo1));
-		
-		fs.freeSpace(10);
-		assertEquals(10,db.getMaxSize());
-		assertEquals(0, db.getSize());
+		}	
 	}
 }
