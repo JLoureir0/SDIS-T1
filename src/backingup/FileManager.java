@@ -71,6 +71,13 @@ public class FileManager {
          return body;
 	}
 	
+	public boolean CheckIfFileExists() {
+		File f = new File(path);
+		if(f.exists() && !f.isDirectory()) 
+			return true;
+		return false;
+	}
+	
 	public void setAppend(boolean append) {
 		this.append = append;
 	}

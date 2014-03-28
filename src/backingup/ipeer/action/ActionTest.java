@@ -39,7 +39,7 @@ public class ActionTest {
 			InetAddress mdrAddress = InetAddress.getByName(address);
 			InetAddress mcAddress = InetAddress.getByName(address1);
 			
-			FileRestore fr = new FileRestore(fileID,1,mcPort,mdrPort,mcAddress,mdrAddress,db);
+			FileRestore fr = new FileRestore(fileID,mcPort,mdrPort,mcAddress,mdrAddress,db);
 			fr.setPath(path);
 			boolean aux = (boolean) method.invoke(fr,fileContent);
 			assertTrue(aux);

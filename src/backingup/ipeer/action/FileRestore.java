@@ -18,7 +18,7 @@ public class FileRestore {
 	private InetAddress mcAddress;
 	private FileManager fm;
 	
-	public FileRestore(String fileID, int chunkNo, int mcPort, int mdrPort, InetAddress mcAddress, InetAddress mdrAddress, Database db) {
+	public FileRestore(String fileID, int mcPort, int mdrPort, InetAddress mcAddress, InetAddress mdrAddress, Database db) {
 		this.fileID = fileID;
 		this.db = db;
 		this.mdrPort = mdrPort;
