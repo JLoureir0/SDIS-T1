@@ -194,7 +194,7 @@ public class CLInterface {
 	    	int userOption = Integer.parseInt(keyboard.nextLine());
 	    	
 	    	if(userOption >= 1 && userOption <= iteration) {
-	    		index = userOption--;
+	    		index = userOption-1;
 	    		break;
 	    	}
 	    	
