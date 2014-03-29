@@ -3,8 +3,8 @@ package backingup;
 import java.io.File;
 
 public class Constants {
-	public static final int ARRAY_SIZE = 512;
-	public static int CHUNKSIZE = 64000;
+	public static final int ARRAY_SIZE = 132096;
+	public static int CHUNKSIZE = 65536;
 	public static final int HALF_A_SECOND = 500;
 	public static final int SLEEP = 401;
 	public static final int NUMBER_OF_DELETED_MESSAGES = 5;
