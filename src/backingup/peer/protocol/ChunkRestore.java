@@ -97,6 +97,6 @@ public class ChunkRestore extends Thread {
 	
 	private boolean correctChunk(String chunk) {
 		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
-		return (chunkSplit[0].equals(Constants.CHUNK) && chunkSplit[1].equals(Constants.VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(Integer.toString(chunkNo)) && chunkSplit[4].equals(Constants.CRLF) && chunkSplit[5].equals(chunkBody));
+		return (chunkSplit[0].equals(Constants.CHUNK) && chunkSplit[1].equals(Constants.VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(Integer.toString(chunkNo)) && chunkSplit[4].equals(Constants.CRLF));
 	}
 }

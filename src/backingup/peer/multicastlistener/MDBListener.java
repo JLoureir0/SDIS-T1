@@ -39,7 +39,8 @@ public class MDBListener extends Thread {
 						
 				if(correctChunk(chunk)) {
 					String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
-					ChunkBackup chunkBackup = new ChunkBackup(peerDB, chunkSplit[2], Integer.parseInt(chunkSplit[3]), Integer.parseInt(chunkSplit[4]), chunkSplit[6], mcPort, mcAddress);
+					int beginIndex = chunkSplit[0].length()+chunkSplit[1].length()+chunkSplit[2].length()+chunkSplit[3].length()+chunkSplit[4].length()+chunkSplit[5].length()+6;
+					ChunkBackup chunkBackup = new ChunkBackup(peerDB, chunkSplit[2], Integer.parseInt(chunkSplit[3]), Integer.parseInt(chunkSplit[4]), chunk.substring(beginIndex, chunk.length()), mcPort, mcAddress);
 					chunkBackup.start();
 				}
 			}
@@ -51,6 +52,6 @@ public class MDBListener extends Thread {
 	
 	private boolean correctChunk(String chunk) {
 		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
-		return (chunkSplit[0].equals(Constants.PUTCHUNK) && (!ipeerDB.containsFile(chunkSplit[2])) && (chunkSplit.length == 7));
+		return (chunkSplit[0].equals(Constants.PUTCHUNK) && (!ipeerDB.containsFile(chunkSplit[2])));
 	}
 }
