@@ -6,13 +6,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import backingup.Constants;
 import backingup.FileManager;
 import backingup.ipeer.database.Database;
 import backingup.ipeer.database.File;
 
 public class SearchDeletedFiles extends Thread {
 
-	private int FIVE_SECONDS = 5000;
 	private Database db;
 	private int mcPort;
 	private int mdrPort;
@@ -45,7 +45,7 @@ public class SearchDeletedFiles extends Thread {
 			        	restoreFile(fileID);
 			        it.remove();
 			    }
-			    Thread.sleep(FIVE_SECONDS);
+			    Thread.sleep(Constants.FIVE_SECONDS);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
