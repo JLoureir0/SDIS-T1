@@ -188,7 +188,6 @@ public class CLInterface {
 		        File f = new File(((backingup.ipeer.database.File)file.getValue()).getPath());
 		        String fileName = f.getName();
 		        System.out.println(iteration + " -> " + fileName);
-		        it.remove();
 		        iteration++;
 		    }
 		    

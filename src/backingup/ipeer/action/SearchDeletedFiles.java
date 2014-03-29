@@ -43,7 +43,6 @@ public class SearchDeletedFiles extends Thread {
 			        pathExists = fm.checkIfFileExists();
 			        if(!pathExists)
 			        	restoreFile(fileID);
-			        it.remove();
 			    }
 			    Thread.sleep(Constants.FIVE_SECONDS);
 			} catch (Exception e) {
