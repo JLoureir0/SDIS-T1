@@ -114,7 +114,7 @@ public class Ui {
         	System.out.println("Error, invalid file replication degree!");
     	}
     
-    	FileBackup fb = new FileBackup(path, replicationDegree, db, mdbPort, mdbAddress, mcPort, mcAddress);
+    	FileBackup fb = new FileBackup(path, replicationDegree, ipeerDb, mdbPort, mdbAddress, mcPort, mcAddress);
     	boolean result = fb.backupFile();
     	if(result)
     		System.out.println("The file has been backup up sucessfully!");
