@@ -3,8 +3,8 @@ package backingup;
 import java.io.File;
 
 public class Constants {
-	public static final int ARRAY_SIZE = 132096;
-	public static final int CHUNKSIZE = 65536;
+	public static final int ARRAY_SIZE = 65500;
+	public static final int CHUNKSIZE = 64000;
 	public static final int HALF_A_SECOND = 500;
 	public static final int FIVE_SECONDS = 5000;
 	public static final int SLEEP = 401;
