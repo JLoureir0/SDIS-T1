@@ -15,8 +15,10 @@ import backingup.ipeer.database.Database;
 public class CLInterface {
 	
 	private static BackingUP backingup;
+	private static Scanner keyboard;
 	
 	public static void main(String[] args) {
+		keyboard = new Scanner(System.in);
 		if(parseArgs(args))
 			mainMenu();
 		else
@@ -86,10 +88,8 @@ public class CLInterface {
 	 }
 	 
 	 private static void getMainMenuChoice() {
-	    	Scanner keyboard = new Scanner(System.in);
 	    	System.out.print("Please insert the desired option: ");
-	    	int userOption = keyboard.nextInt();
-	    	keyboard.close();
+	    	int userOption = Integer.parseInt(keyboard.nextLine());
 	    	
 	    	switch (userOption) {
 	        case 1:
@@ -116,14 +116,12 @@ public class CLInterface {
 	 private static void backupFile() {
 		 String path = "";
 		 int replicationDegree = 0;
-		 Scanner keyboard = new Scanner(System.in);
 		 System.out.println("Please insert the path of the file you want to backup: ");
-		 path = keyboard.next();
+		 path = keyboard.nextLine();
 		 
 		 while(true) {
 			 System.out.print("Please insert the replication degree of the file: ");
-			 replicationDegree = keyboard.nextInt();
-
+			 replicationDegree = Integer.parseInt(keyboard.nextLine());
 			 
 			if(replicationDegree > 0)
 				break;
@@ -134,8 +132,7 @@ public class CLInterface {
     	if(result)
     		System.out.println("The file has been backup up sucessfully!");
     	else
-    		System.out.println("It was not possible to backup the desired file, pleasy try again!");
-    	keyboard.close();
+    		System.out.println("It was not possible to backup the desired file, please try again!");
 	 }
 	
 	private static void restoreFile() {
@@ -153,7 +150,6 @@ public class CLInterface {
 	
 	private static void freeSpace() {		
 		 int newSize = 0;
-		 Scanner keyboard = new Scanner(System.in);
 		 
 		 while(true) {
 			 System.out.print("Please insert the replication degree of the file: ");
@@ -169,8 +165,7 @@ public class CLInterface {
     	if(result)
     		System.out.println("The file has been backup up sucessfully!");
     	else
-    		System.out.println("It was not possible to backup the desired file, pleasy try again!");
-    	keyboard.close();
+    		System.out.println("It was not possible to backup the desired file, please try again!");
 	}
 	
 	private static String printFilesInDatabase() {
@@ -197,9 +192,7 @@ public class CLInterface {
 		        iteration++;
 		    }
 		    
-	    	Scanner keyboard = new Scanner(System.in);
 	    	int userOption = keyboard.nextInt();
-	    	keyboard.close();
 	    	
 	    	if(userOption >= 1 && userOption <= iteration) {
 	    		index = userOption--;

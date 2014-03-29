@@ -34,10 +34,8 @@ public class FileManager {
 	
 	public boolean write(String body) {
 		try {
-			if(!directory.equals(directory)) {
-				File file = new File(directory);
-				file.mkdir();
-			}
+			File file = new File(directory);
+			file.mkdir();
 			FileOutputStream fileOS;
 			if(append)
 				fileOS = new FileOutputStream(path, true);

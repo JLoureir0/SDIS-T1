@@ -39,8 +39,7 @@ public class FileBackup {
 		this.mcAddress = mcAddress;
 	}
 	
-	public boolean backupFile() { 
-		updateDatabase();
+	public boolean backupFile() {
 		try {
 			FileManager fm = new FileManager(path);
 			boolean exists = fm.checkIfFileExists();
@@ -48,19 +47,18 @@ public class FileBackup {
 				return false;
 			
 		    File file = new File(path);
-		    FileInputStream fileStream = new FileInputStream(file);
-		    byte[] dataBody = new byte[(int)file.length()];
-		    fileStream.read(dataBody);
-		    fileStream.close();
-		    String fileBody = new String(dataBody);
 		    fileLastModification = file.lastModified();
 		    fileName = file.getName();
 		    
-		    if (fileBody.length() % Constants.CHUNKSIZE == 0)
+		    if (file.length() % Constants.CHUNKSIZE == 0)
 		    	this.multiple = true;
 		    
 		    generateFileID();
-		    createFileChunks(fileBody);
+		    updateDatabase();
+		    if(!createFileChunks()) {
+		    	db.removeFile(fileID);
+		    	return false;
+		    }
 		    updateDatabase();
 		    
 		    return true;
@@ -72,7 +70,7 @@ public class FileBackup {
 		return false; 
 	}
 	
-	private void createFileChunks(String fileBody) {
+	private boolean createFileChunks() {
 		String chunkBody = "";
 		byte[] buffer = new byte[Constants.CHUNKSIZE];
 		
@@ -81,7 +79,10 @@ public class FileBackup {
 			 while(inputStream.read(buffer) != -1) {
 				 chunkBody = new String(buffer);
 				 chunkBody = chunkBody.trim();
-				 backupChunk(chunkNos, chunkBody);
+				 if(!backupChunk(chunkNos, chunkBody)) {
+					 inputStream.close();
+					 return false;
+				 }
 				 chunkNos++;
 				 System.out.println("ChunkNos: " + chunkNos);
 	         }	
@@ -92,9 +93,11 @@ public class FileBackup {
 		
 	    if(multiple) {
 	    	chunkBody = "";
-	    	backupChunk(chunkNos, chunkBody);
+	    	if(!backupChunk(chunkNos, chunkBody))
+	    		return false;
 	    	chunkNos++;
 	    }
+	    return true;
 	}
 	
 	private void updateDatabase() {
