@@ -15,8 +15,6 @@ public class BackingUP {
 	private backingup.ipeer.database.Database ipeerDB;
 	private backingup.peer.database.Database peerDB;
 	
-	
-	
 	private int mcPort;
 	private int mdbPort;
 	private int mdrPort;
