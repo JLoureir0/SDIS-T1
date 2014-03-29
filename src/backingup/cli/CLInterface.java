@@ -1,8 +1,11 @@
 package backingup.cli;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import backingup.BackingUP;
+import backingup.ipeer.database.File;
 
 public class CLInterface {
 	
@@ -76,6 +79,14 @@ public class CLInterface {
 	
 	private static void freeSpace() {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	private static String printFilesInDatabase() {
+		HashMap<String, File> files;
+		ArrayList<String> fileIDs = new ArrayList<String> ();
+		
+		
 		
 	}
 }

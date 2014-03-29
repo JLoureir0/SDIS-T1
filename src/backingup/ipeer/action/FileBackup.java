@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.security.MessageDigest;
 
 import backingup.Constants;
+import backingup.FileManager;
 import backingup.ipeer.database.Database;
 import backingup.ipeer.protocol.ChunkBackup;
 
@@ -40,6 +41,11 @@ public class FileBackup {
 	
 	public boolean backupFile() { 
 		try {
+			FileManager fm = new FileManager(path);
+			boolean exists = fm.checkIfFileExists();
+			if(!exists)
+				return false;
+			
 		    File file = new File(path);
 		    FileInputStream fileStream = new FileInputStream(file);
 		    byte[] dataBody = new byte[(int)file.length()];
