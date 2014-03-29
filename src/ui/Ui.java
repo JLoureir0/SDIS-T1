@@ -7,6 +7,7 @@ public class Ui {
     public static void main(String[] args) {
     	//Create listeners
     	//Create SearchDeletedFiles Thread
+    	//Portas ips dbsize
         mainMenu();
     }
     
