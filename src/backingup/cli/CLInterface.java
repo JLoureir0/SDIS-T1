@@ -63,9 +63,30 @@ public class CLInterface {
 	    	}
 	 }
 
-	private static void backupFile() {
-		
-	}
+	 private static void backupFile() {
+		 String path = "";
+		 int replicationDegree = 0;
+		 Scanner keyboard = new Scanner(System.in);
+		 System.out.println("Please insert the path of the file you want to backup: ");
+		 path = keyboard.next();
+		 
+		 while(true) {
+			 System.out.print("Please insert the replication degree of the file: ");
+			 replicationDegree = keyboard.nextInt();
+
+			 
+			if(replicationDegree > 0)
+				break;
+			System.out.println("Error, invalid file replication degree!");
+	    }
+	    
+    	boolean result = backingup.backupFile(path, replicationDegree);
+    	if(result)
+    		System.out.println("The file has been backup up sucessfully!");
+    	else
+    		System.out.println("It was not possible to backup the desired file, pleasy try again!");
+    	keyboard.close();
+	 }
 	
 	private static void restoreFile() {
 		// TODO Auto-generated method stub
@@ -77,9 +98,26 @@ public class CLInterface {
 		
 	}
 	
-	private static void freeSpace() {
-		// TODO Auto-generated method stub
-		
+	private static void freeSpace() {		
+		 int newSize = 0;
+		 Scanner keyboard = new Scanner(System.in);
+		 
+		 while(true) {
+			 System.out.print("Please insert the replication degree of the file: ");
+			 newSize = keyboard.nextInt();
+
+			 
+			if(newSize > 0)
+				break;
+			System.out.println("Error, invalid file replication degree!");
+	    }
+	    
+    	boolean result = backingup.freeSpace(newSize);
+    	if(result)
+    		System.out.println("The file has been backup up sucessfully!");
+    	else
+    		System.out.println("It was not possible to backup the desired file, pleasy try again!");
+    	keyboard.close();
 	}
 	
 	private static String printFilesInDatabase() {
