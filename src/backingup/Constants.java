@@ -6,6 +6,7 @@ public class Constants {
 	public static final int ARRAY_SIZE = 132096;
 	public static final int CHUNKSIZE = 65536;
 	public static final int HALF_A_SECOND = 500;
+	public static final int FIVE_SECONDS = 5000;
 	public static final int SLEEP = 401;
 	public static final int NUMBER_OF_DELETED_MESSAGES = 5;
 	public static final String PUTCHUNK = "PUTCHUNK";
