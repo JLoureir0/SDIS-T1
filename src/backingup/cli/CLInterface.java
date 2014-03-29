@@ -20,7 +20,7 @@ public class CLInterface {
 		if(parseArgs(args))
 			mainMenu();
 		else
-			System.out.println("Usage: backingup mcPort mcAddress mdbPort mdbAddress mdrPort mdrAddress databaseSize");
+			System.out.println("Usage: mcPort mcAddress mdbPort mdbAddress mdrPort mdrAddress databaseSize");
 	}
 	
 	private static boolean parseArgs(String[] args) {
@@ -39,29 +39,29 @@ public class CLInterface {
 	}
 	
 	private static boolean invalidPort(int port) {
-		if(port < 1000 && port > 65535)
+		if(port < 1000 || port > 65535)
 			return true;
 		return false;
 	}
 	
 	private static boolean invalidAddress(String address) {
-		String[] range = address.split(".");
+		String[] range = address.split(Constants.DOT_REGEX);
 		if(range.length != 4)
 			return true;
 		
-		int first = Integer.getInteger(range[0]);
-		int second = Integer.getInteger(range[1]);
-		int third = Integer.getInteger(range[2]);
-		int fourth = Integer.getInteger(range[3]);
+		int first = Integer.parseInt(range[0]);
+		int second = Integer.parseInt(range[1]);
+		int third = Integer.parseInt(range[2]);
+		int fourth = Integer.parseInt(range[3]);
 		
 		//The multicast addresses are in the range 224.0.0.0 through 239.255.255.255
-		if(first < 224 && first > 239)
+		if(first < 224 || first > 239)
 			return true;
-		if(second < 0 && second > 255)
+		if(second < 0 || second > 255)
 			return true;
-		if(third < 0 && third > 255)
+		if(third < 0 || third > 255)
 			return true;
-		if(fourth < 0 && fourth > 255)
+		if(fourth < 0 || fourth > 255)
 			return true;
 		return false;
 	}

@@ -19,6 +19,7 @@ public class Constants {
 	public static final String CRLF = "CRLFCRLF";
 	public static final String ENCODING = "US-ASCII";
 	public static final String WHITESPACE_REGEX = "\\s";
+	public static final String DOT_REGEX = "\\.";
 	public static final String CURRENT_DIR = "user.dir";
 	public static final String BACKUP_PATH = System.getProperty(CURRENT_DIR) + File.separator + "backup";
 }
