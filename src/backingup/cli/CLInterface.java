@@ -153,7 +153,7 @@ public class CLInterface {
 		 
 		 while(true) {
 			 System.out.print("Please insert the replication degree of the file: ");
-			 newSize = keyboard.nextInt();
+			 newSize = Integer.parseInt(keyboard.nextLine());
 
 			 
 			if(newSize > 0)
@@ -185,14 +185,14 @@ public class CLInterface {
 		        Map.Entry<String, backingup.ipeer.database.File> file = (Map.Entry<String, backingup.ipeer.database.File>)it.next();
 		        String fileID = (String) file.getKey();
 		        fileIDs.add(fileID);
-		        File f = new File(db.getFilePath(fileID));
+		        File f = new File(((backingup.ipeer.database.File)file.getValue()).getPath());
 		        String fileName = f.getName();
 		        System.out.println(iteration + " -> " + fileName);
 		        it.remove();
 		        iteration++;
 		    }
 		    
-	    	int userOption = keyboard.nextInt();
+	    	int userOption = Integer.parseInt(keyboard.nextLine());
 	    	
 	    	if(userOption >= 1 && userOption <= iteration) {
 	    		index = userOption--;
