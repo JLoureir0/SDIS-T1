@@ -19,11 +19,13 @@ public class FreeSpace {
 		this.mcAddress = mcAddress;
 	}
 	
-	public void freeSpace(int newSize) {
+	public boolean freeSpace(int newSize) {
 		if(newSize < 0)
 			newSize = 0;
-		if(newSize >= database.getSize())
+		if(newSize >= database.getSize()) {
 			database.setMaxSize(newSize);
+			return true;
+		}
 		else {
 			while(database.getSize() > newSize) {
 				ID id = database.removeChunk();
@@ -31,6 +33,7 @@ public class FreeSpace {
 					sendRemoved(id);
 			}
 			database.setMaxSize(newSize);
+			return true;
 		}
 	}
 	

@@ -5,17 +5,18 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 import backingup.Constants;
-import backingup.peer.database.Database;
 import backingup.peer.protocol.ChunkBackup;
 
 public class MDBListener extends Thread {
-	private Database database;
+	private backingup.peer.database.Database peerDB;
+	private backingup.ipeer.database.Database ipeerDB;
 	private int mcPort;
 	private InetAddress mcAddress;
 	private MulticastSocket mdbSocket;
 	
-	public MDBListener(Database database, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
-		this.database = database;
+	public MDBListener(backingup.peer.database.Database peerDB, backingup.ipeer.database.Database ipeerDB, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
+		this.peerDB = peerDB;
+		this.ipeerDB = ipeerDB;
 		this.mcPort = mcPort;
 		this.mcAddress = mcAddress;
 		try {
@@ -38,7 +39,7 @@ public class MDBListener extends Thread {
 						
 				if(correctChunk(chunk)) {
 					String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
-					ChunkBackup chunkBackup = new ChunkBackup(database, chunkSplit[2], Integer.parseInt(chunkSplit[3]), Integer.parseInt(chunkSplit[4]), chunkSplit[7], mcPort, mcAddress);
+					ChunkBackup chunkBackup = new ChunkBackup(peerDB, chunkSplit[2], Integer.parseInt(chunkSplit[3]), Integer.parseInt(chunkSplit[4]), chunkSplit[7], mcPort, mcAddress);
 					chunkBackup.start();
 				}
 			}
@@ -50,6 +51,6 @@ public class MDBListener extends Thread {
 	
 	private boolean correctChunk(String chunk) {
 		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
-		return (chunkSplit[0].equals(Constants.PUTCHUNK) && (chunkSplit.length == 7));
+		return (chunkSplit[0].equals(Constants.PUTCHUNK) && (!ipeerDB.containsFile(chunkSplit[2])) && (chunkSplit.length == 7));
 	}
 }

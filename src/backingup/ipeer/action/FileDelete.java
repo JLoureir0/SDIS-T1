@@ -8,15 +8,15 @@ import backingup.ipeer.protocol.ChunkDelete;
 
 public class FileDelete {
 	
-	private String fileId;
+	private String fileID;
 	private String path;
 	private int numberOfDeleteMessages;
 	private int mcPort;
 	private InetAddress mcAddress;
 	private Database db;
 	
-	public FileDelete(String fileId, int numberOfDeleteMessages, InetAddress mcAddress, int mcPort, String path, Database db) {
-		this.fileId = fileId;
+	public FileDelete(String fileID, int numberOfDeleteMessages, InetAddress mcAddress, int mcPort, String path, Database db) {
+		this.fileID = fileID;
 		this.numberOfDeleteMessages = numberOfDeleteMessages;
 		this.mcAddress = mcAddress;   
 		this.mcPort = mcPort;
@@ -24,9 +24,9 @@ public class FileDelete {
 		this.db = db;
 	}
 	
-	public boolean DeleteFile() {
+	public boolean deleteFile() {
 		boolean deleteChunkResult = false;
-		ChunkDelete cd = new ChunkDelete(fileId,numberOfDeleteMessages,mcAddress,mcPort);
+		ChunkDelete cd = new ChunkDelete(fileID,numberOfDeleteMessages,mcAddress,mcPort);
 		deleteChunkResult = cd.deleteChunk();
 		if(!deleteChunkResult)
 			return false;
@@ -36,7 +36,7 @@ public class FileDelete {
 	}
 	
 	private void updateDatabase() {
-		db.removeFile(fileId);
+		db.removeFile(fileID);
 	}
 	
 	private boolean removeFileFromDir() {
