@@ -41,10 +41,10 @@ public class FileBackup {
 	public boolean backupFile() { 
 		try {
 		    File file = new File(path);
-		    FileInputStream fileStram = new FileInputStream(file);
+		    FileInputStream fileStream = new FileInputStream(file);
 		    byte[] dataBody = new byte[(int)file.length()];
-		    fileStram.read(dataBody);
-		    fileStram.close();
+		    fileStream.read(dataBody);
+		    fileStream.close();
 		    String fileBody = new String(dataBody);
 		    fileLastModification = file.lastModified();
 		    fileName = file.getName();

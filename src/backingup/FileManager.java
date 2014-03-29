@@ -71,7 +71,7 @@ public class FileManager {
          return body;
 	}
 	
-	public boolean CheckIfFileExists() {
+	public boolean checkIfFileExists() {
 		File f = new File(path);
 		if(f.exists() && !f.isDirectory()) 
 			return true;

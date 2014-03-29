@@ -40,7 +40,7 @@ public class SearchDeletedFiles extends Thread {
 			        String fileID = (String) file.getKey();
 			        String path = db.getFilePath(fileID);
 			        FileManager fm = new FileManager(path);
-			        pathExists = fm.CheckIfFileExists();
+			        pathExists = fm.checkIfFileExists();
 			        if(!pathExists)
 			        	restoreFile(fileID);
 			        it.remove();
