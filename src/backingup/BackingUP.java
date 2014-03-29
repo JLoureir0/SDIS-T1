@@ -68,4 +68,9 @@ public class BackingUP {
 		FreeSpace freeSpace = new FreeSpace(peerDB, mcPort, mcAddress);
 		return freeSpace.freeSpace(newSize);
 	}
+
+	public backingup.ipeer.database.Database getIpeerDB() {
+		return ipeerDB;
+	}
+	
 }
