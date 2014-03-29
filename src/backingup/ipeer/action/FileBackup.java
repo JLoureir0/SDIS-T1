@@ -40,6 +40,7 @@ public class FileBackup {
 	}
 	
 	public boolean backupFile() { 
+		updateDatabase();
 		try {
 			FileManager fm = new FileManager(path);
 			boolean exists = fm.checkIfFileExists();
@@ -66,7 +67,7 @@ public class FileBackup {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		db.removeFile(fileID);
 		return false; 
 	}
 	
