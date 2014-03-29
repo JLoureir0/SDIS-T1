@@ -9,8 +9,53 @@ public class CLInterface {
 	private static BackingUP backingup;
 	
 	public static void main(String[] args) {
-		mainMenu();
+		if(parseArgs(args))
+			mainMenu();
+		else
+			System.out.println("Usage: backingup mcPort mcAddress mdbPort mdbAddress mdrPort mdrAddress databaseSize");
+	}
+	
+	private static boolean parseArgs(String[] args) {
+		if(args.length == 7) {
+			int mcPort = Integer.parseInt(args[0]); int mdbPort = Integer.parseInt(args[2]); int mdrPort = Integer.parseInt(args[4]);
+			String mcAddress = args[1]; String mdbAddress = args[3]; String mdrAddress = args[5];
+			int databaseSize = Integer.parseInt(args[6]);
+			if(invalidPort(mcPort) || invalidPort(mdbPort) || invalidPort(mdrPort))
+				return false;
+			if(invalidAddress(mcAddress) || invalidAddress(mdbAddress) || invalidAddress(mdrAddress))
+				return false;
+			backingup = new BackingUP(mcPort, mcAddress, mdbPort, mdbAddress, mdrPort, mdrAddress, databaseSize);
+			return true;
+		}
+		return false;
+	}
+	
+	private static boolean invalidPort(int port) {
+		if(port < 1000 && port > 65535)
+			return true;
+		return false;
+	}
+	
+	private static boolean invalidAddress(String address) {
+		String[] range = address.split(".");
+		if(range.length != 4)
+			return true;
 		
+		int first = Integer.getInteger(range[0]);
+		int second = Integer.getInteger(range[1]);
+		int third = Integer.getInteger(range[2]);
+		int fourth = Integer.getInteger(range[3]);
+		
+		//The multicast addresses are in the range 224.0.0.0 through 239.255.255.255
+		if(first < 224 && first > 239)
+			return true;
+		if(second < 0 && second > 255)
+			return true;
+		if(third < 0 && third > 255)
+			return true;
+		if(fourth < 0 && fourth > 255)
+			return true;
+		return false;
 	}
 	
 	private static void mainMenu() {
