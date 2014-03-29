@@ -1,11 +1,16 @@
 package backingup.cli;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Map.Entry;
 
 import backingup.BackingUP;
-import backingup.ipeer.database.File;
+import backingup.Constants;
+import backingup.ipeer.database.Database;
 
 public class CLInterface {
 	
@@ -89,13 +94,16 @@ public class CLInterface {
 	 }
 	
 	private static void restoreFile() {
-		// TODO Auto-generated method stub
-		
+		String fileID = printFilesInDatabase();
+		backingup.restoreFile(fileID);
 	}
 
 	private static void deleteFile() {
-		// TODO Auto-generated method stub
-		
+		String fileID = printFilesInDatabase();
+		Database db = new Database();
+		db = backingup.getIpeerDB();
+		String path = db.getFilePath(fileID);
+		backingup.deleteFile(fileID, path, Constants.NUMBER_OF_DELETED_MESSAGES);
 	}
 	
 	private static void freeSpace() {		
@@ -121,10 +129,41 @@ public class CLInterface {
 	}
 	
 	private static String printFilesInDatabase() {
-		HashMap<String, File> files;
+		
+		Database db = new Database();
+		db = backingup.getIpeerDB();
+		HashMap<String, backingup.ipeer.database.File> files = db.getFiles();
 		ArrayList<String> fileIDs = new ArrayList<String> ();
+		int index = 0;
 		
+		while(true) {
+			fileIDs.clear();
+		    Iterator<Entry<String, backingup.ipeer.database.File>> it = files.entrySet().iterator();
+		    int iteration = 1;
+		    System.out.println("Choose the file you want:");
+		    while (it.hasNext()) {
+		        Map.Entry<String, backingup.ipeer.database.File> file = (Map.Entry<String, backingup.ipeer.database.File>)it.next();
+		        String fileID = (String) file.getKey();
+		        fileIDs.add(fileID);
+		        File f = new File(db.getFilePath(fileID));
+		        String fileName = f.getName();
+		        System.out.println(iteration + " -> " + fileName);
+		        it.remove();
+		        iteration++;
+		    }
+		    
+	    	Scanner keyboard = new Scanner(System.in);
+	    	int userOption = keyboard.nextInt();
+	    	keyboard.close();
+	    	
+	    	if(userOption >= 1 && userOption <= iteration) {
+	    		index = userOption--;
+	    		break;
+	    	}
+	    	
+	    	System.out.println("Error! Invalid option, please try again!");
+		}
 		
-		
+		return fileIDs.get(index);	
 	}
 }

@@ -7,6 +7,7 @@ public class Constants {
 	public static int CHUNKSIZE = 64000;
 	public static final int HALF_A_SECOND = 500;
 	public static final int SLEEP = 401;
+	public static final int NUMBER_OF_DELETED_MESSAGES = 5;
 	public static final String PUTCHUNK = "PUTCHUNK";
 	public static final String STORED = "STORED";
 	public static String GETCHUNK = "GETCHUNK";
