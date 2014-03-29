@@ -59,14 +59,16 @@ public class FileBackup {
 		    	this.multiple = true;
 		    
 		    generateFileID();
+		    updateDatabase();
 		    createFileChunks(fileBody);
 		    updateDatabase();
-
+		    
 		    return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+		db.removeFile(fileID);
 		return false; 
 	}
 	
@@ -79,7 +81,7 @@ public class FileBackup {
 			 while(inputStream.read(buffer) != -1) {
 				 chunkBody = new String(buffer);
 				 chunkBody = chunkBody.trim();
-	             backupChunk(chunkNos, chunkBody);
+				 backupChunk(chunkNos, chunkBody);
 				 chunkNos++;
 				 System.out.println("ChunkNos: " + chunkNos);
 	         }	
