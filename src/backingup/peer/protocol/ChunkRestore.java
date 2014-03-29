@@ -56,8 +56,10 @@ public class ChunkRestore extends Thread {
 			byte[] chunkData = chunkMessage.getBytes(Constants.ENCODING);
 			DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length, mdrAddress, mdrPort);
 			
-			if(noResponse())
+			if(noResponse()) {
+				System.out.println("Vou mandar chunk");
 				mdrSocket.send(chunkPacket);
+			}
 			mdrSocket.close();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -81,6 +83,7 @@ public class ChunkRestore extends Thread {
 					String chunk = new String(chunkPacket.getData(),Constants.ENCODING).trim();
 					
 					if(System.currentTimeMillis() < endTime && correctChunk(chunk)) {
+						System.out.println("NO RESPONSE FALSE");
 						mcSocket.close();
 						return false;
 					}						

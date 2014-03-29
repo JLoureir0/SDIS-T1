@@ -137,7 +137,11 @@ public class CLInterface {
 	
 	private static void restoreFile() {
 		String fileID = printFilesInDatabase();
-		backingup.restoreFile(fileID);
+		boolean result = backingup.restoreFile(fileID);
+		if(result)
+			System.out.println("The file has been restored sucessfully");
+		else
+			System.out.println("It was not possible to restore the desired file, please try again!");
 	}
 
 	private static void deleteFile() {
@@ -145,7 +149,11 @@ public class CLInterface {
 		Database db = new Database();
 		db = backingup.getIpeerDB();
 		String path = db.getFilePath(fileID);
-		backingup.deleteFile(fileID, path, Constants.NUMBER_OF_DELETED_MESSAGES);
+		boolean result = backingup.deleteFile(fileID, path, Constants.NUMBER_OF_DELETED_MESSAGES);
+		if(result)
+			System.out.println("The file has been deleted sucessfully");
+		else
+			System.out.println("It was not possible to delete the desired file, please try again!");
 	}
 	
 	private static void freeSpace() {		
