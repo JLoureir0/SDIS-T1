@@ -35,7 +35,7 @@ public class MDBListener extends Thread {
 				byte[] chunkData = new byte[Constants.ARRAY_SIZE];
 				DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length);
 				mdbSocket.receive(chunkPacket);
-				String chunk = new String(chunkPacket.getData(),Constants.ENCODING).trim();
+				String chunk = new String(chunkPacket.getData(),Constants.ENCODING).substring(0, chunkPacket.getLength());
 						
 				if(correctChunk(chunk)) {
 					String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
