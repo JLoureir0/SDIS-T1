@@ -195,13 +195,7 @@ public class ActionTest {
 		    byte[] dataBody = new byte[(int)file.length()];
 		    fileStram.read(dataBody);
 		    fileStram.close();
-		    String fileBody = new String(dataBody);
-			
-			double fileSize = fileBody.length()/64000.0;
-			int nChunks = (int) Math.ceil(fileSize);
-			if(fileBody.length() % 64000 == 0)
-				nChunks++;
-			
+
 		    fileLastModification = file.lastModified();
 		    fileName = file.getName();
 			
