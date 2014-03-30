@@ -52,7 +52,7 @@ public class MCListener extends Thread {
 	}
 	
 	private void parseChunk(String chunk) {
-		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
+		String[] chunkSplit = chunk.substring(0, chunk.length()-Constants.CRLF.length()).split(Constants.WHITESPACE_REGEX);
 		if(chunkSplit[0].equals(Constants.GETCHUNK) && chunkSplit[1].equals(Constants.VERSION_1)) {
 			ChunkRestore chunkRestore = new ChunkRestore(database, chunkSplit[2], Integer.parseInt(chunkSplit[3]), mdrPort, mdrAddress);
 			chunkRestore.start();

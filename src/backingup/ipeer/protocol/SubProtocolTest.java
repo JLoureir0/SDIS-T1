@@ -41,7 +41,7 @@ public class SubProtocolTest {
 				String address = "224.2.2.5";
 				int mcPort = 54321;
 				String address1 = "224.2.2.3";
-				String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF;
+				String storeMessage = Constants.STORED + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + Constants.CRLF;
 				
 				try {
 					InetAddress mdbAddress = InetAddress.getByName(address);
@@ -54,16 +54,16 @@ public class SubProtocolTest {
 					
 					mdbSocket.receive(putchunkPacket);
 					mdbSocket.close();
-					String[] putchunkMessage = new String(putchunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
+					String[] header = new String(putchunkPacket.getData(),Constants.ENCODING).trim().split(Constants.CRLF);
+					String[] putchunkMessage = header[0].split(Constants.WHITESPACE_REGEX);
 					
-					assertEquals(7, putchunkMessage.length);
+					assertEquals(5, putchunkMessage.length);
 					assertEquals(Constants.PUTCHUNK, putchunkMessage[0]);
 					assertEquals(Constants.VERSION_1, putchunkMessage[1]);
 					assertEquals(fileID, putchunkMessage[2]);
 					assertEquals(Integer.toString(chunkNo), putchunkMessage[3]);
 					assertEquals(Integer.toString(replicationDegree), putchunkMessage[4]);
-					assertEquals(Constants.CRLF, putchunkMessage[5]);
-					assertEquals(chunkBody, putchunkMessage[6]);
+					assertEquals(chunkBody, header[1]);
 					
 					InetAddress mcAddress = InetAddress.getByName(address1);
 					DatagramSocket mcSocket = new DatagramSocket();
@@ -110,7 +110,7 @@ public class SubProtocolTest {
 					int mdrPort = 55321;
 					String address1 = "224.2.2.4";
 					String chunkBody = "sensitive_data";
-					String sendChunkMessage = Constants.CHUNK + " " + Constants.VERSION_1 + " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + chunkBody; 
+					String sendChunkMessage = Constants.CHUNK + " " + Constants.VERSION_1 + " " + fileID + " " + chunkNo + Constants.CRLF + chunkBody; 
 					
 					try {
 						InetAddress mcAddress = InetAddress.getByName(address);
@@ -125,7 +125,7 @@ public class SubProtocolTest {
 						mcSocket.close();
 						String[] getChunkMessage = new String(getChunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
 						
-						assertEquals(5, getChunkMessage.length);
+						assertEquals(4, getChunkMessage.length);
 						assertEquals(Constants.GETCHUNK, getChunkMessage[0]);
 						assertEquals(Constants.VERSION_1, getChunkMessage[1]);
 						assertEquals(fileID, getChunkMessage[2]);
@@ -183,10 +183,9 @@ public class SubProtocolTest {
 							DatagramPacket deleteChunkPacket = new DatagramPacket(deletechunkData, deletechunkData.length);
 							mcSocket.receive(deleteChunkPacket);
 							String [] deletechunkMessage = new String(deleteChunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
-							assertEquals(3, deletechunkMessage.length);
+							assertEquals(2, deletechunkMessage.length);
 							assertEquals(Constants.DELETE, deletechunkMessage[0]);
-							assertEquals(fileId, deletechunkMessage[1]);
-							assertEquals(Constants.CRLF, deletechunkMessage[2]);
+							assertEquals(fileId, deletechunkMessage[1].substring(0, deletechunkMessage[1].length()-Constants.CRLF.length()));
 						}
 						mcSocket.close();
 						

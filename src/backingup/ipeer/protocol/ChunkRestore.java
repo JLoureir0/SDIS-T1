@@ -51,7 +51,7 @@ public class ChunkRestore {
 	}
 	
 	public void sendGetChunk() {
-		String stringRequest = Constants.GETCHUNK + " " + Constants.VERSION_1 + " " + fileID + " " + chunkNo + " " + Constants.CRLF;
+		String stringRequest = Constants.GETCHUNK + " " + Constants.VERSION_1 + " " + fileID + " " + chunkNo + Constants.CRLF;
 		
 		try {
 			byte[] request = stringRequest.getBytes(Constants.ENCODING);
@@ -81,11 +81,11 @@ public class ChunkRestore {
 	}
 	
 	public boolean correctChunk(String chunk) {
-		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
+		String[] chunkSplit = chunk.split(Constants.CRLF);
 		String chunkNumber = ""+chunkNo;
-		if(chunkSplit[0].equals(Constants.CHUNK) && chunkSplit[1].equals(Constants.VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(chunkNumber) && chunkSplit[4].equals(Constants.CRLF)) {
-			int beginIndex = chunkSplit[0].length()+chunkSplit[1].length()+chunkSplit[2].length()+chunkSplit[3].length()+chunkSplit[4].length()+5;
-			receivedChunkBody = chunk.substring(beginIndex, chunk.length());
+		String[] headerSplit = chunkSplit[0].split(Constants.WHITESPACE_REGEX);
+		if(headerSplit[0].equals(Constants.CHUNK) && headerSplit[1].equals(Constants.VERSION_1) && headerSplit[2].equals(fileID) && headerSplit[3].equals(chunkNumber)) {
+			receivedChunkBody = chunkSplit[1];
 			return true;
 		}
 		else

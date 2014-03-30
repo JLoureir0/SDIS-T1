@@ -38,9 +38,9 @@ public class MDBListener extends Thread {
 				String chunk = new String(chunkPacket.getData(),Constants.ENCODING).substring(0, chunkPacket.getLength());
 						
 				if(correctChunk(chunk)) {
-					String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
-					int beginIndex = chunkSplit[0].length()+chunkSplit[1].length()+chunkSplit[2].length()+chunkSplit[3].length()+chunkSplit[4].length()+chunkSplit[5].length()+6;
-					ChunkBackup chunkBackup = new ChunkBackup(peerDB, chunkSplit[2], Integer.parseInt(chunkSplit[3]), Integer.parseInt(chunkSplit[4]), chunk.substring(beginIndex, chunk.length()), mcPort, mcAddress);
+					String[] chunkSplit = chunk.split(Constants.CRLF);
+					String[] headerSplit = chunkSplit[0].split(Constants.WHITESPACE_REGEX);
+					ChunkBackup chunkBackup = new ChunkBackup(peerDB, headerSplit[2], Integer.parseInt(headerSplit[3]), Integer.parseInt(headerSplit[4]), chunkSplit[1], mcPort, mcAddress);
 					chunkBackup.start();
 				}
 			}

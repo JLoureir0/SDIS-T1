@@ -84,7 +84,8 @@ public class ChunkRemoved extends Thread {
 	}
 	
 	private boolean correctChunk(String chunk) {
-		String[] chunkSplit = chunk.split(Constants.WHITESPACE_REGEX);
-		return (chunkSplit[0].equals(Constants.PUTCHUNK) && chunkSplit[1].equals(Constants.VERSION_1) && chunkSplit[2].equals(fileID) && chunkSplit[3].equals(Integer.toString(chunkNo)) && chunkSplit[4].equals(Integer.toString(replicationDegree)) && chunkSplit[5].equals(Constants.CRLF));
+		String[] chunkSplit = chunk.split(Constants.CRLF);
+		String[] headerSplit = chunkSplit[0].split(Constants.WHITESPACE_REGEX);
+		return (headerSplit[0].equals(Constants.PUTCHUNK) && headerSplit[1].equals(Constants.VERSION_1) && headerSplit[2].equals(fileID) && headerSplit[3].equals(Integer.toString(chunkNo)) && headerSplit[4].equals(Integer.toString(replicationDegree)));
 	}
 }
