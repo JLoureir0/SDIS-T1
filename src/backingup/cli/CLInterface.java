@@ -164,7 +164,7 @@ public class CLInterface {
 			 newSize = Integer.parseInt(keyboard.nextLine());
 
 			 
-			if(newSize < 0)
+			if(newSize >= 0)
 				break;
 			System.out.println("Error, invalid database size!");
 	    }
