@@ -1,0 +1,13 @@
+Grupo:
+
+   Daniel João Lopes Moreira ei11076
+
+   João Alexandre Gonçalinho Loureiro ei08101
+
+
+Turma 3
+
+Instruções: No ficheiro backingUP.sh está o comando para a chamada do programa, sendo a syntax a seguinte
+java -jar backingUP.jar [mcPort] [mcAddress] [mdbPort] [mdbAddress] [mdrPort] [mdrAddress] [databaseSyze(bytes)]
+
+Depois de executado o comando é apresentado um menu, com as várias opções possiveis
