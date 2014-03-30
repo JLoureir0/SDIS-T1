@@ -172,7 +172,7 @@ public class ActionTest {
 	
 	@Test
 	public void testCreateFileChunks() throws NoSuchMethodException, SecurityException {
-	    Method method = FileBackup.class.getDeclaredMethod("createFileChunks", String.class);
+	    Method method = FileBackup.class.getDeclaredMethod("createFileChunks");
 	    method.setAccessible(true);
 		String dirPath = System.getProperty(Constants.CURRENT_DIR);
 		dirPath += File.separator + "src" + File.separator + "backingup" + File.separator + "ipeer" + File.separator + "action";
@@ -209,9 +209,8 @@ public class ActionTest {
 			fb.setFileLastModification(fileLastModification);
 			fb.setFileName(fileName);
 			db = fb.getDb();
-			method.invoke(fb,fileBody);
-
-			assertEquals(nChunks,fb.getChunkNos());
+			boolean result = (boolean) method.invoke(fb);
+			assertFalse(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
