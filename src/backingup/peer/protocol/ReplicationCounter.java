@@ -42,7 +42,8 @@ public class ReplicationCounter extends Thread {
 	}
 	
 	private void updateCount() {
-		database.increaseCount(fileID, chunkNo);
+		if(database.containsChunk(fileID, chunkNo))
+			database.increaseCount(fileID, chunkNo);
 	}
 	
 	private boolean correctChunk(String store) {

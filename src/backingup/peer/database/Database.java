@@ -1,20 +1,20 @@
 package backingup.peer.database;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import backingup.Constants;
 import backingup.FileManager;
 
 public class Database {
 	private int maxSize;
-	private Map<ID, Chunk> chunks;
+	private ConcurrentHashMap<ID, Chunk> chunks;
 
 	public Database(int maxSize) {
-		chunks = new HashMap<ID,Chunk>();
+		chunks = new ConcurrentHashMap<ID,Chunk>();
 		this.maxSize = maxSize;
 	}
   
@@ -103,10 +103,12 @@ public class Database {
 	
 	public int getSize() {
 		int size = 0;
-		for(ID id: chunks.keySet()) {
+		Iterator<ID> it = chunks.keySet().iterator();
+		while(it.hasNext()) {
+			ID id = it.next();
 			File file = new File(Constants.BACKUP_PATH + File.separator + id.getFileID() + id.getChunkNo());
 			size += file.length();
-		}
+		}		
 		return size;
 	}
 }

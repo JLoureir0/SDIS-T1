@@ -3,6 +3,7 @@ package backingup.peer.protocol;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.net.SocketTimeoutException;
 import java.util.Random;
 
 import backingup.Constants;
@@ -77,7 +78,9 @@ public class ChunkRestore extends Thread {
 					if(System.currentTimeMillis() < endTime && correctChunk(chunk)) {
 						return false;
 					}						
-				} catch(Exception e) {
+				}catch(SocketTimeoutException e) {
+					
+				}catch(Exception e) {
 					e.printStackTrace();
 				}
 			}

@@ -3,6 +3,7 @@ package backingup.peer.protocol;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.net.SocketTimeoutException;
 import java.util.Random;
 
 import backingup.Constants;
@@ -25,21 +26,25 @@ public class ChunkRemoved extends Thread {
 		this.database = database;
 		this.fileID = fileID;
 		this.chunkNo = chunkNo;
-		this.replicationDegree = database.getReplicationDegree(fileID, chunkNo);
 		this.mdbPort = mdbPort;
 		this.mdbAddress = mdbAddress;
 		this.mcPort = mcPort;
 		this.mcAddress = mcAddress;
-		chunkBody = database.getChunkBody(fileID, chunkNo);
+		
 		random = new Random();
 	}
 	
 	public void run() {
-		database.decreaseCount(fileID, chunkNo);
-		if(database.getCount(fileID, chunkNo) < replicationDegree) {
-			if(noResponse()) {
-				ChunkBackup chunkBackup = new ChunkBackup(fileID, chunkNo, replicationDegree, chunkBody, mdbPort, mdbAddress, mcPort, mcAddress);
-				chunkBackup.backupChunk();
+		if(database.containsChunk(fileID, chunkNo)) {
+			replicationDegree = database.getReplicationDegree(fileID, chunkNo);
+			chunkBody = database.getChunkBody(fileID, chunkNo);
+			
+			database.decreaseCount(fileID, chunkNo);
+			if(database.getCount(fileID, chunkNo) < replicationDegree) {
+				if(noResponse()) {
+					ChunkBackup chunkBackup = new ChunkBackup(fileID, chunkNo, replicationDegree, chunkBody, mdbPort, mdbAddress, mcPort, mcAddress);
+					chunkBackup.backupChunk();
+				}
 			}
 		}
 	}
@@ -63,8 +68,11 @@ public class ChunkRemoved extends Thread {
 					if(System.currentTimeMillis() < endTime && correctChunk(chunk)) {
 						mdbSocket.close();
 						return false;
-					}						
-				} catch(Exception e) {
+					}
+					
+				} catch(SocketTimeoutException e) {
+					
+				}catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
