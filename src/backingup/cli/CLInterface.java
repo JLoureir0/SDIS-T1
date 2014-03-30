@@ -160,20 +160,20 @@ public class CLInterface {
 		 int newSize = 0;
 		 
 		 while(true) {
-			 System.out.print("Please insert the replication degree of the file: ");
+			 System.out.print("Please insert new database size: ");
 			 newSize = Integer.parseInt(keyboard.nextLine());
 
 			 
-			if(newSize > 0)
+			if(newSize < 0)
 				break;
-			System.out.println("Error, invalid file replication degree!");
+			System.out.println("Error, invalid database size!");
 	    }
 	    
     	boolean result = backingup.freeSpace(newSize);
     	if(result)
-    		System.out.println("The file has been backup up sucessfully!");
+    		System.out.println("The Database has been updated successfully!");
     	else
-    		System.out.println("It was not possible to backup the desired file, please try again!");
+    		System.out.println("It was not possible to update Database size!");
 	}
 	
 	private static String printFilesInDatabase() {
