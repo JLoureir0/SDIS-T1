@@ -62,7 +62,7 @@ public class MCListener extends Thread {
 			chunkDelete.start();
 		}
 		else if(chunkSplit[0].equals(Constants.REMOVED)) {
-			ChunkRemoved chunkRemoved = new ChunkRemoved(database, chunkSplit[2], Integer.parseInt(chunkSplit[3]), Integer.parseInt(chunkSplit[4]), mdbPort, mdbAddress, mcPort, mcAddress);
+			ChunkRemoved chunkRemoved = new ChunkRemoved(database, chunkSplit[2], Integer.parseInt(chunkSplit[3]), mdbPort, mdbAddress, mcPort, mcAddress);
 			chunkRemoved.start();
 		}
 	}

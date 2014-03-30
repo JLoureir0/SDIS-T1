@@ -21,11 +21,11 @@ public class ChunkRemoved extends Thread {
 	private InetAddress mcAddress;
 	private Random random;
 
-	public ChunkRemoved(Database database, String fileID, int chunkNo, int replicationDegree, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
+	public ChunkRemoved(Database database, String fileID, int chunkNo, int mdbPort, InetAddress mdbAddress, int mcPort, InetAddress mcAddress) {
 		this.database = database;
 		this.fileID = fileID;
 		this.chunkNo = chunkNo;
-		this.replicationDegree = replicationDegree;
+		this.replicationDegree = database.getReplicationDegree(fileID, chunkNo);
 		this.mdbPort = mdbPort;
 		this.mdbAddress = mdbAddress;
 		this.mcPort = mcPort;

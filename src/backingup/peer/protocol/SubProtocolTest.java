@@ -289,7 +289,7 @@ public class SubProtocolTest {
 			InetAddress mdbAddress = InetAddress.getByName(address);
 			InetAddress mcAddress = InetAddress.getByName(address1);
 					
-			ChunkRemoved cr = new ChunkRemoved(db, fileID, chunkNo, replicationDegree, mdbPort, mdbAddress, mcPort, mcAddress);
+			ChunkRemoved cr = new ChunkRemoved(db, fileID, chunkNo, mdbPort, mdbAddress, mcPort, mcAddress);
 			cr.start();
 			
 			String putchunkMessage = Constants.PUTCHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + replicationDegree + " " +  Constants.CRLF + " " + chunkBody;
@@ -314,7 +314,7 @@ public class SubProtocolTest {
 			InetAddress mdbAddress = InetAddress.getByName(address);
 			InetAddress mcAddress = InetAddress.getByName(address1);
 			
-			ChunkRemoved cr = new ChunkRemoved(db, fileID, chunkNo, replicationDegree, mdbPort, mdbAddress, mcPort, mcAddress);
+			ChunkRemoved cr = new ChunkRemoved(db, fileID, chunkNo, mdbPort, mdbAddress, mcPort, mcAddress);
 			cr.start();		
 			
 			MulticastSocket mdbSocket = new MulticastSocket(mdbPort);
