@@ -73,13 +73,12 @@ public class FileBackup {
 	private boolean createFileChunks() {
 		String chunkBody = "";
 		byte[] buffer = new byte[Constants.CHUNKSIZE];
-		
+		int count;
 		try {
 			 FileInputStream inputStream = new FileInputStream(path);
-			 while(inputStream.read(buffer) != -1) {
-				 chunkBody = new String(buffer);
-//				 chunkBody = chunkBody.trim();
-//				 System.out.println(chunkBody.length());
+			 while((count=inputStream.read(buffer)) != -1) {
+				 chunkBody = new String(buffer,Constants.ENCODING);
+				 chunkBody = chunkBody.substring(0, count);
 				 if(!backupChunk(chunkNos, chunkBody)) {
 					 inputStream.close();
 					 return false;

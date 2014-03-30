@@ -42,7 +42,7 @@ public class FileManager {
 			else
 				fileOS = new FileOutputStream(path);
             
-            fileOS.write(body.getBytes());
+            fileOS.write(body.getBytes(Constants.ENCODING));
             fileOS.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,13 +52,15 @@ public class FileManager {
 	}
 	
 	public String read() {
-		 byte[] buffer = new byte[Constants.ARRAY_SIZE];
+		 byte[] buffer = new byte[Constants.CHUNKSIZE];
          String body = "";
          try {
         	 FileInputStream inputStream = new FileInputStream(path);
         	 
-        	 while(inputStream.read(buffer) != -1) {
-        		 body += new String(buffer).trim();
+        	 int count;
+        	 while((count=inputStream.read(buffer)) != -1) {
+        		 body = new String(buffer,Constants.ENCODING);
+				 body = body.substring(0, count);
         	 }
         	 
         	 inputStream.close();
