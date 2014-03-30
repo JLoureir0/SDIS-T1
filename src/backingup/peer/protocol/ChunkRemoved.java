@@ -58,7 +58,7 @@ public class ChunkRemoved extends Thread {
 					byte[] putchunkData = new byte[Constants.ARRAY_SIZE];
 					DatagramPacket putchunkPacket = new DatagramPacket(putchunkData, putchunkData.length);
 					mdbSocket.receive(putchunkPacket);
-					String chunk = new String(putchunkPacket.getData(),Constants.ENCODING).trim();
+					String chunk = new String(putchunkPacket.getData(),Constants.ENCODING).substring(0, putchunkPacket.getLength());
 					
 					if(System.currentTimeMillis() < endTime && correctChunk(chunk)) {
 						mdbSocket.close();

@@ -69,7 +69,7 @@ public class ChunkRestore {
 			DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
 
 			mdrSocket.receive(receivedPacket);
-			String receivedMessage = new String(receivedPacket.getData(),Constants.ENCODING).trim();
+			String receivedMessage = new String(receivedPacket.getData(),Constants.ENCODING).substring(0,receivedPacket.getLength());
 			if(correctChunk(receivedMessage))
 				return true;		
 			return false;
