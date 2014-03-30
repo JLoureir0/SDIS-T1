@@ -78,14 +78,15 @@ public class FileBackup {
 			 FileInputStream inputStream = new FileInputStream(path);
 			 while(inputStream.read(buffer) != -1) {
 				 chunkBody = new String(buffer);
-				 chunkBody = chunkBody.trim();
+//				 chunkBody = chunkBody.trim();
+//				 System.out.println(chunkBody.length());
 				 if(!backupChunk(chunkNos, chunkBody)) {
 					 inputStream.close();
 					 return false;
 				 }
 				 chunkNos++;
 				 System.out.println("ChunkNos: " + chunkNos);
-	         }	
+	         }
 			 inputStream.close();
 		} catch (Exception e) {
 			e.printStackTrace();

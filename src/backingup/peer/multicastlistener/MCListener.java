@@ -58,7 +58,7 @@ public class MCListener extends Thread {
 			chunkRestore.start();
 		}
 		else if(chunkSplit[0].equals(Constants.DELETE)) {
-			ChunkDelete chunkDelete = new ChunkDelete(database, chunkSplit[2]);
+			ChunkDelete chunkDelete = new ChunkDelete(database, chunkSplit[1]);
 			chunkDelete.start();
 		}
 		else if(chunkSplit[0].equals(Constants.REMOVED)) {

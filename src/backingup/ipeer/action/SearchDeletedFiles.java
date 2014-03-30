@@ -52,7 +52,6 @@ public class SearchDeletedFiles extends Thread {
 	}
 	
 	private void restoreFile(String fileID) {
-		System.out.println("Tenho de fazer restore de: " + fileID);
 		FileRestore fr = new FileRestore(fileID, mcPort, mdrPort, mcAddress, mdrAddress, db);
 		fr.restoreFile();
 	}

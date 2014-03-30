@@ -17,7 +17,7 @@ public class Constants {
 	public static final String REMOVED = "REMOVED";
 	public static final String VERSION_1 = "1.0";
 	public static final String CRLF = "CRLFCRLF";
-	public static final String ENCODING = "US-ASCII";
+	public static final String ENCODING = "ISO-8859-1";
 	public static final String WHITESPACE_REGEX = "\\s";
 	public static final String DOT_REGEX = "\\.";
 	public static final String CURRENT_DIR = "user.dir";

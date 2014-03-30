@@ -56,7 +56,7 @@ public class Database {
 		Iterator<ID> it = chunks.keySet().iterator();
 		while(it.hasNext()) {
 			ID id = it.next();
-			if(id.getFileID() == fileID) {
+			if(id.getFileID().equals(fileID)) {
 				it.remove();
 				FileManager fileManager = new FileManager(Constants.BACKUP_PATH, id.getFileID() + id.getChunkNo());
 				fileManager.delete();
