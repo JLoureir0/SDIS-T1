@@ -1,7 +1,10 @@
 package backingup.peer.database;
 
-public class Chunk {
-
+public class Chunk implements java.io.Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1891747068189876003L;
 	private int replicationDegree;
 	private int count;
 	

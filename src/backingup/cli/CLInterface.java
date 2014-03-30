@@ -23,10 +23,12 @@ public class CLInterface {
 	private static Scanner keyboard;
 	
 	public static void main(String[] args) {
-		loadBackingup();
 		keyboard = new Scanner(System.in);
-		if(parseArgs(args))
+		if(parseArgs(args)) {
+			loadBackingup();
+			backingup.initializeListeners();
 			mainMenu();
+		}
 		else
 			System.out.println("Usage: mcPort mcAddress mdbPort mdbAddress mdrPort mdrAddress databaseSize");
 	}
@@ -112,12 +114,6 @@ public class CLInterface {
 	        	break;
 	        case 5:
 	        	saveBackingUp();
-	        	try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 	        	System.exit(0);
 	        	break;
 	        default: 

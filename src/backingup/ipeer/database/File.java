@@ -1,7 +1,11 @@
 package backingup.ipeer.database;
 
-public class File {
+public class File implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3543431154083149242L;
 	private String path;
 	private int chunkNos;
 	

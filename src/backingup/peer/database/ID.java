@@ -1,6 +1,10 @@
 package backingup.peer.database;
 
-public class ID {
+public class ID implements java.io.Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1850333793836945277L;
 	private String fileID;
 	private int chunkNo;
 	

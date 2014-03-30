@@ -2,8 +2,12 @@ package backingup.ipeer.database;
 
 import java.util.HashMap;
 
-public class Database {
+public class Database implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5265341254582439288L;
 	private HashMap<String, File> files;
 	
 	public Database() {

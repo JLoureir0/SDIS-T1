@@ -9,7 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import backingup.Constants;
 import backingup.FileManager;
 
-public class Database {
+public class Database implements java.io.Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7596871288487963593L;
 	private int maxSize;
 	private ConcurrentHashMap<ID, Chunk> chunks;
 

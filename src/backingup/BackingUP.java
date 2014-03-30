@@ -42,7 +42,9 @@ public class BackingUP implements java.io.Serializable {
 		
 		ipeerDB = new Database();
 		peerDB = new backingup.peer.database.Database(databaseSize);
-		
+	}
+	
+	public void initializeListeners() {
 		SearchDeletedFiles deletedFiles = new SearchDeletedFiles(ipeerDB, mcPort, mdrPort, this.mcAddress, this.mdrAddress);
 		deletedFiles.start();
 		
