@@ -57,6 +57,8 @@ public class FileBackup {
 		    updateDatabase();
 		    if(!createFileChunks()) {
 		    	db.removeFile(fileID);
+		    	FileDelete fd = new FileDelete(fileID,Constants.NUMBER_OF_DELETED_MESSAGES,mcAddress,mcPort,path,db); //
+		    	fd.deleteFile(); //
 		    	return false;
 		    }
 		    updateDatabase();
@@ -67,6 +69,8 @@ public class FileBackup {
 		}
 		
 		db.removeFile(fileID);
+    	FileDelete fd = new FileDelete(fileID,Constants.NUMBER_OF_DELETED_MESSAGES,mcAddress,mcPort,path,db); //
+    	fd.deleteFile(); //
 		return false; 
 	}
 	
