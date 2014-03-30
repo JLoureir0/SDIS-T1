@@ -94,8 +94,6 @@ public class SubProtocolTest {
 		String chunkBody = "sensitive_data";
 		int mdrPort = 54321;
 		String address = "224.2.2.5";
-		int mcPort = 54321;
-		String address1 = "224.2.2.3";
 		Database db = new Database(100);
 		db.addChunk(fileID, chunkNo, replicationDegree, chunkBody);
 		
@@ -123,20 +121,18 @@ public class SubProtocolTest {
 		
 		try {
 			InetAddress mdrAddress = InetAddress.getByName(address);
-			InetAddress mcAddress = InetAddress.getByName(address1);
 					
 			ChunkRestore cr = new ChunkRestore(db, fileID, chunkNo, mdrPort, mdrAddress);
 			cr.start();
 			
 			String restoreMessage = Constants.CHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + chunkBody;
 			byte[] chunkData = restoreMessage.getBytes(Constants.ENCODING);
-			DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length, mcAddress, mcPort);
-			DatagramSocket mcSocket = new DatagramSocket();
-			Thread.sleep(10);
-			mcSocket.send(chunkPacket);
-			mcSocket.close();
-			
+			DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length, mdrAddress, mdrPort);
 			MulticastSocket mdrSocket = new MulticastSocket(mdrPort);
+			Thread.sleep(10);
+			mdrSocket.send(chunkPacket);
+			mdrSocket.close();
+			
 			byte[] restoreData = new byte[Constants.ARRAY_SIZE];
 			DatagramPacket restorePacket = new DatagramPacket(restoreData, restoreData.length);
 			mdrSocket.joinGroup(mdrAddress);
@@ -325,7 +321,7 @@ public class SubProtocolTest {
 			mdbSocket.close();
 			
 			String putchunkMessage = Constants.PUTCHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + replicationDegree + " " +  Constants.CRLF + " " + chunkBody;
-			String receivedPutchunk = new String(putchunkPacket.getData(),Constants.ENCODING).trim();
+			String receivedPutchunk = new String(putchunkPacket.getData(),Constants.ENCODING).substring(0,putchunkPacket.getLength());
 			
 			assertEquals(putchunkMessage, receivedPutchunk);
 			
