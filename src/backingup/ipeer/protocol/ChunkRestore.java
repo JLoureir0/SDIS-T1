@@ -13,8 +13,6 @@ public class ChunkRestore {
 
 	private int mcPort;
 	private InetAddress mcAddress;
-	private int mdrPort;
-	private InetAddress mdrAddress;
 	private DatagramSocket mcSocket;
 	private MulticastSocket mdrSocket;
 	private String receivedChunkBody;
@@ -24,20 +22,20 @@ public class ChunkRestore {
 		this.chunkNo = chunkNo;
 		this.mcPort = mcPort;
 		this.mcAddress = mcAddress;
-		this.mdrPort = mdrPort;
-		this.mdrAddress = mdrAddress;
 		this.receivedChunkBody = "";
 		
 		try {
 			mcSocket = new DatagramSocket();
 			mdrSocket = new MulticastSocket(mdrPort);
+			mdrSocket.setSoTimeout(Constants.HALF_A_SECOND);
+			mdrSocket.joinGroup(mdrAddress);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public String restoreChunk() throws ChunkNotFound {
-		long endTime = System.currentTimeMillis() + Constants.SLEEP;
+		long endTime = System.currentTimeMillis() + Constants.HALF_A_SECOND;
 		boolean received = false;
 		while(!received) {
 			
@@ -68,14 +66,10 @@ public class ChunkRestore {
 		byte[] receiveData = new byte[Constants.ARRAY_SIZE];
 		
 		try {
-			mdrSocket = new MulticastSocket(mdrPort);
-			mdrSocket.setSoTimeout(Constants.SLEEP);
-			mdrSocket.joinGroup(mdrAddress);
 			DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
 
 			mdrSocket.receive(receivedPacket);
 			String receivedMessage = new String(receivedPacket.getData(),Constants.ENCODING).trim();
-
 			if(correctChunk(receivedMessage))
 				return true;		
 			return false;

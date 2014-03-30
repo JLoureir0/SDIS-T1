@@ -20,7 +20,7 @@ public class ID {
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof ID) {
-			return this.fileID == ((ID)obj).getFileID() && this.chunkNo == ((ID)obj).getChunkNo();
+			return (this.fileID.equals(((ID)obj).getFileID()) && this.chunkNo == ((ID)obj).getChunkNo());
 		}
 		return super.equals(obj);
 	}

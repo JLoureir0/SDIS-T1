@@ -101,9 +101,8 @@ public class SubProtocolTest {
 		
 		try {
 			InetAddress mdrAddress = InetAddress.getByName(address);
-			InetAddress mcAddress = InetAddress.getByName(address1);
 			
-			ChunkRestore cr = new ChunkRestore(db, fileID, chunkNo, mdrPort, mdrAddress,mcPort,mcAddress);
+			ChunkRestore cr = new ChunkRestore(db, fileID, chunkNo, mdrPort, mdrAddress);
 			cr.start();		
 			
 			MulticastSocket mdrSocket = new MulticastSocket(mdrPort);
@@ -126,7 +125,7 @@ public class SubProtocolTest {
 			InetAddress mdrAddress = InetAddress.getByName(address);
 			InetAddress mcAddress = InetAddress.getByName(address1);
 					
-			ChunkRestore cr = new ChunkRestore(db, fileID, chunkNo, mdrPort, mdrAddress,mcPort,mcAddress);
+			ChunkRestore cr = new ChunkRestore(db, fileID, chunkNo, mdrPort, mdrAddress);
 			cr.start();
 			
 			String restoreMessage = Constants.CHUNK + " " + Constants.VERSION_1 +  " " + fileID + " " + chunkNo + " " + Constants.CRLF + " " + chunkBody;

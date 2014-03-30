@@ -1,10 +1,8 @@
 package backingup.peer.protocol;
 
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.net.SocketException;
 import java.util.Random;
 
 import backingup.Constants;
@@ -15,26 +13,22 @@ public class ChunkRestore extends Thread {
 	private String fileID;
 	private int chunkNo;
 	private String chunkBody;
-	private DatagramSocket mdrSocket;
+	private MulticastSocket mdrSocket;
 	private int mdrPort;
 	private InetAddress mdrAddress;
-	private int mcPort;
-	private InetAddress mcAddress;
 	private Random random;
 
-	public ChunkRestore(Database database, String fileID, int chunkNo, int mdrPort, InetAddress mdrAddress, int mcPort, InetAddress mcAddress) {
+	public ChunkRestore(Database database, String fileID, int chunkNo, int mdrPort, InetAddress mdrAddress) {
 		this.database = database;
 		this.fileID = fileID;
 		this.chunkNo = chunkNo;
 		this.mdrPort = mdrPort;
 		this.mdrAddress = mdrAddress;
-		this.mcPort = mcPort;
-		this.mcAddress = mcAddress;
 		random = new Random();
 		
 		try {
-			mdrSocket = new DatagramSocket();
-		} catch (SocketException e) {
+			mdrSocket = new MulticastSocket(mdrPort);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -57,21 +51,19 @@ public class ChunkRestore extends Thread {
 			DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length, mdrAddress, mdrPort);
 			
 			if(noResponse()) {
-				System.out.println("Vou mandar chunk");
 				mdrSocket.send(chunkPacket);
 			}
-			mdrSocket.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		mdrSocket.close();
 	}
 	
 	private boolean noResponse() {
 		try {
-			MulticastSocket mcSocket = new MulticastSocket(mcPort);
-			mcSocket.joinGroup(mcAddress);
+			mdrSocket.joinGroup(mdrAddress);
 			int timeout = random.nextInt(Constants.SLEEP);
-			mcSocket.setSoTimeout(timeout);			
+			mdrSocket.setSoTimeout(timeout);			
 			
 			long endTime = System.currentTimeMillis()+timeout;
 			
@@ -79,19 +71,16 @@ public class ChunkRestore extends Thread {
 				try {
 					byte[] chunkData = new byte[Constants.ARRAY_SIZE];
 					DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length);
-					mcSocket.receive(chunkPacket);
+					mdrSocket.receive(chunkPacket);
 					String chunk = new String(chunkPacket.getData(),Constants.ENCODING).trim();
 					
 					if(System.currentTimeMillis() < endTime && correctChunk(chunk)) {
-						System.out.println("NO RESPONSE FALSE");
-						mcSocket.close();
 						return false;
 					}						
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
-			mcSocket.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

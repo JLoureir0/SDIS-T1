@@ -116,7 +116,7 @@ public class CLInterface {
 	 private static void backupFile() {
 		 String path = "";
 		 int replicationDegree = 0;
-		 System.out.println("Please insert the path of the file you want to backup: ");
+		 System.out.print("Please insert the path of the file you want to backup: ");
 		 path = keyboard.nextLine();
 		 
 		 while(true) {
@@ -188,7 +188,6 @@ public class CLInterface {
 			fileIDs.clear();
 		    Iterator<Entry<String, backingup.ipeer.database.File>> it = files.entrySet().iterator();
 		    int iteration = 1;
-		    System.out.println("Choose the file you want:");
 		    while (it.hasNext()) {
 		        Map.Entry<String, backingup.ipeer.database.File> file = (Map.Entry<String, backingup.ipeer.database.File>)it.next();
 		        String fileID = (String) file.getKey();
@@ -198,6 +197,7 @@ public class CLInterface {
 		        System.out.println(iteration + " -> " + fileName);
 		        iteration++;
 		    }
+		    System.out.print("Choose the file you want: ");
 		    
 	    	int userOption = Integer.parseInt(keyboard.nextLine());
 	    	
