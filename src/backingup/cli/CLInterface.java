@@ -1,6 +1,10 @@
 package backingup.cli;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,6 +14,7 @@ import java.util.Map.Entry;
 
 import backingup.BackingUP;
 import backingup.Constants;
+import backingup.FileManager;
 import backingup.ipeer.database.Database;
 
 public class CLInterface {
@@ -18,6 +23,7 @@ public class CLInterface {
 	private static Scanner keyboard;
 	
 	public static void main(String[] args) {
+		loadBackingup();
 		keyboard = new Scanner(System.in);
 		if(parseArgs(args))
 			mainMenu();
@@ -104,7 +110,14 @@ public class CLInterface {
 	        case 4:
 	        	freeSpace();
 	        	break;
-	        case 5:  
+	        case 5:
+	        	saveBackingUp();
+	        	try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	        	System.exit(0);
 	        	break;
 	        default: 
@@ -211,4 +224,34 @@ public class CLInterface {
 		
 		return fileIDs.get(index);	
 	}
+	
+	private static void saveBackingUp() {
+		File file = new File(Constants.SAVE_PATH);
+		file.mkdir();
+		String path = Constants.SAVE_PATH + File.separator + "save.ser";
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(path));
+			os.writeObject(backingup);
+			os.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void loadBackingup() {
+		String path = Constants.SAVE_PATH + File.separator + "save.ser";
+		FileManager fm = new FileManager(path);
+		boolean exists = fm.checkIfFileExists();
+		if(!exists)
+			return;
+		
+		try {
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
+			backingup = (BackingUP) is.readObject();
+			is.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
+

@@ -11,7 +11,11 @@ import backingup.peer.multicastlistener.MCListener;
 import backingup.peer.multicastlistener.MDBListener;
 import backingup.peer.protocol.FreeSpace;
 
-public class BackingUP {
+public class BackingUP implements java.io.Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4030844434344968304L;
 	private backingup.ipeer.database.Database ipeerDB;
 	private backingup.peer.database.Database peerDB;
 	

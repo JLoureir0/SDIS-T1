@@ -22,4 +22,5 @@ public class Constants {
 	public static final String DOT_REGEX = "\\.";
 	public static final String CURRENT_DIR = "user.dir";
 	public static final String BACKUP_PATH = System.getProperty(CURRENT_DIR) + File.separator + "backup";
+	public static final String SAVE_PATH = System.getProperty(CURRENT_DIR) + File.separator + "save";
 }
