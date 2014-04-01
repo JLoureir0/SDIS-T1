@@ -43,8 +43,11 @@ public class MCListener extends Thread {
 				DatagramPacket chunkPacket = new DatagramPacket(chunkData, chunkData.length);
 				mcSocket.receive(chunkPacket);
 				String chunk = new String(chunkPacket.getData(),Constants.ENCODING).substring(0, chunkPacket.getLength());
-				
-				parseChunk(chunk);
+				try {
+					parseChunk(chunk);
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

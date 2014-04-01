@@ -81,14 +81,17 @@ public class ChunkRestore {
 	}
 	
 	public boolean correctChunk(String chunk) {
-		String[] chunkSplit = chunk.split(Constants.CRLF);
-		String chunkNumber = ""+chunkNo;
-		String[] headerSplit = chunkSplit[0].split(Constants.WHITESPACE_REGEX);
-		if(headerSplit[0].equals(Constants.CHUNK) && headerSplit[1].equals(Constants.VERSION_1) && headerSplit[2].equals(fileID) && headerSplit[3].equals(chunkNumber)) {
-			receivedChunkBody = chunkSplit[1];
-			return true;
+		try {
+			String[] chunkSplit = chunk.split(Constants.CRLF);
+			String chunkNumber = ""+chunkNo;
+			String[] headerSplit = chunkSplit[0].split(Constants.WHITESPACE_REGEX);
+			if(headerSplit[0].equals(Constants.CHUNK) && headerSplit[1].equals(Constants.VERSION_1) && headerSplit[2].equals(fileID) && headerSplit[3].equals(chunkNumber)) {
+				receivedChunkBody = chunkSplit[1];
+				return true;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
-		else
-			return false;
+		return false;
 	}	
 }
