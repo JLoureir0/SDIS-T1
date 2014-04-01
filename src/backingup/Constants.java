@@ -16,7 +16,7 @@ public class Constants {
 	public static final String DELETE = "DELETE";
 	public static final String REMOVED = "REMOVED";
 	public static final String VERSION_1 = "1.0";
-	public static final String CRLF = "CRLFCRLF";
+	public static final String CRLF = "\r\n\r\n";
 	public static final String ENCODING = "ISO-8859-1";
 	public static final String WHITESPACE_REGEX = "\\s";
 	public static final String DOT_REGEX = "\\.";
