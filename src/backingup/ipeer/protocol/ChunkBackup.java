@@ -88,7 +88,8 @@ public class ChunkBackup {
 	}
 	
 	private boolean correctChunk(String store) {
-		String[] storeSplit = store.substring(0, store.length()-Constants.CRLF.length()).split(Constants.WHITESPACE_REGEX);
-		return (storeSplit[0].equals(Constants.STORED) && storeSplit[1].equals(Constants.VERSION_1) && storeSplit[2].equals(fileID) && storeSplit[3].equals(Integer.toString(chunkNo)));
+		String[] storeSplit = store.split(Constants.CRLF);
+		String[] headerSplit = storeSplit[0].split(Constants.WHITESPACE_REGEX);
+		return (headerSplit[0].equals(Constants.STORED) && headerSplit[1].equals(Constants.VERSION_1) && headerSplit[2].equals(fileID) && headerSplit[3].equals(Integer.toString(chunkNo)));
 	}
 }

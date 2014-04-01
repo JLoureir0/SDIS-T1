@@ -182,10 +182,12 @@ public class SubProtocolTest {
 							byte[] deletechunkData = new byte[Constants.ARRAY_SIZE];
 							DatagramPacket deleteChunkPacket = new DatagramPacket(deletechunkData, deletechunkData.length);
 							mcSocket.receive(deleteChunkPacket);
-							String [] deletechunkMessage = new String(deleteChunkPacket.getData(),Constants.ENCODING).trim().split(Constants.WHITESPACE_REGEX);
+							
+							String[] deleteSplit = new String(deleteChunkPacket.getData(),Constants.ENCODING).trim().split(Constants.CRLF);
+							String[] deletechunkMessage = deleteSplit[0].split(Constants.WHITESPACE_REGEX);
 							assertEquals(2, deletechunkMessage.length);
 							assertEquals(Constants.DELETE, deletechunkMessage[0]);
-							assertEquals(fileId, deletechunkMessage[1].substring(0, deletechunkMessage[1].length()-Constants.CRLF.length()));
+							assertEquals(fileId, deletechunkMessage[1]);
 						}
 						mcSocket.close();
 						

@@ -52,17 +52,18 @@ public class MCListener extends Thread {
 	}
 	
 	private void parseChunk(String chunk) {
-		String[] chunkSplit = chunk.substring(0, chunk.length()-Constants.CRLF.length()).split(Constants.WHITESPACE_REGEX);
-		if(chunkSplit[0].equals(Constants.GETCHUNK) && chunkSplit[1].equals(Constants.VERSION_1)) {
-			ChunkRestore chunkRestore = new ChunkRestore(database, chunkSplit[2], Integer.parseInt(chunkSplit[3]), mdrPort, mdrAddress);
+		String[] chunkSplit = chunk.split(Constants.CRLF);
+		String[] headerSplit = chunkSplit[0].split(Constants.WHITESPACE_REGEX);
+		if(headerSplit[0].equals(Constants.GETCHUNK) && headerSplit[1].equals(Constants.VERSION_1)) {
+			ChunkRestore chunkRestore = new ChunkRestore(database, headerSplit[2], Integer.parseInt(headerSplit[3]), mdrPort, mdrAddress);
 			chunkRestore.start();
 		}
-		else if(chunkSplit[0].equals(Constants.DELETE)) {
-			ChunkDelete chunkDelete = new ChunkDelete(database, chunkSplit[1]);
+		else if(headerSplit[0].equals(Constants.DELETE)) {
+			ChunkDelete chunkDelete = new ChunkDelete(database, headerSplit[1]);
 			chunkDelete.start();
 		}
-		else if(chunkSplit[0].equals(Constants.REMOVED) && chunkSplit[1].equals(Constants.VERSION_1)) {
-			ChunkRemoved chunkRemoved = new ChunkRemoved(database, chunkSplit[2], Integer.parseInt(chunkSplit[3]), mdbPort, mdbAddress, mcPort, mcAddress);
+		else if(headerSplit[0].equals(Constants.REMOVED) && headerSplit[1].equals(Constants.VERSION_1)) {
+			ChunkRemoved chunkRemoved = new ChunkRemoved(database, headerSplit[2], Integer.parseInt(headerSplit[3]), mdbPort, mdbAddress, mcPort, mcAddress);
 			chunkRemoved.start();
 		}
 	}
